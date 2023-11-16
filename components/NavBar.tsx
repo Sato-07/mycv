@@ -7,6 +7,7 @@ import { GithubIcon, LinkedInIcon, TwitterIcon } from './Icon'
 import { Montserrat } from 'next/font/google'
 import {BsFillMoonStarsFill, BsSunFill} from 'react-icons/bs'
 import useThemeSwitcher from './hook/useThemeSwitcher'
+import { Link as ScrollLink } from 'react-scroll';
 
 interface CustomLinkProps {
     href: string;
@@ -25,18 +26,27 @@ const montserrat = Montserrat({
 
 const CustomLink: React.FC<CustomLinkProps> = ({ href, title, className = '' }) => {
   const router = useRouter();
-  return(
-    <a href={href} className={`${className} ${montserrat.className} relative group`}>
+
+  return (
+    <ScrollLink
+      to={href.replace(/^#/, '')} // Remove the leading '#' character
+      spy={true}
+      smooth={true}
+      offset={-70}
+      duration={500}
+      className={`cursor-pointer ${className} ${montserrat.className} relative group`}
+    >
       {title}
-      <span 
-      className={`h-[1px] inline-block w-0 bg-dark dark:bg-light absolute left-0 -bottom-0.5  group-hover:w-full transition-[width] ease duration-300
-      ${router.asPath === href ? 'w-full' : 'w-0'}
-      dark:bg-light`}>
+      <span
+        className={`h-[1px] inline-block w-0 bg-dark dark:bg-light absolute left-0 -bottom-0.5  group-hover:w-full transition-[width] ease duration-300
+        ${router.asPath === href ? 'w-full' : 'w-0'}
+        dark:bg-light`}
+      >
         &nbsp;
       </span>
-    </a>
-  )
-}
+    </ScrollLink>
+  );
+};
 
 const CustomMobileLink: React.FC<CustomLinkProps> = ({ href, title, className = '' }) => {
   const router = useRouter();
@@ -78,9 +88,8 @@ const NavBar = () => {
           <CustomLink href="#about" title="Projects" className='mr-3'/>
         </nav>
         <nav className='flex items-center justify-center flex-wrap'>
-          <motion.a href="https://www.twitter.com/" target={"_blank"} className='w-6 mr-4' whileTap={{scale:0.9}} whileHover={{y:-2}}><TwitterIcon/></motion.a>
           <motion.a href="https://www.linkedin.com/" target={"_blank"} className='w-6 mr-4' whileTap={{scale:0.9}} whileHover={{y:-2}}><LinkedInIcon/></motion.a>
-          <motion.a href="https://www.linkedin.com/" target={"_blank"} className='w-6 mr-4' whileTap={{scale:0.9}} whileHover={{y:-2}}><GithubIcon/></motion.a>
+          <motion.a href="https://github.com/Sato-07" target={"_blank"} className='w-6 mr-4' whileTap={{scale:0.9}} whileHover={{y:-2}}><GithubIcon/></motion.a>
           <motion.a onClick={() => setMode(mode ==="light" ? "dark" : "light")} target={"_blank"} className='w-6 mr-4 cursor-pointer' whileTap={{scale:0.9}} whileHover={{y:-2}}>
             {
               mode === "dark" ?
@@ -106,9 +115,8 @@ const NavBar = () => {
             <CustomMobileLink href="#about"title="Projects" className='mr-3'/>
           </nav>
           <nav className='flex items-center justify-center flex-wrap'>
-            <motion.a href="https://www.twitter.com/" target={"_blank"} className='w-6 mr-4 ' whileTap={{scale:0.9}} whileHover={{y:-2}}><TwitterIcon/></motion.a>
             <motion.a href="https://www.linkedin.com/" target={"_blank"} className='w-6 mr-4' whileTap={{scale:0.9}} whileHover={{y:-2}}><LinkedInIcon/></motion.a>
-            <motion.a href="https://www.linkedin.com/" target={"_blank"} className='w-6 mr-4 bg-light' whileTap={{scale:0.9}} whileHover={{y:-2}}><GithubIcon/></motion.a>
+            <motion.a href="https://github.com/Sato-07" target={"_blank"} className='w-6 mr-4 bg-light' whileTap={{scale:0.9}} whileHover={{y:-2}}><GithubIcon/></motion.a>
             <motion.a onClick={() => setMode(mode ==="light" ? "dark" : "light")} target={"_blank"} className='w-6 mr-4 cursor-pointer ' whileTap={{scale:0.9}} whileHover={{y:-2}}>
               {
                 mode === "dark" ?

@@ -57,23 +57,23 @@ export default function Home() {
     ];
     const projects = [
       {
-        title: "Projet : C2 Montreal",
-        src: "c2montreal.png",
+        title: "Projet: Sentiment analysis review ",
+        src: "Sentiment_analysis.png",
         color: "#000000"
       },
       {
-        title: "Projet : Office Studio",
-        src: "officestudio.png",
+        title: "Projet: Chat with multiple pdf",
+        src: "chat_pdf.png",
         color: "#8C8C8C"
       },
       {
-        title: "Locomotive",
-        src: "locomotive.png",
+        title: "Project: Twitter clone",
+        src: "twitter.png",
         color: "#EFE8D3"
       },
       {
-        title: "Silencio",
-        src: "silencio.png",
+        title: "Project: Breast cancer Predictor ",
+        src: "Breast_cancer.png",
         color: "#706D63"
       }
     ]
@@ -182,13 +182,13 @@ console.log(serverDescription)
         <Layout  className={` lg:pt-32 sm:pt-28`}>
           <div className="flex items-center justify-between w-full lg:flex-col">
             <div className='w-1/2 flex items-center justify-center sm:pl-0 md: lg:pl-0 '>
-              <Image src={FotoProfil} alt="developper" width={480} height={600} className=' relative right-5 -top-40 md:inline-block ' priority
+              <Image src={FotoProfil} alt="developper" width={480} height={600} className=' relative right-5 -top-40 md:inline-block sm:h-full sm:w-full sm:-top-20 sm:right-0' priority
               />
               <HireMe /> {/* Afficher HireMe en fonction de showHireMe */}
             </div>
             
-            <div className='w-1/2 flex flex-col items-center pb-32 self-center lg:w-full lg:text-center '>
-              <AnimatedText  className='!text-[3.2rem] font-mont font-normal leading-none capitalize !text-left pb-10 lg:!text-center xl:!text-5xl lg:!text-4xl md:!text-2xl sm:!text-2xl sm:w-full' text="Transformez votre vision en réalité grâce au code."/>
+            <div className='w-1/2 flex flex-col items-center pb-32 self-center lg:w-full lg:text-center sm:p-5 '>
+              <AnimatedText  className='!text-[3.2rem] font-mont font-normal leading-none capitalize !text-left pb-5 lg:!text-center xl:!text-5xl lg:!text-4xl md:!text-2xl sm:!text-2xl sm:w-full' text="Transformez votre vision en réalité grâce au code."/>
               <p>
               {showServerDescription ? (
                 serverDescription.map((description, index) => (
@@ -227,7 +227,7 @@ console.log(serverDescription)
                 
                 }}
                 >
-                  <Description show={showDescription} />
+                  <Description show={showDescription} title="Découvrez mon portfolio d'une manière unique." />
                   <Skills show={showDescription}   onAnimationComplete={() => setExampleSentencesVisible(true)} // Appelé lorsque l'animation est terminée
                   paragraph="Bienvenue sur mon portfolio, où l'exploration de contenu prend une toute nouvelle dimension.
                   Mon site offre une expérience interactive exceptionnelle, vous permettant de dialoguer avec une IA conviviale pour découvrir mon contenu de manière personnalisée.
