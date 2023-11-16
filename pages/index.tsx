@@ -19,14 +19,7 @@ import Modal from '@/components/Modal'
 import Project from '@/components/Project'
 import ExampleSentences from '@/components/ExampleSentences'
 import NavBar from '@/components/NavBar'
-import {MdOutlineQuestionMark} from 'react-icons/md'
 import Questions from '@/components/Questions'
-const montserra = Montserrat({
-  weight: ['400'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
-  display: 'swap',
-})
 
 export default function Home() {
     const [showProject, setshowProject] = useState(false);
