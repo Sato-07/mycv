@@ -19,12 +19,7 @@ import Modal from '@/components/Modal'
 import Project from '@/components/Project'
 import ExampleSentences from '@/components/ExampleSentences'
 
-const montserra = Montserrat({
-  weight: ['400'],
-  style: ['normal', 'italic'],
-  subsets: ['latin'],
-  display: 'swap',
-})
+
 
 export default function Home() {
     const [showProject, setshowProject] = useState(false);
@@ -194,7 +189,7 @@ export default function Home() {
                 
                 }}
                 >
-                  <Description show={showDescription} />
+                  <Description show={showDescription} title='' />
                   <Skills show={showDescription}   onAnimationComplete={() => setExampleSentencesVisible(true)} // Appelé lorsque l'animation est terminée
                   paragraph="Bienvenue sur mon portfolio, où l'exploration de contenu prend une toute nouvelle dimension.
                   Mon site offre une expérience interactive exceptionnelle, vous permettant de dialoguer avec une IA conviviale pour découvrir mon contenu de manière personnalisée.
