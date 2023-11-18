@@ -3,10 +3,6 @@ import TypingAnimation from './TypingAnimation';
 import { MdSend } from 'react-icons/md'; // Import the send icon
 import Image from 'next/image';
 import FotoProfil from '@/public/hb7_sport.png' 
-import FotoUser from '@/public/Portrait_Placeholder.png'
-import AnimatedText from './AnimatedText';
-import Description from './Description';
-import Skills from './Skills';
 
 type Message = {
   text: string;

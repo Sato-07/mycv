@@ -1,18 +1,16 @@
 import Layout from '@/components/Layout'
 import Head from 'next/head'
 import Image from 'next/image'
-import Link from 'next/link'
 import AnimatedText from '@/components/AnimatedText'
 import HireMe from '@/components/HireMe'
 import lightbuble from '@/public/miscellaneous_icons_1.svg'
-import { Montserrat } from 'next/font/google'
 import Experience from '@/components/Experience'
 import Messenger from '@/components/Messenger'
 import FotoProfil from '@/public/hb7_sport.png' 
+import FotoProfilSever from '@/public/AB7.png' 
 import Description from '@/components/Description'
-import { useEffect, useState } from 'react'
+import {useState} from 'react'
 import { motion } from 'framer-motion';
-import Skills from '@/components/Skills'
 import useThemeSwitcher from '@/components/hook/useThemeSwitcher'
 import Competences from '@/components/Competences'
 import Modal from '@/components/Modal'
@@ -20,6 +18,7 @@ import Project from '@/components/Project'
 import ExampleSentences from '@/components/ExampleSentences'
 import NavBar from '@/components/NavBar'
 import Questions from '@/components/Questions'
+import TextDescription from '@/components/TextDescription'
 
 export default function Home() {
     const [showProject, setshowProject] = useState(false);
@@ -34,6 +33,7 @@ export default function Home() {
     const [textColor, setTextColor] = useState('#000'); // État initial vide
     const [serverDescription, setServerDescription] = useState<string[]>([]);
     const [showServerDescription, setShowServerDescription] = useState(false);
+    const [showServerImage, setShowServerImage] = useState(false);
 
 
 
@@ -71,7 +71,6 @@ export default function Home() {
       }
     ]
 
-
   
     
   const handleExampleSelect = (sentence: string) => {
@@ -85,6 +84,7 @@ export default function Home() {
     textcode?: string;
     // Add other properties as needed
   };
+
   
   const handleSendFMessage = (message: Partial<MessageObject>) => {
     const subjectMessage = message.subjects ?? [] // Use an empty array as a default if subject is undefined
@@ -117,6 +117,14 @@ export default function Home() {
             setshowProject(false);
             setServerDescription([message.description||""]);
             localStorage.setItem('serverDescription', JSON.stringify([message.description ||'']));
+            break;
+          case 'IMAGE':
+            setShowServerImage(true);
+            setShowServerDescription(false);
+            setShowExperience(false);
+            setshowDescription(true);
+            setShowSkills(false);
+            setshowProject(false);
             break;
           case 'DARKMODE':
             setBackgroundColor("");
@@ -155,11 +163,6 @@ export default function Home() {
       console.error('Erreur lors de la gestion du message :', error);
     }
   };
-  
-
-console.log(serverDescription)
-
-  
   return (
     <>
       <Head>
@@ -175,7 +178,12 @@ console.log(serverDescription)
         <Layout  className={` lg:pt-32 sm:pt-28`}>
           <div className="flex items-center justify-between w-full lg:flex-col">
             <div className='w-1/2 flex items-center justify-center sm:pl-0 md: lg:pl-0 '>
-              <Image src={FotoProfil} alt="developper" width={480} height={600} className=' relative right-5 -top-40 md:inline-block sm:h-full sm:w-full sm:-top-20 sm:right-0' priority
+              <Image
+              src={showServerImage ? FotoProfilSever : FotoProfil}
+              alt="developper" 
+              width={450} 
+              className=' relative right-5 -top-40 md:inline-block sm:h-full sm:w-full sm:-top-20 sm:right-0' 
+              priority
               />
               <HireMe /> {/* Afficher HireMe en fonction de showHireMe */}
             </div>
@@ -221,7 +229,7 @@ console.log(serverDescription)
                 }}
                 >
                   <Description show={showDescription} title="Découvrez mon portfolio d'une manière unique." />
-                  <Skills show={showDescription}   onAnimationComplete={() => setExampleSentencesVisible(true)} // Appelé lorsque l'animation est terminée
+                  <TextDescription show={showDescription}   onAnimationComplete={() => setExampleSentencesVisible(true)} // Appelé lorsque l'animation est terminée
                   paragraph="Bienvenue sur mon portfolio, où l'exploration de contenu prend une toute nouvelle dimension.
                   Mon site offre une expérience interactive exceptionnelle, vous permettant de dialoguer avec une IA conviviale pour découvrir mon contenu de manière personnalisée.
                   Commencez dès maintenant en lui posant vos questions sur mes compétences, mes projets et mon parcours académique,

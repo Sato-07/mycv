@@ -76,7 +76,7 @@ const NavBar = () => {
     <header
       className='w-full z-50 relative px-32 md:p-12 lg:p-14   py-8 font-large flex items-center justify-between dark:text-light'
     >
-      <button className='lg:flex flex-col md:right-auto md:flex  md:left-0 md:top-0 md:bottom-auto hidden' onClick={handleClick}>
+      <button className='lg:flex flex-col py-2 md:right-auto md:flex  md:left-0 md:top-0 md:bottom-auto hidden' onClick={handleClick}>
         <span className={` bg-dark dark:bg-light block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm -translate-y-0.5 ${isOpen ? 'rotate-45 translate-y-1':'-translate-y-0.5'}`} ></span>
         <span className={` bg-dark dark:bg-light block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm my-0.5 ${isOpen ? 'opacity-0' : 'opacity-100'}`} ></span>
         <span className={` bg-dark dark:bg-light block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm -translate-y-0.5 ${isOpen ? '-rotate-45 -translate-y-1':'translate-y-0.5'}`} ></span>
@@ -131,7 +131,7 @@ const NavBar = () => {
         :null
       }
 
-      <div className=' absolute left-[50%] lg:top-8 md:top-6 top-2 translate-x-[-50%] '>
+      <div className=' absolute left-[50%] sm:left-[47%] lg:top-8 md:top-6 top-2 translate-x-[-50%] '>
           <Logo/>
         </div>
     </header>

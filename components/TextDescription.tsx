@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 
-type SkillsProps = {
+type TextDescriptionProps = {
   show: boolean;
   title?: string;
   subtitle?: string;
@@ -11,7 +11,7 @@ type SkillsProps = {
 
 };
 
-const Skills: React.FC<SkillsProps> = ({ show, title, subtitle, paragraph,onAnimationComplete }) => {
+const TextDescription: React.FC<TextDescriptionProps> = ({ show, title, subtitle, paragraph,onAnimationComplete }) => {
   const [animatedTitle, setAnimatedTitle] = useState('');
   const [animatedSubtitle, setAnimatedSubtitle] = useState('');
   const [animatedParagraph, setAnimatedParagraph] = useState('');
@@ -91,4 +91,4 @@ const Skills: React.FC<SkillsProps> = ({ show, title, subtitle, paragraph,onAnim
   );
 };
 
-export default Skills;
+export default TextDescription;
