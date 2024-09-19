@@ -24,7 +24,7 @@ const Questions = () => {
                     className='flex flex-col h-[80%] w-[80%] sm:h-[90%] z-50  justify-between items-center text-light font-montserrat fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/90 dark:bg-light/75 dark:text-dark rounded-lg backdrop-blur-md py-40'
                 >
                     <div className='relative  flex flex-col font-mont h-full w-4/5  sm:w-5/6 -top-28  sm:-top-36 bottom-auto'>
-                        {/* Contenu de la partie messenger */}
+
                         <h1 className='text-4xl sm:text-lg font-bold dark:text-dark'>
                             Y a-t-il d'autres mystères que vous souhaitez éclaircir ?
                         </h1>

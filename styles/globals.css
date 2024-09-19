@@ -5,3 +5,7 @@
 :root {
     --custom-gradient-color: #f5f5f5; /* Vous pouvez spécifier la couleur par défaut ici */
 }
+
+body {
+    background: var(--custom-gradient-color);
+  }

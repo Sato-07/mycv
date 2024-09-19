@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Logo from './Logo'
 import { useRouter } from 'next/router'
 import {motion} from "framer-motion"
-import { GithubIcon, LinkedInIcon, TwitterIcon } from './Icon'
+import { GithubIcon, LinkedInIcon } from './Icon'
 import { Montserrat } from 'next/font/google'
 import {BsFillMoonStarsFill, BsSunFill} from 'react-icons/bs'
 import useThemeSwitcher from './hook/useThemeSwitcher'
@@ -29,7 +29,7 @@ const CustomLink: React.FC<CustomLinkProps> = ({ href, title, className = '' }) 
 
   return (
     <ScrollLink
-      to={href.replace(/^#/, '')} // Remove the leading '#' character
+      to={href.replace(/^#/, '')} 
       spy={true}
       smooth={true}
       offset={-70}

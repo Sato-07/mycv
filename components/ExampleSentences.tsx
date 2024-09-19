@@ -10,11 +10,10 @@ const ExampleSentences: React.FC<ExampleSentencesProps> = ({ onExampleSelect,sho
     "Share a summary of your primary skills",
     "Can you share a brief overview of a recent project ?",
     "Can you change the background color to sky blue ?",
-    // Ajoutez autant d'exemples que nécessaire
   ];
 
   const handleSelectExample = (sentence: string) => {
-    onExampleSelect(sentence); // Utilisez simplement la phrase (string)
+    onExampleSelect(sentence);
   };
 
   return (

@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion, useScroll } from 'framer-motion';
 
-// Interface pour typer les props de Details
 interface DetailsProps {
   position?: string;
   company: string;

@@ -1,7 +1,6 @@
 import { motion, useScroll } from 'framer-motion';
 import React from 'react';
 
-// Définissez une interface pour typer les props
 interface LiIconProps {
   reference: any;
 }
