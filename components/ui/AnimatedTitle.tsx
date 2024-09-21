@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from "framer-motion";
-import { type } from 'os';
+import { AnimatedTextProps } from '@/types/type';
 
 const quote = {
     initial: {
@@ -29,13 +29,9 @@ const singleWord = {
     }
 };
 
-type AnimatedTextProps = {
-    text: string,
-    className?: string,
-    show?: Boolean, 
-}
 
-const AnimatedText:React.FC<AnimatedTextProps> = ({ show=true, text, className = '' }) => {
+
+const AnimatedTitle:React.FC<AnimatedTextProps> = ({ show=true, text, className = '' }) => {
     return (
         show ? (
         <div className='w-full m-auto py-2 flex items-center justify-center text-center overflow-hidden sm:py-0'>
@@ -52,4 +48,4 @@ const AnimatedText:React.FC<AnimatedTextProps> = ({ show=true, text, className =
     );
 };
 
-export default AnimatedText;
+export default AnimatedTitle;

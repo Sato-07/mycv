@@ -1,12 +1,6 @@
+import { ProjectProps } from '@/types/type';
 import React from 'react';
 
-interface ProjectProps {
-  index: number;
-  title: string;
-  src: string;
-  show:Boolean;
-  setModal: (modal: { active: boolean; index: number }) => void;
-}
 
 const Project: React.FC<ProjectProps> = ({ index, title, src,show, setModal }) => {
   return (

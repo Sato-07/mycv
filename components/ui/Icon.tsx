@@ -194,6 +194,34 @@ export default CircularText;
 
 
 
+
+export const ResumeSVG = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 100 100"
+    width="100"
+    height="100"
+    fill="currentColor"
+  >
+    {/* Your SVG content here */}
+    <circle cx="50" cy="50" r="45" stroke="black" strokeWidth="2" fill="none" />
+    <text x="50%" y="50%" textAnchor="middle" dy=".3em">Resume</text>
+  </svg>
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export const LinkedInIcon:FunctionComponent<LinkedInIconProps> = ({ className, ...rest }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"

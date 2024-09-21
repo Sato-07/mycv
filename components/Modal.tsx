@@ -31,7 +31,7 @@ const Modal: React.FC<ModalProps> = ({ modal, projects }) => {
   const cursorLabel = useRef(null);
 
   useEffect(() => {
-    // Déplacez le conteneur
+
     let xMoveContainer = gsap.quickTo(modalContainer.current, 'left', {
       duration: 0.8,
       ease: 'power3',
@@ -40,7 +40,7 @@ const Modal: React.FC<ModalProps> = ({ modal, projects }) => {
       duration: 0.8,
       ease: 'power3',
     });
-    // Déplacez le curseur
+
     let xMoveCursor = gsap.quickTo(cursor.current, 'left', {
       duration: 0.5,
       ease: 'power3',
@@ -49,7 +49,7 @@ const Modal: React.FC<ModalProps> = ({ modal, projects }) => {
       duration: 0.5,
       ease: 'power3',
     });
-    // Déplacez l'étiquette du curseur
+
     let xMoveCursorLabel = gsap.quickTo(cursorLabel.current, 'left', {
       duration: 0.45,
       ease: 'power3',

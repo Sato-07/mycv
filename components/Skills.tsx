@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 
 type SkillProps = {
@@ -28,10 +28,10 @@ type CompetencesProps = {
   show: boolean;
 };
 
-const Competences: React.FC<CompetencesProps> = ({ skills, show }) => {
+const Skills: React.FC<CompetencesProps> = ({ skills, show }) => {
   return (
     show ? (
-    <div className='relative h-full overflow-hidden'>
+    <div className='relative h-full w-11/12 overflow-hidden'>
       <h2 className="font-medium  text-6xl text-center md:text-8xl mb-5 ">Skills</h2>
       <div className="w-full h-[80%] relative flex items-center justify-center rounded-full dark:bg-circularDark bg-circularLight">
         <motion.div whileHover={{ scale: 1.5 }} className="flex items-center justify-center rounded-full font-semibold bg-black dark:bg-light text-light dark:text-dark p-8 shadow-dark md:shadow-black cursor-pointer lg:p-6 md:p-4">
@@ -46,4 +46,4 @@ const Competences: React.FC<CompetencesProps> = ({ skills, show }) => {
   );
 };
 
-export default Competences;
+export default Skills;

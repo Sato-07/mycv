@@ -1,5 +1,5 @@
 import React from 'react'
-import  CircularText  from '@/components/Icon'
+import  CircularText  from '@/components/ui/Icon'
 import Link from 'next/link'
 
 

@@ -1,14 +1,7 @@
-import React, { useRef, useState } from 'react';
-import { motion, useScroll } from 'framer-motion';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { DetailsProps } from '@/types/type';
 
-interface DetailsProps {
-  position?: string;
-  company: string;
-  companyLink?: string;
-  time: string;
-  address: string;
-  work: string;
-}
 
 const Details: React.FC<DetailsProps> = ({ position, company, companyLink, time, address, work }) => {
 
@@ -33,7 +26,6 @@ const Details: React.FC<DetailsProps> = ({ position, company, companyLink, time,
   );
 }
 
-// Interface pour typer les props de Experience
 type ExperienceProps = {
     show: boolean;
   };
@@ -85,7 +77,7 @@ const Experience: React.FC<ExperienceProps> = ({ show }) => {
               Mon parcours académique m'a permis d'acquérir des compétences solides en informatique
               et de me préparer pour une carrière prometteuse dans ce domaine."
             />
-            {/* Ajoutez d'autres Details avec des données différentes si nécessaire */}
+
           </ul>
         </div>
       </div>
