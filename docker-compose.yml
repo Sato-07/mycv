@@ -8,16 +8,18 @@ services:
     ports:
       - '3000:3000' 
     environment:
-      - NODE_ENV=development 
+      - NODE_ENV=production 
+    restart: always 
 
   nginx:
     image: nginx:latest 
     ports:
-      - '8080:80' 
+      - '8080:80'   
       - '8443:443' 
     volumes:
-    - ./nginx.conf:/etc/nginx/nginx.conf
-    - ./mycv:/etc/nginx/sites-available/mycv
-    - /etc/letsencrypt:/etc/letsencrypt 
+      - ./nginx.conf:/etc/nginx/nginx.conf 
+      - ./mycv:/etc/nginx/sites-available/mycv 
+      - /etc/letsencrypt:/etc/letsencrypt 
     depends_on:
-      - app 
+      - app
+    restart: always 
