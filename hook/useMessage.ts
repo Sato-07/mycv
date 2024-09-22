@@ -27,7 +27,7 @@ export const useMessages = (onSendMessage: (message: Partial<MessageObject>) => 
         console.log('ceci est  historique',updatedHistory)
         try {
             const response = await fetchOpenAI(updatedHistory.join('\n'), messageText);
-            const serverResponseText = response.text || 'No response received';
+            const serverResponseText = response?.text || 'No response received';
 
             setMessages((prevMessages) => [
                 ...prevMessages,
@@ -41,10 +41,9 @@ export const useMessages = (onSendMessage: (message: Partial<MessageObject>) => 
 
             console.log()
             onSendMessage({
-                subjects: response.subjects,
-                code: response.code || '',
-                textcode: response.textcode || '',
-                description: response.description || '',
+                subjects: response?.subjects,
+                code: response?.code || '',
+                textcode: response?.textcode || '',
             });
         } catch (error) {
             console.error('Error communicating with the server:', error);

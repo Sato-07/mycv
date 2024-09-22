@@ -5,7 +5,6 @@ export type Message = {
   
   export interface OpenAIResponse {
     text: string;
-    description: string;
     subjects: string[];
     code: string;
     textcode: string;
