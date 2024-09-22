@@ -6,7 +6,7 @@ import { OpenAIResponse } from '@/types/type';
 
 const groq = createOpenAI({
   baseURL: 'https://api.groq.com/openai/v1',
-  apiKey: process.env.NEXT_PUBLIC_GROQ_API_KEY,
+  apiKey: "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",
 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<OpenAIResponse | { error: string }>) {
