@@ -3,20 +3,20 @@ version: '3'
 services:
   app:
     build:
-      context: . # Tells Docker Compose to use the Dockerfile in this directory
-      dockerfile: Dockerfile # Specifies the Dockerfile to use
+      context: . 
+      dockerfile: Dockerfile
     ports:
-      - '3000:3000' # Expose port 3000 on the container and map it to port 3000 on the host
+      - '3000:3000' 
     environment:
-      - NODE_ENV=production # Set the environment to production for Next.js
+      - NODE_ENV=development 
 
   nginx:
-    image: nginx:latest # Use the latest Nginx image from Docker Hub
+    image: nginx:latest 
     ports:
-      - '80:80' # Expose port 80 for HTTP
-      - '443:443' # Expose port 443 for HTTPS (optional, if you have SSL)
+      - '80:80' 
+      - '443:443' 
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf # Mount custom Nginx configuration file
-      - /etc/letsencrypt:/etc/letsencrypt # Mount Let's Encrypt SSL certificates (optional)
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf 
+      - /etc/letsencrypt:/etc/letsencrypt 
     depends_on:
-      - app # Ensure Nginx starts only after the app is running
+      - app 
