@@ -16,7 +16,8 @@ services:
       - '8080:80' 
       - '8443:443' 
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf 
-      - /etc/letsencrypt:/etc/letsencrypt 
+    - ./nginx.conf:/etc/nginx/nginx.conf
+    - ./mycv:/etc/nginx/sites-available/mycv
+    - /etc/letsencrypt:/etc/letsencrypt 
     depends_on:
       - app 
