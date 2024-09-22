@@ -30,10 +30,9 @@ const skills = [
 ];
 
 const projects = [
-  { title: "Projet: Sentiment analysis review", src: "Sentiment_analysis.png", color: "#000000" },
-  { title: "Projet: Chat with multiple pdf", src: "chat_pdf.png", color: "#8C8C8C" },
-  { title: "Project: Twitter clone", src: "twitter.png", color: "#EFE8D3" },
-  { title: "Project: Breast cancer Predictor", src: "Breast_cancer.png", color: "#706D63" }
+  { title: "Project: Chaire Familles en Entreprises", src: "chaireFamille.png", color: "#000000", url: "https://chairefamilles.ichec.be/" },
+  { title: "Projet: Whisper audio transcription", src: "whisperAudio.png", color: "#8C8C8C", url: "https://github.com/Sato-07/streamlitWhisper/tree/main" },
+  { title: "Projet: Twitter Clone", src: "twitter.png", color: "#EFE8D3", url: "https://github.com/Sato-07/Twitter-clone/tree/main/my-app" },
 ];
 
 export default function Home() {
@@ -55,8 +54,6 @@ export default function Home() {
     setShowExampleQuestions,
     setMode
   );
-
-  console.log('cette seission est :',activeSection )
   
   const handleAnimationComplete = () => {
     
@@ -90,10 +87,10 @@ export default function Home() {
               <AnimatedTitle className='!text-[3.2rem] font-mont font-normal leading-none capitalize !text-left pb-5 lg:!text-center xl:!text-5xl lg:!text-4xl md:!text-2xl sm:!text-2xl sm:w-full' text="Transformez votre vision en réalité grâce au code." />
 
               <p>
-                Je suis Achraf, un développeur passionné. Fort de mes connaissances en deep learning, en sciences des données et en développement web,
-                j'associe la puissance des modèles de Hugging Face à mon approche créative du développement front-end.
-                Mes compétences en Python, ma maîtrise de Next.js, et ma solide compréhension des bases de données offrent une combinaison équilibrée entre créativité et technicité.
-                Je vous invite à explorer mon univers professionnel pour découvrir mon travail et ma passion pour l'innovation
+              I'm Achraf, a passionate developer. With my knowledge in deep learning, data science, and web development,
+              I combine the power of Hugging Face models with my creative approach to front-end development.
+              My skills in Python, proficiency in Next.js, and strong understanding of databases provide a balanced combination of creativity and technical expertise.
+              I invite you to explore my professional world to discover my work and passion for innovation.
               </p>
             </div>
           </div>
@@ -102,8 +99,8 @@ export default function Home() {
             <div id="about" className={`w-2/3  px-10 flex overflow-auto flex-col sm:hidden`}>
               <AnimatedDescription 
               show={activeSection === 'DESCRIPTION'} 
-              title="Découvrez mon portfolio d'une manière unique." 
-              paragraph="Bienvenue sur mon portfolio, où l'exploration de contenu prend une toute nouvelle dimension. Mon site offre une expérience interactive exceptionnelle, vous permettant de dialoguer avec une IA conviviale pour découvrir mon contenu de manière personnalisée. Commencez dès maintenant en lui posant vos questions sur mes compétences, mes projets et mon parcours académique, et n'hésitez pas à personnaliser le site, y compris les couleurs, la photo de profil et le texte de description, selon vos préférences." 
+              title="Discover my portfolio in a unique way." 
+              paragraph="Welcome to my portfolio, where exploring content takes on a whole new dimension. My site offers an exceptional interactive experience, allowing you to engage with a friendly AI to discover my content in a personalized way. Start now by asking questions about my skills, projects, and academic background. Feel free to customize the site's appearance, including text and background colors, according to your preferences." 
               onAnimationComplete={handleAnimationComplete} // Ajoutez ceci
 
                />              
@@ -114,7 +111,7 @@ export default function Home() {
 
                 <AnimatedTitle show={activeSection === 'PROJECT'} className='text-8xl font-medium leading-none flex items-center justify-center capitalize !text-left pb-2' text="Project" />
                 {projects.map((project, index) => (
-                  <Project key={index} index={index} title={project.title} src={project.src} setModal={setModal} show={activeSection === 'PROJECT'} />
+                  <Project url={project.url} key={index} index={index} title={project.title} src={project.src} setModal={setModal} show={activeSection === 'PROJECT'} />
                 ))}
               </div>
               <ExampleQuestions show={showExampleQuestions} onExampleSelect={setSelectedExample} />

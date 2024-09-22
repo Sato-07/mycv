@@ -21,7 +21,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isLoading }) => {
           alt="Profile image"
           className="rounded-full w-14 -mt-8 mr-2"
         />
-        <span className="inline-block p-2 rounded-lg bg-dark dark-bg-light text-light dark-text-dark">
+        <span className="inline-block p-2 rounded-lg bg-dark dark:bg-light text-light dark:text-dark">
           Hi! Welcome to my portfolio. I'm Achraf AI, your friendly AI here to help you explore my world.
           Feel free to ask me questions about my skills, projects, or academic journey.
           We can even customize the site to your liking. Interested?
@@ -34,7 +34,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isLoading }) => {
         >
           {message.sender === 'user' && (
             <div className="flex items-center mb-2 justify-end">
-              <span className="inline-block p-2 rounded-lg bg-gray-200 text-dark dark:bg-dark dark-text-light">
+              <span className="inline-block p-2 rounded-lg bg-gray-200 text-dark dark:bg-neutral-700 dark:text-light">
                 {message.text}
               </span>
             </div>
@@ -46,7 +46,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isLoading }) => {
                 alt="server profile"
                 className="rounded-full w-14 -mt-8 mr-2"
               />
-              <span className="inline-block p-2 rounded-lg bg-dark dark-bg-light text-light dark-text-dark">
+              <span className="inline-block p-2 rounded-lg bg-dark dark:bg-light text-light dark:text-dark">
                 {message.text}
               </span>
             </div>

@@ -26,6 +26,7 @@ export type Message = {
     title: string;
     src: string;
     show:Boolean;
+    url: string;
     setModal: (modal: { active: boolean; index: number }) => void;
   }
 
