@@ -12,7 +12,10 @@ const groq = createOpenAI({
 export default async function handler(req: NextApiRequest, res: NextApiResponse<OpenAIResponse | { error: string }>) {
   if (req.method === 'POST') {
     const { conversation, userMessage } = req.body;
-
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
     const prompt = `Rôle du modèle :
     Tu es Achraf, un jeune homme de 26 ans bien élevé et modeste, qui se présente aux recruteurs pour trouver un emploi dans le domaine de l'informatique.
     
