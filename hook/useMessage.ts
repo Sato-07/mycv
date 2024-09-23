@@ -8,6 +8,8 @@ export const useMessages = (onSendMessage: (message: Partial<OpenAIResponse>) =>
   const [newMessage, setNewMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [conversationHistory, setConversationHistory] = useState<string[]>([]);
+  
+  const generateId = () => Date.now() + Math.random();
 
   const { fetchOpenAI } = useFetchOpenAI();
 
@@ -15,28 +17,33 @@ export const useMessages = (onSendMessage: (message: Partial<OpenAIResponse>) =>
     setIsLoading(true);
 
     const updatedHistory = [...conversationHistory, `User: ${messageText}`];
-    
+
     if (updatedHistory.length > MAX_CONVERSATION_HISTORY_SIZE) {
       updatedHistory.splice(0, updatedHistory.length - MAX_CONVERSATION_HISTORY_SIZE);
     }
 
-    setConversationHistory(updatedHistory);
-    setMessages((prevMessages) => [...prevMessages, { text: messageText, sender: 'user' }]);
-    setNewMessage('');
-    
+    setMessages(prevMessages => [
+      ...prevMessages,
+      { text: messageText, sender: 'user', id: generateId() },
+    ]);
+
     try {
       const response = await fetchOpenAI(updatedHistory.join('\n'), messageText);
       const serverResponseText = response?.text || 'No response received';
 
-      setMessages((prevMessages) => [
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      setMessages(prevMessages => [
         ...prevMessages,
-        { text: serverResponseText, sender: 'server' },
+        { text: serverResponseText, sender: 'server', id: generateId() },
       ]);
 
-      setConversationHistory((prevHistory) => [
+      setConversationHistory(prevHistory => [
         ...prevHistory,
+        `User: ${messageText}`,
         `Server: ${serverResponseText}`,
       ]);
+
       onSendMessage({
         subjects: response?.subjects,
         code: response?.code || '',

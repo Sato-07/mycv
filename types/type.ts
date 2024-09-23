@@ -1,7 +1,9 @@
-export type Message = {
-  text: string; 
-  sender: 'user' | 'server'; 
-};
+export interface Message {
+  text: string;
+  sender: 'user' | 'server';
+  id?: number; 
+}
+
 
 export interface OpenAIResponse {
   text: string;
@@ -10,7 +12,6 @@ export interface OpenAIResponse {
   textcode: string;
 }
 
-// /components/project
 
   export interface ProjectProps {
     index: number;
@@ -42,7 +43,6 @@ export interface DetailsProps {
   work: string;
 }
 
-// /components/ui/AnimatedDescription
 export type AnimatedDescriptionProps = {
   show?: boolean;
   title: string;
@@ -52,7 +52,6 @@ export type AnimatedDescriptionProps = {
 };
 
 
-// /components/ui/AnimatedTitle
 export type AnimatedTextProps = {
   text: string,
   className?: string,
