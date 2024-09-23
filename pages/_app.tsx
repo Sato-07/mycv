@@ -1,8 +1,6 @@
-// pages/_app.tsx
 import '@/styles/globals.css'
 import { Montserrat } from 'next/font/google'
 import type { AppProps } from 'next/app'
-import NavBar from '@/components/NavBar'
 
 const montserrat = Montserrat({
   subsets: ['latin'],

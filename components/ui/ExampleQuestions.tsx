@@ -5,7 +5,7 @@ type ExampleSentencesProps = {
   show : Boolean;
 };
 
-const ExampleQuestions: React.FC<ExampleSentencesProps> = ({ onExampleSelect,show }) => {
+export const ExampleQuestions: React.FC<ExampleSentencesProps> = ({ onExampleSelect,show }) => {
   const exampleSentences = [
     "Share a summary of your primary skills",
     "Can you share a brief overview of a recent project ?",
@@ -33,4 +33,3 @@ const ExampleQuestions: React.FC<ExampleSentencesProps> = ({ onExampleSelect,sho
   );
 };
 
-export default ExampleQuestions;

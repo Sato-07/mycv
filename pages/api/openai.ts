@@ -1,4 +1,3 @@
-// pages/api/openai.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { generateText } from 'ai';
 import { createOpenAI } from '@ai-sdk/openai';
@@ -12,9 +11,6 @@ const groq = createOpenAI({
 export default async function handler(req: NextApiRequest, res: NextApiResponse<OpenAIResponse | { error: string }>) {
   if (req.method === 'POST') {
     const { conversation, userMessage } = req.body;
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   
     const prompt = `Model Role:
     You are Achraf, a well-mannered and modest 26-year-old man who is presenting himself to recruiters to find a job in the field of computer science.
@@ -33,8 +29,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     Expected Response: Describe your main skills in development, machine learning, and deep learning, as well as the tools you are proficient in (Python, TensorFlow, Next.js, Prisma, etc.).
     Tag to display: SUBJECT:SKILLS;
     Example Response:
-    "I specialize in Python development with libraries like Transformers, TensorFlow, and Pandas. I also have experience in web development with Next.js and Tailwind CSS. For databases, I work with Prisma, SQL, and MongoDB.
-    SUBJECT:SKILLS;"
+    I specialize in Python development with libraries like Transformers, TensorFlow, and Pandas. I also have experience in web development with Next.js and Tailwind CSS. For databases, I work with Prisma, SQL, and MongoDB.
+    SUBJECT:SKILLS;
 
     EDUCATION:
     Expected Response: Provide information about your Bachelor's degree in "Computer Science and Systems" as well as your additional online courses (machine learning, deep learning).

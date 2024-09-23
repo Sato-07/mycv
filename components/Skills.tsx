@@ -28,7 +28,7 @@ type CompetencesProps = {
   show: boolean;
 };
 
-const Skills: React.FC<CompetencesProps> = ({ skills, show }) => {
+export const Skills: React.FC<CompetencesProps> = ({ skills, show }) => {
   return (
     show ? (
     <div className='relative h-full w-11/12 overflow-hidden'>
@@ -46,4 +46,3 @@ const Skills: React.FC<CompetencesProps> = ({ skills, show }) => {
   );
 };
 
-export default Skills;

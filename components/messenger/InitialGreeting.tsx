@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import FotoProfil from '@/public/hb7_sport.png';
 
-const InitialGreeting: React.FC = () => {
+export const InitialGreeting: React.FC = () => {
   return (
     <div className="flex items-center mb-2 p-3 text-left pt-24 ">
       <Image
@@ -18,4 +18,3 @@ const InitialGreeting: React.FC = () => {
   );
 };
 
-export default InitialGreeting; 

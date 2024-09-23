@@ -1,4 +1,3 @@
-// hooks/useFetchOpenAI.ts
 import { useState } from 'react';
 import { OpenAIResponse } from '@/types/type';
 

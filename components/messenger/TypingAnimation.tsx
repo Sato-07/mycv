@@ -18,7 +18,7 @@ const typingVariants: Variants = {
 
   
 
-const TypingAnimation: React.FC = () => {
+export const TypingAnimation: React.FC = () => {
   return (
     <div className="flex  items-center">
       <motion.span
@@ -50,4 +50,3 @@ const TypingAnimation: React.FC = () => {
   );
 };
 
-export default TypingAnimation;

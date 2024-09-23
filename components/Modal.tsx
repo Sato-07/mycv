@@ -24,7 +24,7 @@ const scaleAnimation = {
   },
 };
 
-const Modal: React.FC<ModalProps> = ({ modal, projects }) => {
+export const Modal: React.FC<ModalProps> = ({ modal, projects }) => {
   const { active, index } = modal;
   const modalContainer = useRef(null);
   const cursor = useRef(null);
@@ -84,7 +84,7 @@ const Modal: React.FC<ModalProps> = ({ modal, projects }) => {
             const { src, color } = project;
             return (
               <div style={{ backgroundColor: color }} key={`modal_${index}`} className="h-full w-full flex items-center justify-center">
-                <Image src={`/images/${src}`} width={300} height={0} alt="image" />
+                <Image src={`/images/${src}`} width={300} height={300} className='h-auto' alt="image" />
               </div>
             );
           })}
@@ -96,4 +96,3 @@ const Modal: React.FC<ModalProps> = ({ modal, projects }) => {
   );
 };
 
-export default Modal;

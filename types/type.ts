@@ -1,22 +1,14 @@
 export type Message = {
-    text: string; 
-    sender: 'user' | 'server'; 
-  };
-  
-  export interface OpenAIResponse {
-    text: string;
-    subjects: string[];
-    code: string;
-    textcode: string;
-  }
-  
-  export interface MessageObject {
-    subjects: string[];
-    code: string;
-    textcode: string;
-    description: string;
-    sendMessage: string; 
-  }
+  text: string; 
+  sender: 'user' | 'server'; 
+};
+
+export interface OpenAIResponse {
+  text: string;
+  subjects: string[];
+  code: string;
+  textcode: string;
+}
 
 // /components/project
 

@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { AnimatedDescriptionProps } from '@/types/type';
 
 
-const AnimatedDescription: React.FC<AnimatedDescriptionProps> = ({ show, title, subtitle, paragraph, onAnimationComplete }) => {
+export const AnimatedDescription: React.FC<AnimatedDescriptionProps> = ({ show, title, subtitle, paragraph, onAnimationComplete }) => {
   const [animatedTitle, setAnimatedTitle] = useState('');
   const [animatedSubtitle, setAnimatedSubtitle] = useState('');
   const [currentStep, setCurrentStep] = useState(0); 
@@ -76,5 +76,3 @@ const AnimatedDescription: React.FC<AnimatedDescriptionProps> = ({ show, title, 
     ) : null
   );
 };
-
-export default AnimatedDescription;

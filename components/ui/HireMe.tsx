@@ -3,7 +3,7 @@ import  CircularText  from '@/components/ui/Icon'
 import Link from 'next/link'
 
 
-const HireMe  = () => {
+export const HireMe  = () => {
   return (
     <div className='absolute left-4 bottom-8 flex items-center justify-center overflow-hidden md:right-0 md:left-auto md:top-0 md:bottom-auto lg:right-0 lg:left-auto lg:top-0 lg:bottom-auto  '>
         <div className='w-48 h-auton font-extralight flex items-center justify-center relative sm:w-32 md:w-36 lg:w-44 2xl:w-44'>
@@ -21,4 +21,3 @@ const HireMe  = () => {
   )
 }
 
-export default HireMe

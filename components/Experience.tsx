@@ -30,7 +30,7 @@ type ExperienceProps = {
     show: boolean;
   };
 
-const Experience: React.FC<ExperienceProps> = ({ show }) => {
+ export const Experience: React.FC<ExperienceProps> = ({ show }) => {
 
   return (
     show ? (
@@ -86,5 +86,3 @@ const Experience: React.FC<ExperienceProps> = ({ show }) => {
 
   );
 }
-
-export default Experience;

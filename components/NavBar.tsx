@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import Logo from './ui/Logo';
+import React, { useState } from 'react';
+import {Logo} from './ui/Logo';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import { GithubIcon, LinkedInIcon } from './ui/Icon';
 import { BsFillMoonStarsFill, BsSunFill } from 'react-icons/bs';
 import { Link as ScrollLink } from 'react-scroll';
-import useThemeSwitcher from '@/hook/useThemeSwitcher';
-import { CustomLinkProps, MessageObject } from '@/types/type';
-import { useFetchOpenAI } from '@/hook/useFetchOpenAI';
-import { useMessages } from '@/hook/useMessage';
+import {useThemeSwitcher} from '@/hook/useThemeSwitcher';
+import { CustomLinkProps, OpenAIResponse } from '@/types/type';
 
 
 
@@ -53,22 +51,21 @@ const CustomMobileLink: React.FC<CustomLinkProps> = ({ href, title, className = 
 };
 
 interface NavBarProps {
-    onSendMessage: (message: Partial<MessageObject>) => void; 
+    onSendMessage: (message: Partial<OpenAIResponse>) => void; 
 }
-const NavBar: React.FC<NavBarProps> = ({ onSendMessage }) => {
+export const NavBar: React.FC<NavBarProps> = ({ onSendMessage }) => {
     const [mode, setMode] = useThemeSwitcher() as [string, (mode: string) => void];
     const [isMenuOpen, setIsMenuOpen] = useState(false); 
-    const { fetchOpenAI } = useFetchOpenAI();
     const handleClick = () => {
         setIsMenuOpen(!isMenuOpen);
     };
-    const { sendMessage } = useMessages(onSendMessage); 
-
+  
     const handleAboutClick = () => {
-        sendMessage('SKILLS'); 
+        onSendMessage({ text: 'What are your top skills?', subjects: ['SKILLS']  });
     };
+  
     const handleProjectsClick = () => {
-        sendMessage('PROJECT');
+        onSendMessage({ text: 'Can you tell me about one of your projects?', subjects: ['PROJECT']  });
     };
     return (
         <header className='w-full z-50 relative px-32 md:p-12 lg:p-14 py-8 font-large flex items-center justify-between dark:text-light'>
@@ -102,15 +99,13 @@ const NavBar: React.FC<NavBarProps> = ({ onSendMessage }) => {
 
             {isMenuOpen && (
                 <motion.div
-                    initial={{ scale: 0, opacity: 0, x: "-50%", y: "-50%" }}
+                    initial={{ scale: 0, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    className='min-w-[70vw] flex flex-col justify-between items-center fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-                    bg-dark/90 dark:bg-light/75 rounded-lg backdrop-blur-md py-40'
+                    className='w-full h-full flex flex-col justify-center items-center fixed top-0 left-0 bg-dark/90 dark:bg-light/75 rounded-lg backdrop-blur-md'
                 >
                     <nav className='flex items-center flex-col mb-2 justify-center'>
-                        <CustomMobileLink href="/" title="Home" className='mr-3' />
-                        <CustomMobileLink href="#about" title="About" className='mr-3' />
-                        <CustomMobileLink href="#projects" title="Projects" className='mr-3' /> {/* corrected href */}
+                        <CustomMobileLink  href="#about" title="About" className='mr-3' />
+                        <CustomMobileLink href="#projects" title="Projects" className='mr-3' />
                     </nav>
                     <nav className='flex items-center justify-center flex-wrap'>
                         <motion.a href="https://www.linkedin.com/" target="_blank" className='w-6 mr-4' whileTap={{ scale: 0.9 }} whileHover={{ y: -2 }}>
@@ -133,4 +128,3 @@ const NavBar: React.FC<NavBarProps> = ({ onSendMessage }) => {
     );
 };
 
-export default NavBar;

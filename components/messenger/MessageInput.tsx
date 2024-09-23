@@ -8,7 +8,7 @@ type MessageInputProps = {
   onKeyPress: (event: React.KeyboardEvent) => void;
 };
 
-const MessageInput: React.FC<MessageInputProps> = ({ newMessage, onChange, onSendMessage, onKeyPress }) => {
+export const MessageInput: React.FC<MessageInputProps> = ({ newMessage, onChange, onSendMessage, onKeyPress }) => {
   return (
     <div className="flex p-2 border-t-2 border-gray-300">
       <input
@@ -29,4 +29,3 @@ const MessageInput: React.FC<MessageInputProps> = ({ newMessage, onChange, onSen
   );
 };
 
-export default MessageInput;

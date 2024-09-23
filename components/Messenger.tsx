@@ -1,27 +1,44 @@
 import React, { useEffect } from 'react';
-import { MessageObject } from '@/types/type';
 import { useMessages } from '@/hook/useMessage';
-import MessageInput from './messenger/MessageInput';
-import  MessageList  from './messenger/MessageList';
+import {MessageInput} from './messenger/MessageInput';
+import {MessageList} from './messenger/MessageList';
+import { Message, OpenAIResponse } from '@/types/type';
+import {useCombinedMessages} from "@/hook/useCombinedMessages"
 
-const Messenger: React.FC<{ onSendMessage: (message: Partial<MessageObject>) => void; selectedExample: string }> = ({ onSendMessage, selectedExample }) => {
-  const { messages, newMessage, setNewMessage, isLoading, handleSendMessage } = useMessages(onSendMessage);
+
+export const Messenger: React.FC<{ 
+  onSendMessage: (message: Partial<OpenAIResponse>) => void; 
+  selectedExample: string; 
+  Navmessages: Message[]; 
+}> = ({ onSendMessage, selectedExample, Navmessages }) => {
+  const { messages: inputMessages, newMessage, setNewMessage, isLoading, handleSendMessage } = useMessages(onSendMessage);
+  
+  const allMessages = useCombinedMessages(inputMessages, Navmessages);
 
   useEffect(() => {
-    setNewMessage(selectedExample);
+    if (selectedExample) {
+      setNewMessage(selectedExample);
+    }
   }, [selectedExample, setNewMessage]);
+
+  const sendMessage = () => {
+    if (newMessage.trim()) {
+      handleSendMessage();
+      setNewMessage(''); 
+    }
+  };
 
   return (
     <div className="flex font-mont w-full h-screen overflow-auto dark:text-dark flex-col">
-      <MessageList messages={messages} isLoading={isLoading} />
+      <MessageList allMessages={allMessages} isLoading={isLoading} />
       <MessageInput
         newMessage={newMessage}
         onChange={setNewMessage}
-        onSendMessage={handleSendMessage}
+        onSendMessage={sendMessage}
         onKeyPress={(e) => {
           if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            handleSendMessage();
+            sendMessage();
           }
         }}
       />
@@ -29,4 +46,3 @@ const Messenger: React.FC<{ onSendMessage: (message: Partial<MessageObject>) => 
   );
 };
 
-export default Messenger;

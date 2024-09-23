@@ -1,24 +1,24 @@
-import Skills from "@/components/Skills";
-import ExampleQuestions from "@/components/ui/ExampleQuestions";
-import Experience from "@/components/Experience";
-import HireMe from "@/components/ui/HireMe";
-import Layout from "@/components/Layout";
-import NavBar from "@/components/NavBar";
-import Project from "@/components/Project";
-import Questions from "@/components/Help";
-import useHandleMessage from "@/hook/useHandleMessage";
+import {Skills} from "@/components/Skills";
+import {ExampleQuestions} from "@/components/ui/ExampleQuestions";
+import {Experience} from "@/components/Experience";
+import {HireMe} from "@/components/ui/HireMe";
+import {Layout} from "@/components/Layout";
+import {NavBar} from "@/components/NavBar";
+import {Project} from "@/components/Project";
+import {Questions} from "@/components/Help";
 import FotoProfil from '@/public/hb7_sport.png';
 import FotoProfilSever from '@/public/AB7.png';
 import lightbuble from '@/public/miscellaneous_icons_1.svg';
 import Head from "next/head";
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import Modal from "@/components/Modal";
-import AnimatedTitle from "@/components/ui/AnimatedTitle";
-import useThemeSwitcher from "@/hook/useThemeSwitcher";
-import AnimatedDescription from "@/components/ui/AnimatedDescription";
-import Messenger from "@/components/Messenger";
-import { Message } from "@/types/type";
+import { useState } from "react";
+import {Modal} from "@/components/Modal";
+import {AnimatedTitle} from "@/components/ui/AnimatedTitle";
+import {useThemeSwitcher} from "@/hook/useThemeSwitcher";
+import {AnimatedDescription} from "@/components/ui/AnimatedDescription";
+import {Messenger} from "@/components/Messenger";
+import { useMessages } from "@/hook/useMessage";
+import handleMessage from "@/utils/HandleMessage";
 
 const skills = [
   { name: 'CSS', x: '-5vw', y: '-8vw' },
@@ -44,9 +44,8 @@ export default function Home() {
   const [modal, setModal] = useState({ active: false, index: 0 });
   const [showServerImage, setShowServerImage] = useState(false);
   const [showExampleQuestions, setShowExampleQuestions] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
   const [mode, setMode] = useThemeSwitcher();
-  const handleSendFMessage = useHandleMessage(
+  const processMessage = handleMessage(
     setActiveSection,
     setThemeSettings,
     setTextSettings,
@@ -54,7 +53,10 @@ export default function Home() {
     setShowExampleQuestions,
     setMode
   );
-  
+
+const { messages, handleNavBarMessage } = useMessages((message) => {
+  processMessage(message); 
+});
   const handleAnimationComplete = () => {
     
     if (activeSection === 'DESCRIPTION') {
@@ -69,7 +71,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <NavBar onSendMessage={handleSendFMessage} />
+      <NavBar onSendMessage={handleNavBarMessage} />
       <main style={{ backgroundColor: themeSettings.backgroundColor, color: textSettings.textColor }} className={`flex ${mode} items-center text-dark dark:text-light bg-light dark:bg-dark w-full`}>
         <Layout className={`lg:pt-32 sm:pt-28`}>
           <div className="flex items-center justify-between w-full lg:flex-col">
@@ -78,7 +80,7 @@ export default function Home() {
                 src={showServerImage ? FotoProfilSever : FotoProfil}
                 alt="developer"
                 width={450}
-                className='relative right-5 -top-40 md:inline-block sm:h-full sm:w-full sm:-top-20 sm:right-0'
+                className='relative h-auto right-5 -top-40 md:inline-block sm:h-full sm:w-full sm:-top-20 sm:right-0'
                 priority
               />
               <HireMe />
@@ -101,7 +103,7 @@ export default function Home() {
               show={activeSection === 'DESCRIPTION'} 
               title="Discover my portfolio in a unique way." 
               paragraph="Welcome to my portfolio, where exploring content takes on a whole new dimension. My site offers an exceptional interactive experience, allowing you to engage with a friendly AI to discover my content in a personalized way. Start now by asking questions about my skills, projects, and academic background. Feel free to customize the site's appearance, including text and background colors, according to your preferences." 
-              onAnimationComplete={handleAnimationComplete} // Ajoutez ceci
+              onAnimationComplete={handleAnimationComplete}
 
                />              
               <Skills skills={skills} show={activeSection === 'SKILLS'} />
@@ -118,13 +120,14 @@ export default function Home() {
               <Modal modal={modal} projects={projects} />
             </div>
             <div className='w-1/3 overflow-hidden sm:w-full lg:w-1/3 flex flex-col'>
-              <Messenger onSendMessage={handleSendFMessage} selectedExample={selectedExample} />
+
+              <Messenger onSendMessage={processMessage} Navmessages={messages} selectedExample={selectedExample} />
             </div>
           </section>
           <Questions />
         </Layout>
         <div className='absolute right-8 bottom-8 inline-block w-24 sm:hidden md:hidden lg:hidden'>
-          <Image src={lightbuble} alt='' className='w-auto h-auto ' />
+          <Image src={lightbuble} alt=''  className='w-auto h-auto ' />
         </div>
       </main>
     </>

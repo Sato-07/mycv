@@ -5,7 +5,7 @@ interface LayoutProps {
   className?: string;
 }
 
-const Layout = ({children, className = '' }: LayoutProps) => {
+export const Layout = ({children, className = '' }: LayoutProps) => {
   return (
     <div className={`w-full h-full inline-block dark:text-light   sm:p-0  lg:p-5 p-12 dark:bg-dark ${className}`} >
       {children}
@@ -13,5 +13,4 @@ const Layout = ({children, className = '' }: LayoutProps) => {
   );
 };
 
-export default Layout;
 

@@ -2,23 +2,24 @@ import React from 'react';
 import Image from 'next/image';
 import FotoProfil from '@/public/hb7_sport.png';
 import { Message } from '@/types/type';
+import {TypingAnimation} from './TypingAnimation';
 import { useScrollToBottom } from '@/hook/useScrollToBotom';
-import TypingAnimation from './TypingAnimation';
 
 type MessageListProps = {
-  messages: Message[];
+  allMessages: Message[];
   isLoading: boolean;
 };
 
-const MessageList: React.FC<MessageListProps> = ({ messages, isLoading }) => {
-    const { messageContainerRef } = useScrollToBottom(messages);
+export const MessageList: React.FC<MessageListProps> = ({ allMessages, isLoading }) => {
+  const { messageContainerRef } = useScrollToBottom(allMessages);
 
-    return (
-    <div ref={messageContainerRef}  className="flex-grow overflow-auto">
-            <div className="flex items-center mb-2 p-3">
+  return (
+    <div ref={messageContainerRef} className="flex-grow overflow-auto">
+      <div className="flex items-center mb-2 p-3">
         <Image
           src={FotoProfil}
           alt="Profile image"
+
           className="rounded-full w-14 -mt-8 mr-2"
         />
         <span className="inline-block p-2 rounded-lg bg-dark dark:bg-light text-light dark:text-dark">
@@ -27,19 +28,16 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isLoading }) => {
           We can even customize the site to your liking. Interested?
         </span>
       </div>
-      {messages.map((message, index) => (
-        <div
-          key={index}
-          className={`mb-2 p-3 ${message.sender === 'user' ? 'text-right' : 'text-left'}`}
-        >
-          {message.sender === 'user' && (
+
+      {allMessages.map((message, index) => (
+        <div key={index} className={`mb-2 p-3 ${message.sender === 'user' ? 'text-right' : 'text-left'}`}>
+          {message.sender === 'user' ? (
             <div className="flex items-center mb-2 justify-end">
               <span className="inline-block p-2 rounded-lg bg-gray-200 text-dark dark:bg-neutral-700 dark:text-light">
                 {message.text}
               </span>
             </div>
-          )}
-          {message.sender === 'server' && (
+          ) : (
             <div className="flex items-center mb-2">
               <Image
                 src={FotoProfil}
@@ -54,7 +52,6 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isLoading }) => {
         </div>
       ))}
       {isLoading && (
-
         <span className="inline-block p-2 rounded-lg bg-dark">
           <TypingAnimation />
         </span>
@@ -63,4 +60,3 @@ const MessageList: React.FC<MessageListProps> = ({ messages, isLoading }) => {
   );
 };
 
-export default MessageList;

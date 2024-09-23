@@ -5,7 +5,7 @@ interface LiIconProps {
   reference: any;
 }
 
-const LiIcon: React.FC<LiIconProps> = ({ reference }) => {
+export const LiIcon: React.FC<LiIconProps> = ({ reference }) => {
   const { scrollYProgress } = useScroll({
     target: reference,
     offset: ["center end" as const, "center center" as const],
@@ -26,5 +26,4 @@ const LiIcon: React.FC<LiIconProps> = ({ reference }) => {
   );
 };
 
-export default LiIcon;
 

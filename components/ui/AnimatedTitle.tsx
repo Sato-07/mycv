@@ -31,7 +31,7 @@ const singleWord = {
 
 
 
-const AnimatedTitle:React.FC<AnimatedTextProps> = ({ show=true, text, className = '' }) => {
+export const AnimatedTitle:React.FC<AnimatedTextProps> = ({ show=true, text, className = '' }) => {
     return (
         show ? (
         <div className='w-full m-auto py-2 flex items-center justify-center text-center overflow-hidden sm:py-0'>
@@ -48,4 +48,3 @@ const AnimatedTitle:React.FC<AnimatedTextProps> = ({ show=true, text, className 
     );
 };
 
-export default AnimatedTitle;
