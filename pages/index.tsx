@@ -109,7 +109,7 @@ const { messages, handleNavBarMessage } = useMessages((message) => {
               <Skills skills={skills} show={activeSection === 'SKILLS'} />
               <Experience show={activeSection === 'EDUCATION'}  key={activeSection}  />
 
-              <div className='w-full grid gap-16'>
+              <div id="projects" className='w-full grid gap-16'>
 
                 <AnimatedTitle show={activeSection === 'PROJECT'} className='text-8xl font-medium leading-none flex items-center justify-center capitalize !text-left pb-2' text="Project" />
                 {projects.map((project, index) => (
