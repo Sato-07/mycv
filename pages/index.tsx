@@ -84,7 +84,7 @@ export default function Home() {
               <HireMe />
             </div>
             <div className='w-1/2 flex flex-col items-center pb-32 self-center lg:w-full lg:text-center sm:p-5 '>
-              <AnimatedTitle className='!text-[3.2rem] font-mont font-normal leading-none capitalize !text-left pb-5 lg:!text-center xl:!text-5xl lg:!text-4xl md:!text-2xl sm:!text-2xl sm:w-full' text="Transformez votre vision en réalité grâce au code." />
+              <AnimatedTitle className='!text-[3.2rem] font-mont font-normal leading-none capitalize !text-left pb-5 lg:!text-center xl:!text-5xl lg:!text-4xl md:!text-2xl sm:!text-2xl sm:w-full' text="Transform your vision into reality through code." />
 
               <p>
               I'm Achraf, a passionate developer. With my knowledge in deep learning, data science, and web development,
