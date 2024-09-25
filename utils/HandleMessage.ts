@@ -23,8 +23,10 @@ setMode?: (mode: string) => void,
             break;
           case 'EDUCATION':
             setActiveSection('EDUCATION');
+            setShowExampleQuestions?.(false);
             break;
           case 'IMAGE':
+            
             setShowServerImage?.(true);
             break;
           case 'DARKMODE':
@@ -35,6 +37,7 @@ setMode?: (mode: string) => void,
             break;
           case 'PROJECT':
             setActiveSection('PROJECT');
+            setShowExampleQuestions?.(false);
             break;
           case 'COLOR':
             setThemeSettings?.({ backgroundColor: color });
