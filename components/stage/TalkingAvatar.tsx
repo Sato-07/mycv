@@ -65,7 +65,13 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
   return (
     <div className="relative mx-auto aspect-[3/4] h-full min-h-[280px]">
       <div className="relative isolate h-full w-full mix-blend-lighten">
-        <div className={`absolute inset-0 ${introPlaying ? '' : poseMotion}`}>
+        {/* Image de repos cachée pendant les vidéos : leurs fondus (bas, côtés) ne tombent pas au même
+            endroit, et la pose transparaissait en dessous, mains dans les poches. */}
+        <div
+          className={`absolute inset-0 transition-opacity duration-500 ${introPlaying ? 'opacity-0' : poseMotion} ${
+            clipOn && !introPlaying ? 'opacity-0' : ''
+          }`}
+        >
           {AVATAR_CLIPS.idle ? (
             <video src={AVATAR_CLIPS.idle} poster={AVATAR_CLIPS.pose} className={layer} autoPlay muted loop playsInline aria-hidden />
           ) : (
