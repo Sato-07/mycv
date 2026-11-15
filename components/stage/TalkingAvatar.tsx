@@ -13,7 +13,8 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
   const intro = useRef<HTMLVideoElement>(null);
   const talkingVideo = useRef<HTMLVideoElement>(null);
   const [introPlaying, setIntroPlaying] = useState(Boolean(AVATAR_CLIPS.intro));
-  // Visible pendant l'unique lecture de la vidéo de parole, même si la voix s'arrête avant la fin.
+  // Une fois jouée, la vidéo de parole reste affichée sur sa dernière image : revenir à la pose
+  // de départ faisait un petit saut visible. Elle reprend au début à la question suivante.
   const [clipOn, setClipOn] = useState(false);
   const playedThisTurn = useRef(false);
 
@@ -70,7 +71,6 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
             muted
             playsInline
             preload="auto"
-            onEnded={() => setClipOn(false)}
             aria-hidden
           />
         )}
