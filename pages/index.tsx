@@ -21,6 +21,7 @@ const SENTENCE = /[\s\S]*?[.!?…](?=\s)/g;
 
 export default function Home() {
   const [subject, setSubject] = useState<string | null>(null);
+  const [waveSignal, setWaveSignal] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const spokenUpTo = useRef(0);
   const voice = useVoice();
@@ -83,7 +84,9 @@ export default function Home() {
           subject={subject}
           analyserRef={voice.analyserRef}
           onSend={ask}
+          waveSignal={waveSignal}
           onListenGreeting={() => {
+            setWaveSignal((n) => n + 1);
             voice.unlock();
             voice.stop();
             voice.say(GREETING);

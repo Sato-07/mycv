@@ -28,11 +28,12 @@ type StageProps = {
   analyserRef: MutableRefObject<AnalyserNode | null>;
   onSend: (text: string) => void;
   onListenGreeting: () => void;
+  waveSignal: number;
   onToggleMute: () => void;
 };
 
 export const Stage = forwardRef<HTMLInputElement, StageProps>(
-  ({ messages, status, speaking, muted, subject, analyserRef, onSend, onListenGreeting, onToggleMute }, inputRef) => {
+  ({ messages, status, speaking, muted, subject, analyserRef, onSend, onListenGreeting, onToggleMute, waveSignal }, inputRef) => {
     const [draft, setDraft] = useState('');
     const subtitles = useRef<HTMLDivElement>(null);
 
@@ -92,9 +93,10 @@ export const Stage = forwardRef<HTMLInputElement, StageProps>(
           </button>
         </div>
 
-        <div className="relative z-10 flex flex-1 flex-col items-center justify-end pb-10">
+        {/* Pas de z-index ici : il isolerait l'avatar, et sa fusion « lighten » ne verrait plus le fond de la page. */}
+        <div className="relative flex flex-1 flex-col items-center justify-end pb-10">
           <div className="h-[46vh] w-full lg:h-[40vh]">
-            <TalkingAvatar speaking={speaking} thinking={status === 'thinking'} analyserRef={analyserRef} />
+            <TalkingAvatar speaking={speaking} thinking={status === 'thinking'} analyserRef={analyserRef} waveSignal={waveSignal} />
           </div>
 
           <div className="mt-1 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.25em] text-light/60" aria-live="polite">

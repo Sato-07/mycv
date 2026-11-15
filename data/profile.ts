@@ -101,18 +101,16 @@ export const chatSuggestions = [
   'Combien ça coûte ?',
 ];
 
-// Vidéos de l'avatar (boucles de repos et de parole), à déposer dans public/avatar/.
-// Tant qu'elles valent null, la page anime l'image fixe à la place.
-export const AVATAR_VIDEOS: { idle: string; talking: string } | null = null;
-
-// Tour à 360° du modèle 3D (export Tripo, recadré, une image clé par image pour un défilement fluide).
-// L'image 0 est de face ; les suivantes tournent vers la gauche de l'écran.
-// Prioritaire sur l'image fixe, ignoré si AVATAR_VIDEOS est renseigné.
-export const AVATAR_TURNTABLE: { src: string; poster: string; frames: number; fps: number } | null = {
-  src: '/avatar/turntable.mp4',
-  poster: '/avatar/turntable-poster.jpg',
-  frames: 120,
-  fps: 30,
+// Clips de l'avatar, dans public/avatar/. Fond noir écrasé sous le noir du site : la page les fusionne
+// en mode « lighten », donc seul le personnage apparaît.
+// - pose : image de repos (première image du coucou), affichée entre deux clips ;
+// - intro : joué une fois à l'arrivée, et quand le visiteur clique sur « Écouter Achraf » ;
+// - idle / talking : boucles de repos et de parole, null tant qu'elles ne sont pas générées.
+export const AVATAR_CLIPS: { pose: string; intro: string | null; idle: string | null; talking: string | null } = {
+  pose: '/avatar/pose.jpg',
+  intro: '/avatar/wave.mp4',
+  idle: null,
+  talking: null,
 };
 
 export const skills = [

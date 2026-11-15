@@ -1,40 +1,34 @@
-import React, { MutableRefObject, useEffect, useRef } from 'react';
-import Image from 'next/image';
-import FotoProfil from '@/public/hb7_sport.png';
-import { AVATAR_TURNTABLE, AVATAR_VIDEOS } from '@/data/profile';
-import { Turntable } from './Turntable';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { AVATAR_CLIPS } from '@/data/profile';
 
 type TalkingAvatarProps = {
   speaking: boolean;
   thinking: boolean;
   analyserRef: MutableRefObject<AnalyserNode | null>;
+  // Incrémenté pour rejouer le coucou (clic sur « Écouter Achraf »).
+  waveSignal: number;
 };
 
-// Deux boucles vidéo superposées (repos / parole) qui se relaient en fondu.
-// Sans vidéos, l'image fixe respire et s'anime au rythme de la voix.
-export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking, analyserRef }) => {
+// Calques superposés : pose de repos (ou boucle de repos), boucle de parole, coucou d'intro.
+// Le conteneur est fusionné en « lighten » avec la page : le fond noir des clips disparaît.
+export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking, analyserRef, waveSignal }) => {
   const halo = useRef<HTMLDivElement>(null);
+  const intro = useRef<HTMLVideoElement>(null);
   const talkingVideo = useRef<HTMLVideoElement>(null);
+  const [introPlaying, setIntroPlaying] = useState(Boolean(AVATAR_CLIPS.intro));
 
-  // Le halo blanc sous l'avatar grossit avec le volume de la voix.
+  // Coucou à l'arrivée, puis à chaque signal ; sans mouvement réduit seulement.
   useEffect(() => {
-    if (!speaking) {
-      if (halo.current) halo.current.style.transform = 'scale(1)';
+    const el = intro.current;
+    if (!el) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setIntroPlaying(false);
       return;
     }
-    const analyser = analyserRef.current;
-    if (!analyser) return;
-    const data = new Uint8Array(analyser.frequencyBinCount);
-    let frame = 0;
-    const tick = () => {
-      analyser.getByteFrequencyData(data);
-      const level = data.slice(2, 16).reduce((a, b) => a + b, 0) / (14 * 255);
-      if (halo.current) halo.current.style.transform = `scale(${(1 + level * 0.35).toFixed(3)})`;
-      frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [speaking, analyserRef]);
+    el.currentTime = 0;
+    setIntroPlaying(true);
+    el.play().catch(() => setIntroPlaying(false));
+  }, [waveSignal]);
 
   // La boucle de parole repart du début à chaque prise de parole, pour ne pas commencer bouche fermée.
   useEffect(() => {
@@ -44,51 +38,72 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking
     }
   }, [speaking]);
 
+  // Le halo sous l'avatar grossit avec le volume réel de la voix.
+  useEffect(() => {
+    if (!speaking) {
+      if (halo.current) halo.current.style.transform = 'translateX(-50%) scale(1)';
+      return;
+    }
+    const analyser = analyserRef.current;
+    if (!analyser) return;
+    const data = new Uint8Array(analyser.frequencyBinCount);
+    let frame = 0;
+    const tick = () => {
+      analyser.getByteFrequencyData(data);
+      const level = data.slice(2, 16).reduce((a, b) => a + b, 0) / (14 * 255);
+      if (halo.current) halo.current.style.transform = `translateX(-50%) scale(${(1 + level * 0.35).toFixed(3)})`;
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [speaking, analyserRef]);
+
+  // Sans boucle de parole générée, la pose fixe bouge au rythme de la voix.
+  const poseMotion = speaking && !AVATAR_CLIPS.talking ? 'animate-talk' : 'animate-breathe';
+  const layer = 'absolute inset-0 h-full w-full object-contain object-bottom';
+
   return (
-    <div className="relative mx-auto aspect-[3/4] h-full max-h-[56vh] min-h-[280px]">
+    <div className="relative mx-auto aspect-[3/4] h-full min-h-[280px]">
       <div
         ref={halo}
         aria-hidden
-        className={`absolute bottom-[8%] left-1/2 h-[45%] w-[90%] -translate-x-1/2 rounded-full bg-light blur-[90px] transition-opacity duration-700 ${
-          speaking ? 'opacity-[0.16]' : thinking ? 'opacity-[0.1] animate-pulse' : 'opacity-[0.07]'
+        className={`absolute bottom-[6%] left-1/2 h-[40%] w-[80%] rounded-full bg-light blur-[90px] ${
+          speaking ? 'opacity-[0.14]' : thinking ? 'animate-pulse opacity-[0.09]' : 'opacity-[0.06]'
         }`}
-        style={{ transition: 'transform 80ms linear, opacity 700ms' }}
+        style={{ transform: 'translateX(-50%)', transition: 'transform 80ms linear, opacity 700ms' }}
       />
-      <div className="relative h-full w-full [mask-image:linear-gradient(to_bottom,black_70%,transparent)]">
-        {AVATAR_VIDEOS ? (
-          <>
-            <video
-              src={AVATAR_VIDEOS.idle}
-              className="absolute inset-0 h-full w-full object-cover"
-              autoPlay
-              muted
-              loop
-              playsInline
-              aria-hidden
-            />
-            <video
-              ref={talkingVideo}
-              src={AVATAR_VIDEOS.talking}
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
-                speaking ? 'opacity-100' : 'opacity-0'
-              }`}
-              muted
-              loop
-              playsInline
-              aria-hidden
-            />
-          </>
-        ) : AVATAR_TURNTABLE ? (
-          <Turntable speaking={speaking} />
-        ) : (
-          <div className={`h-full w-full ${speaking ? 'animate-talk' : 'animate-breathe'}`}>
-            <Image
-              src={FotoProfil}
-              alt="Avatar d'Achraf Baitar"
-              priority
-              className="h-full w-full object-contain object-bottom grayscale-[35%]"
-            />
-          </div>
+      <div className="relative isolate h-full w-full mix-blend-lighten [mask-image:linear-gradient(to_bottom,black_78%,transparent)]">
+        <div className={`absolute inset-0 ${introPlaying ? '' : poseMotion}`}>
+          {AVATAR_CLIPS.idle ? (
+            <video src={AVATAR_CLIPS.idle} poster={AVATAR_CLIPS.pose} className={layer} autoPlay muted loop playsInline aria-hidden />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={AVATAR_CLIPS.pose} alt="Avatar d'Achraf Baitar" className={layer} />
+          )}
+        </div>
+        {AVATAR_CLIPS.talking && (
+          <video
+            ref={talkingVideo}
+            src={AVATAR_CLIPS.talking}
+            className={`${layer} transition-opacity duration-300 ${speaking && !introPlaying ? 'opacity-100' : 'opacity-0'}`}
+            muted
+            loop
+            playsInline
+            aria-hidden
+          />
+        )}
+        {AVATAR_CLIPS.intro && (
+          <video
+            ref={intro}
+            src={AVATAR_CLIPS.intro}
+            poster={AVATAR_CLIPS.pose}
+            className={`${layer} transition-opacity duration-500 ${introPlaying ? 'opacity-100' : 'opacity-0'}`}
+            muted
+            playsInline
+            preload="auto"
+            onEnded={() => setIntroPlaying(false)}
+            aria-hidden
+          />
         )}
       </div>
     </div>
