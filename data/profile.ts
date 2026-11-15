@@ -105,6 +105,16 @@ export const chatSuggestions = [
 // Tant qu'elles valent null, la page anime l'image fixe à la place.
 export const AVATAR_VIDEOS: { idle: string; talking: string } | null = null;
 
+// Tour à 360° du modèle 3D (export Tripo, recadré, une image clé par image pour un défilement fluide).
+// L'image 0 est de face ; les suivantes tournent vers la gauche de l'écran.
+// Prioritaire sur l'image fixe, ignoré si AVATAR_VIDEOS est renseigné.
+export const AVATAR_TURNTABLE: { src: string; poster: string; frames: number; fps: number } | null = {
+  src: '/avatar/turntable.mp4',
+  poster: '/avatar/turntable-poster.jpg',
+  frames: 120,
+  fps: 30,
+};
+
 export const skills = [
   'TypeScript',
   'Next.js',

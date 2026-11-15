@@ -1,7 +1,8 @@
 import React, { MutableRefObject, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import FotoProfil from '@/public/hb7_sport.png';
-import { AVATAR_VIDEOS } from '@/data/profile';
+import { AVATAR_TURNTABLE, AVATAR_VIDEOS } from '@/data/profile';
+import { Turntable } from './Turntable';
 
 type TalkingAvatarProps = {
   speaking: boolean;
@@ -77,6 +78,8 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking
               aria-hidden
             />
           </>
+        ) : AVATAR_TURNTABLE ? (
+          <Turntable speaking={speaking} />
         ) : (
           <div className={`h-full w-full ${speaking ? 'animate-talk' : 'animate-breathe'}`}>
             <Image
