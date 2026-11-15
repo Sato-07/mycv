@@ -2,55 +2,44 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { bookingHref, offers } from '@/data/profile';
 
-type OffersProps = {
-  // compact : version affichée dans le panneau piloté par le chatbot.
-  compact?: boolean;
-};
-
-export const Offers: React.FC<OffersProps> = ({ compact = false }) => {
+export const Offers: React.FC = () => {
   return (
-    <div className="w-full">
-      <h2
-        className={`font-medium text-center w-full ${
-          compact ? 'text-6xl mb-10' : 'text-8xl lg:text-6xl sm:text-5xl mb-16 sm:mb-10'
-        }`}
-      >
-        Offres
-      </h2>
-      <p className="text-center font-light mb-12 sm:mb-8">
-        Un prix fixé avant de commencer : vous savez ce que vous payez et ce que vous recevez.
-      </p>
-      <div className={`grid gap-8 ${compact ? 'grid-cols-1' : 'grid-cols-3 lg:grid-cols-1'}`}>
+    <section id="offres" className="scroll-mt-24 border-t border-light/10 px-10 py-32 lg:py-20 sm:px-5">
+      <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-light/50">02 — Offres</p>
+      <div className="mt-4 flex items-end justify-between gap-10 lg:flex-col lg:items-start">
+        <h2 className="text-8xl font-medium leading-none lg:text-6xl sm:text-5xl">Prix fixés d'avance</h2>
+        <p className="max-w-sm font-light text-light/60">Vous savez ce que vous payez et ce que vous recevez avant que je commence.</p>
+      </div>
+      <div className="mt-16 grid grid-cols-3 gap-px overflow-hidden rounded-3xl border border-light/10 bg-light/10 lg:grid-cols-1">
         {offers.map((offer, index) => (
           <motion.div
             key={offer.title}
-            initial={{ y: 50, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: index * 0.1, type: 'spring' }}
-            className="flex flex-col rounded-3xl bg-dark dark:bg-light text-light dark:text-dark p-8 ring-1 ring-transparent transition hover:-translate-y-1 hover:ring-violet-500/60 hover:shadow-2xl hover:shadow-violet-500/20"
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            className="group flex flex-col bg-dark p-10 transition-colors duration-300 hover:bg-light hover:text-dark sm:p-7"
           >
-            <h3 className="text-3xl font-normal">{offer.title}</h3>
-            <p className="font-semibold mt-2">{offer.price}</p>
-            <p className="font-light mt-4">{offer.description}</p>
-            <ul className="font-light mt-4 mb-8 flex-grow">
+            <span className="font-mono text-xs opacity-40">0{index + 1}</span>
+            <h3 className="mt-8 text-3xl font-normal">{offer.title}</h3>
+            <p className="mt-2 text-xl font-light opacity-70">{offer.price}</p>
+            <p className="mt-6 font-light opacity-80">{offer.description}</p>
+            <ul className="mb-10 mt-6 flex-grow space-y-2 text-sm font-light opacity-70">
               {offer.items.map((item) => (
-                <li key={item} className="mb-1">
-                  · {item}
-                </li>
+                <li key={item}>— {item}</li>
               ))}
             </ul>
             <a
               href={bookingHref()}
               target="_blank"
               rel="noopener noreferrer"
-              className="self-start rounded-full border border-solid border-light dark:border-dark px-5 py-2 font-medium hover:bg-light hover:text-dark dark:hover:bg-dark dark:hover:text-light transition-colors"
+              className="self-start border-b border-current pb-0.5 text-sm font-medium"
             >
-              En parler
+              En parler →
             </a>
           </motion.div>
         ))}
       </div>
-    </div>
+    </section>
   );
 };

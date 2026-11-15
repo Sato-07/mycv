@@ -15,32 +15,32 @@ module.exports = {
         mono:['var(--font-mono)', ...fontFamily.mono],
       },
       colors: {
-        dark: "#1b1b1b",
+        dark: "#0a0a0a",
         light: "#f5f5f5",
         primary: "#062F2B",
         primaryDark: "#020F0E",
       },
       keyframes: {
         blink: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0' } },
-        glow: {
-          '0%, 100%': { opacity: '0.45', transform: 'scale(1) rotate(0deg)' },
-          '50%': { opacity: '0.75', transform: 'scale(1.08) rotate(20deg)' },
+        breathe: {
+          '0%, 100%': { transform: 'translateY(0) scale(1)' },
+          '50%': { transform: 'translateY(-4px) scale(1.008)' },
         },
-        'gradient-x': {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
+        talk: {
+          '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
+          '25%': { transform: 'translateY(-3px) rotate(-0.6deg)' },
+          '75%': { transform: 'translateY(-1px) rotate(0.6deg)' },
         },
+        wave: { '0%, 100%': { transform: 'scaleY(0.25)' }, '50%': { transform: 'scaleY(1)' } },
       },
       animation: {
         'spin-slow': 'spin 8s linear infinite',
         blink: 'blink 1s step-end infinite',
-        glow: 'glow 9s ease-in-out infinite',
-        'gradient-x': 'gradient-x 6s ease infinite',
+        breathe: 'breathe 5s ease-in-out infinite',
+        talk: 'talk 0.9s ease-in-out infinite',
+        wave: 'wave 0.9s ease-in-out infinite',
       },
       backgroundImage:{
-        circularLight: 'repeating-radial-gradient(rgba(0,0,0,0.4) 2px, var(--light) 5px, var(--light) 90px);',
-        circularDark: "repeating-radial-gradient(rgba(255,255,255,0.4) 2px, var(--dark) 5px, var(--dark) 90px);",
-        'ai-gradient': 'linear-gradient(90deg, #7c3aed, #d946ef, #06b6d4)',
       }
     },
     screens: {

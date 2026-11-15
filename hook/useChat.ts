@@ -7,7 +7,8 @@ export type ChatStatus = 'idle' | 'thinking' | 'streaming';
 
 // Une seule conversation pour toute la page : la barre de navigation, les cartes projet,
 // le bouton flottant et le champ du chat écrivent tous dans ce même fil.
-export const useChat = (onAction: (action: ChatAction) => void) => {
+// onText reçoit le texte visible au fil du streaming (done = true à la fin) : la voix s'en sert pour parler phrase par phrase.
+export const useChat = (onAction: (action: ChatAction) => void, onText?: (text: string, done: boolean) => void) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [status, setStatus] = useState<ChatStatus>('idle');
   const nextId = useRef(0);
@@ -58,7 +59,9 @@ export const useChat = (onAction: (action: ChatAction) => void) => {
         const { done, value } = await reader.read();
         if (done) break;
         reply += decoder.decode(value, { stream: true });
-        updateMessage(botId, { text: visibleText(reply) });
+        const shown = visibleText(reply);
+        updateMessage(botId, { text: shown });
+        onText?.(shown, false);
       }
 
       const { cleanedText, subjects, colors } = extractChatTags(reply);
@@ -66,6 +69,7 @@ export const useChat = (onAction: (action: ChatAction) => void) => {
         text: cleanedText || "Je n'ai pas de réponse à ça. Reformulez, ou écrivez-moi directement.",
         streaming: false,
       });
+      onText?.(cleanedText, true);
       onAction({ subjects, code: colors.color ?? '', textcode: colors.textcolor ?? '' });
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);

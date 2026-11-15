@@ -4,23 +4,25 @@ import { caseStudies } from '@/data/profile';
 
 export const CaseStudies: React.FC<{ onAsk: (question: string) => void }> = ({ onAsk }) => {
   return (
-    <section id="realisations" className="w-full pt-32 lg:pt-20 px-10 sm:px-5 scroll-mt-24">
-      <h2 className="font-medium text-8xl lg:text-6xl sm:text-5xl mb-16 sm:mb-10 text-center w-full">Réalisations</h2>
-      <ul className="w-full">
-        {caseStudies.map((study) => (
+    <section id="realisations" className="scroll-mt-24 border-t border-light/10 px-10 py-32 lg:py-20 sm:px-5">
+      <p className="font-mono text-[11px] uppercase tracking-[0.25em] text-light/50">01 — Réalisations</p>
+      <h2 className="mt-4 text-8xl font-medium leading-none lg:text-6xl sm:text-5xl">Ce que j'ai livré</h2>
+      <ul className="mt-16 sm:mt-10">
+        {caseStudies.map((study, index) => (
           <motion.li
             key={study.title}
-            initial={{ y: 50, opacity: 0 }}
+            initial={{ y: 40, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, type: 'spring' }}
-            className="border-t border-gray-200 dark:border-neutral-700 py-10 grid grid-cols-3 gap-10 lg:grid-cols-1 lg:gap-4"
+            transition={{ duration: 0.5 }}
+            className="group grid grid-cols-[80px_1fr_1.4fr] gap-10 border-t border-light/10 py-12 lg:grid-cols-1 lg:gap-5"
           >
+            <span className="font-mono text-sm text-light/30">0{index + 1}</span>
             <div>
-              <p className="font-light text-sm uppercase tracking-wider">{study.tag}</p>
-              <h3 className="text-4xl sm:text-3xl font-normal mt-2">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-light/50">{study.tag}</p>
+              <h3 className="mt-3 text-4xl font-normal leading-tight transition group-hover:translate-x-1 sm:text-3xl">
                 {study.url ? (
-                  <a href={study.url} target="_blank" rel="noopener noreferrer" className="hover:opacity-50 transition-opacity">
+                  <a href={study.url} target="_blank" rel="noopener noreferrer" className="hover:text-light/60">
                     {study.title} ↗
                   </a>
                 ) : (
@@ -30,25 +32,25 @@ export const CaseStudies: React.FC<{ onAsk: (question: string) => void }> = ({ o
               <button
                 type="button"
                 onClick={() => onAsk(`Parle-moi du projet ${study.title} : comment il fonctionne et ce qu'il apporte.`)}
-                className="mt-4 font-mono text-xs text-dark/60 transition hover:text-violet-500 dark:text-light/60"
+                className="mt-5 inline-flex items-center gap-2 rounded-full border border-light/20 px-3 py-1.5 text-xs text-light/70 transition hover:border-light hover:text-light"
               >
-                ✦ Demander à l'IA →
+                ▶ Achraf vous l'explique
               </button>
             </div>
-            <div className="col-span-2 lg:col-span-1 grid grid-cols-3 gap-6 md:grid-cols-1 md:gap-3">
+            <dl className="grid grid-cols-3 gap-8 md:grid-cols-1 md:gap-4">
               <div>
-                <p className="font-semibold mb-1">Le problème</p>
-                <p className="font-light">{study.problem}</p>
+                <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-light/40">Le problème</dt>
+                <dd className="mt-2 font-light text-light/80">{study.problem}</dd>
               </div>
               <div>
-                <p className="font-semibold mb-1">Ce que j'ai construit</p>
-                <p className="font-light">{study.built}</p>
+                <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-light/40">La solution</dt>
+                <dd className="mt-2 font-light text-light/80">{study.built}</dd>
               </div>
               <div>
-                <p className="font-semibold mb-1">Aujourd'hui</p>
-                <p className="font-light">{study.result}</p>
+                <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-light/40">Aujourd'hui</dt>
+                <dd className="mt-2 font-light text-light/80">{study.result}</dd>
               </div>
-            </div>
+            </dl>
           </motion.li>
         ))}
       </ul>

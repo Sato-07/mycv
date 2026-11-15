@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { MAX_MESSAGE_LENGTH } from '@/utils/constant';
 import { CONTACT_EMAIL } from '@/data/profile';
 import { SYSTEM_PROMPT } from '@/utils/systemPrompt';
-import { isRateLimited } from '@/utils/rateLimit';
+import { clientKey, isRateLimited } from '@/utils/rateLimit';
 
 // Lit ANTHROPIC_API_KEY dans l'environnement (.env, jamais commité).
 const client = new Anthropic();
@@ -17,12 +17,6 @@ const BodySchema = z.object({
   userMessage: z.string().trim().min(1).max(MAX_MESSAGE_LENGTH),
 });
 
-const clientIp = (req: NextApiRequest): string => {
-  const forwarded = req.headers['x-forwarded-for'];
-  const first = Array.isArray(forwarded) ? forwarded[0] : forwarded?.split(',')[0];
-  return first?.trim() || req.socket.remoteAddress || 'inconnu';
-};
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST']);
@@ -33,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (!parsed.success) {
     return res.status(400).json({ error: 'Message invalide ou trop long.' });
   }
-  if (isRateLimited(clientIp(req))) {
+  if (isRateLimited(`chat:${clientKey(req.headers, req.socket.remoteAddress)}`)) {
     return res.status(429).json({
       error: `Vous avez posé beaucoup de questions d'un coup. Réessayez dans quelques minutes, ou écrivez à ${CONTACT_EMAIL}.`,
     });
@@ -42,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const stream = client.beta.messages.stream({
     model: MODEL,
-    // Plafond de coût par réponse ; il inclut la réflexion, d'où la marge au-delà des 3-6 phrases demandées.
+    // Plafond de coût par réponse ; il inclut la réflexion, d'où la marge au-delà des 2-4 phrases demandées.
     max_tokens: 2000,
     // Effort bas : une conversation de site n'a pas besoin de réflexion longue, et la première phrase arrive plus vite.
     output_config: { effort: 'low' },

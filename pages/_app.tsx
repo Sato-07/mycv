@@ -17,7 +17,7 @@ const mono = JetBrains_Mono({
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-      <main className={`font-mont bg-light dark:bg-dark text-dark dark:text-light w-full min-h-screen ${montserrat.variable} ${mono.variable}`}>
+      <main className={`font-mont bg-dark text-light antialiased w-full min-h-screen ${montserrat.variable} ${mono.variable}`}>
         <Component {...pageProps} />
       </main>
   )

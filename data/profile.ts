@@ -94,22 +94,58 @@ export const offers: Offer[] = [
   },
 ];
 
-// Questions proposées en un clic dans le chat.
+// Questions proposées en un clic sous l'avatar.
 export const chatSuggestions = [
-  'Que pourrais-tu automatiser dans ma PME ?',
-  'Montre-moi ce que tu as déjà livré',
-  'Combien coûte un site ou une automatisation ?',
-  'Passe le site en mode sombre',
+  'Que peux-tu automatiser dans ma PME ?',
+  "Qu'as-tu déjà livré ?",
+  'Combien ça coûte ?',
 ];
 
-// Positions des bulles autour du centre « IA » (section Compétences).
+// Vidéos de l'avatar (boucles de repos et de parole), à déposer dans public/avatar/.
+// Tant qu'elles valent null, la page anime l'image fixe à la place.
+export const AVATAR_VIDEOS: { idle: string; talking: string } | null = null;
+
 export const skills = [
-  { name: 'TypeScript', x: '-5vw', y: '-8vw' },
-  { name: 'Next.js', x: '5vw', y: '8vw' },
-  { name: 'React Native', x: '-14vw', y: '10vw' },
-  { name: 'LLM & agents', x: '12vw', y: '-10vw' },
-  { name: 'PostgreSQL', x: '17vw', y: '6vw' },
-  { name: 'Python', x: '-16vw', y: '-6vw' },
-  { name: 'Peppol', x: '0vw', y: '-14vw' },
-  { name: 'Automatisation', x: '0vw', y: '14vw' },
+  'TypeScript',
+  'Next.js',
+  'React Native',
+  'Node.js',
+  'PostgreSQL',
+  'Prisma',
+  'Python',
+  'LLM & agents IA',
+  'Whisper',
+  'Peppol',
+  'Automatisation',
+];
+
+export type ExperienceItem = { role: string; place: string; url?: string; time: string; text: string };
+
+export const experience: ExperienceItem[] = [
+  {
+    role: 'Développeur freelance',
+    place: 'Indépendant',
+    time: "Aujourd'hui",
+    text: "Automatisations IA, outils de prospection et de veille, logiciels métier et sites web pour les PME. Prix fixé avant de commencer, livraison par étapes.",
+  },
+  {
+    role: 'Cofondateur et développeur',
+    place: 'Aionik',
+    url: 'https://aionik.app',
+    time: "Aujourd'hui",
+    text: "Logiciel de gestion pour les paysagistes : devis, facturation électronique Peppol, relevé d'heures, stock, agenda, application iOS et Android, assistant IA. Je le conçois, le développe et le vends.",
+  },
+  {
+    role: 'Bachelier en informatique et systèmes',
+    place: 'ISIPS',
+    time: '2020',
+    text: 'Développement logiciel, réseaux, bases de données et systèmes.',
+  },
+  {
+    role: 'Machine learning, Université Stanford',
+    place: 'Coursera',
+    url: 'https://www.coursera.org/',
+    time: '2020',
+    text: "Trois certifications du cursus d'Andrew Ng : apprentissage supervisé, algorithmes avancés et réseaux de neurones, apprentissage non supervisé.",
+  },
 ];

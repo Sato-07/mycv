@@ -2,53 +2,62 @@ import Head from "next/head";
 import { useRef, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { NavBar } from "@/components/NavBar";
-import { Hero } from "@/components/Hero";
-import { AiStudio } from "@/components/AiStudio";
+import { GREETING, Stage } from "@/components/stage/Stage";
 import { CaseStudies } from "@/components/CaseStudies";
 import { Offers } from "@/components/Offers";
+import { Parcours } from "@/components/Parcours";
 import { ContactSection } from "@/components/ContactSection";
 import { FloatingAsk } from "@/components/FloatingAsk";
 import { Footer } from "@/components/Footer";
-import { Modal } from "@/components/Modal";
-import { useThemeSwitcher } from "@/hook/useThemeSwitcher";
 import { useChat } from "@/hook/useChat";
-import handleMessage from "@/utils/HandleMessage";
-import { caseStudies } from "@/data/profile";
+import { useVoice } from "@/hook/useVoice";
+import { ChatAction } from "@/types/type";
 
 const TITLE = "Achraf Baitar · Développeur freelance, automatisation IA pour PME";
-const DESCRIPTION = "J'automatise la prospection et la gestion des PME avec l'IA : outils sur mesure, automatisations, sites web. Belgique.";
+const DESCRIPTION = "Parlez à mon avatar IA : j'automatise la prospection et la gestion des PME avec l'IA. Outils sur mesure, automatisations, sites web. Belgique.";
+
+// Une phrase est complète quand sa ponctuation finale est suivie d'un espace : elle peut partir à la voix.
+const SENTENCE = /[\s\S]*?[.!?…](?=\s)/g;
 
 export default function Home() {
-  const [activeSection, setActiveSection] = useState<string>('DESCRIPTION');
-  const [themeSettings, setThemeSettings] = useState<{ backgroundColor?: string }>({});
-  const [textSettings, setTextSettings] = useState<{ textColor?: string }>({});
-  const [modal, setModal] = useState({ active: false, index: 0 });
-  const [showServerImage, setShowServerImage] = useState(false);
-  const [mode, setMode] = useThemeSwitcher();
+  const [subject, setSubject] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const studioRef = useRef<HTMLElement | null>(null);
+  const spokenUpTo = useRef(0);
+  const voice = useVoice();
 
-  const processMessage = handleMessage(
-    setActiveSection,
-    setThemeSettings,
-    setTextSettings,
-    setShowServerImage,
-    undefined,
-    setMode
-  );
-  const { messages, status, send } = useChat(processMessage);
-
-  const [heroRef, heroInView] = useInView({ threshold: 0.1 });
-  const [studioViewRef, studioInView] = useInView({ threshold: 0.2 });
-
-  // Amène le visiteur au chat (et y pose la question s'il en a une) depuis n'importe où dans la page.
-  const talk = (question?: string) => {
-    studioRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    if (question) {
-      void send(question);
-    } else {
-      window.setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 500);
+  // Découpe le texte qui arrive en phrases et les envoie une à une à la voix.
+  const feedVoice = (text: string, done: boolean) => {
+    const rest = text.slice(spokenUpTo.current);
+    let consumed = 0;
+    for (const match of Array.from(rest.matchAll(SENTENCE))) {
+      voice.say(match[0]);
+      consumed = (match.index ?? 0) + match[0].length;
     }
+    spokenUpTo.current += consumed;
+    if (done) {
+      voice.say(text.slice(spokenUpTo.current));
+      spokenUpTo.current = 0;
+    }
+  };
+
+  const onAction = ({ subjects }: ChatAction) => setSubject(subjects.find((s) => s !== 'NULL') ?? null);
+  const { messages, status, send } = useChat(onAction, feedVoice);
+
+  const ask = (text: string) => {
+    // Le clic d'envoi est le geste qui autorise le navigateur à jouer le son.
+    voice.unlock();
+    voice.stop();
+    spokenUpTo.current = 0;
+    setSubject(null);
+    void send(text);
+  };
+
+  const [stageViewRef, stageInView] = useInView({ threshold: 0.25 });
+
+  const backToAvatar = (question?: string) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (question) ask(question);
+    else window.setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 600);
   };
 
   return (
@@ -59,56 +68,37 @@ export default function Home() {
         <meta property="og:title" content={TITLE} />
         <meta property="og:description" content={DESCRIPTION} />
         <meta property="og:type" content="website" />
+        <meta name="theme-color" content="#0a0a0a" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div
-        style={{ backgroundColor: themeSettings.backgroundColor, color: textSettings.textColor }}
-        className="bg-dots relative min-h-screen overflow-x-clip transition-colors duration-700"
-      >
-        <NavBar mode={mode} setMode={setMode} onTalk={() => talk()} />
-
-        <div className="mx-auto max-w-7xl px-12 lg:px-6 sm:px-4">
-          <div ref={heroRef}>
-            <Hero showServerImage={showServerImage} onTalk={() => talk()} />
-          </div>
-
-          <section
-            id="assistant"
-            ref={(node) => {
-              studioRef.current = node;
-              studioViewRef(node);
-            }}
-            className="scroll-mt-24 pt-24 lg:pt-16"
-          >
-            <div className="mb-10 text-center">
-              <p className="font-mono text-xs uppercase tracking-[0.2em] text-dark/50 dark:text-light/50">Assistant IA</p>
-              <h2 className="mx-auto mt-3 max-w-3xl text-5xl font-medium leading-tight lg:text-4xl sm:text-3xl">
-                Demandez-lui ce que je peux <span className="text-ai">automatiser chez vous</span>.
-              </h2>
-            </div>
-            <AiStudio
-              ref={inputRef}
-              activeSection={activeSection}
-              messages={messages}
-              status={status}
-              onSend={(text) => void send(text)}
-              setModal={setModal}
-            />
-          </section>
-
-          <CaseStudies onAsk={talk} />
-          <section id="offres" className="w-full scroll-mt-24 px-10 pt-32 lg:pt-20 sm:px-0">
-            <Offers />
-          </section>
-          <ContactSection />
-        </div>
-        <Footer />
+      <NavBar />
+      <div ref={stageViewRef}>
+        <Stage
+          ref={inputRef}
+          messages={messages}
+          status={status}
+          speaking={voice.speaking}
+          muted={voice.muted}
+          subject={subject}
+          analyserRef={voice.analyserRef}
+          onSend={ask}
+          onListenGreeting={() => {
+            voice.unlock();
+            voice.stop();
+            voice.say(GREETING);
+          }}
+          onToggleMute={() => voice.setMuted(!voice.muted)}
+        />
       </div>
-
-      <FloatingAsk visible={!heroInView && !studioInView} onClick={() => talk()} />
-      {/* Hors de tout conteneur positionné : l'aperçu suit la souris en coordonnées de page. */}
-      <Modal modal={modal} projects={caseStudies} />
+      <div className="mx-auto max-w-7xl">
+        <CaseStudies onAsk={backToAvatar} />
+        <Offers />
+        <Parcours />
+        <ContactSection onTalk={() => backToAvatar()} />
+      </div>
+      <Footer />
+      <FloatingAsk visible={!stageInView} onClick={() => backToAvatar()} />
     </>
   );
 }
