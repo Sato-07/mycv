@@ -22,22 +22,16 @@ module.exports = {
       },
       keyframes: {
         blink: { '0%, 100%': { opacity: '1' }, '50%': { opacity: '0' } },
-        breathe: {
-          '0%, 100%': { transform: 'translateY(0) scale(1)' },
-          '50%': { transform: 'translateY(-4px) scale(1.008)' },
-        },
         talk: {
           '0%, 100%': { transform: 'translateY(0) rotate(0deg)' },
-          '25%': { transform: 'translateY(-3px) rotate(-0.6deg)' },
-          '75%': { transform: 'translateY(-1px) rotate(0.6deg)' },
+          '50%': { transform: 'translateY(-1.5px) rotate(0.25deg)' },
         },
         wave: { '0%, 100%': { transform: 'scaleY(0.25)' }, '50%': { transform: 'scaleY(1)' } },
       },
       animation: {
         'spin-slow': 'spin 8s linear infinite',
         blink: 'blink 1s step-end infinite',
-        breathe: 'breathe 5s ease-in-out infinite',
-        talk: 'talk 0.9s ease-in-out infinite',
+        talk: 'talk 1.6s ease-in-out infinite',
         wave: 'wave 0.9s ease-in-out infinite',
       },
       backgroundImage:{

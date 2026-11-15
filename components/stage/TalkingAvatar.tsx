@@ -58,8 +58,9 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking
     return () => cancelAnimationFrame(frame);
   }, [speaking, analyserRef]);
 
-  // Sans boucle de parole générée, la pose fixe bouge au rythme de la voix.
-  const poseMotion = speaking && !AVATAR_CLIPS.talking ? 'animate-talk' : 'animate-breathe';
+  // Au repos, l'avatar reste immobile (une « respiration » sur un avatar de cette taille distrait).
+  // Sans boucle de parole générée, la pose fixe bouge seulement pendant qu'il parle.
+  const poseMotion = speaking && !AVATAR_CLIPS.talking ? 'animate-talk' : '';
   const layer = 'absolute inset-0 h-full w-full object-contain object-bottom';
 
   return (
