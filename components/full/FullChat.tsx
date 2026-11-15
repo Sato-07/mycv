@@ -115,15 +115,10 @@ export const FullChat: React.FC<FullChatProps> = ({ messages, status, subject, o
       </form>
 
       {/* Les suggestions lancent la conversation ; ensuite elles prendraient la place de la réponse. */}
-      <AnimatePresence initial={false}>
+      {/* Pas d'animation de hauteur ici : elle coupait les suggestions à moitié. */}
+      <AnimatePresence>
         {!started && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.4 }}
-            className="overflow-hidden"
-          >
+          <motion.div exit={{ opacity: 0, transition: { duration: 0.25 } }}>
             <div className="flex flex-wrap gap-2 pt-4">
               {chatSuggestions.map((suggestion, index) => (
                 <motion.button
