@@ -94,6 +94,10 @@ export const offers: Offer[] = [
   },
 ];
 
+// Voix de l'avatar (ElevenLabs, ou voix du navigateur en repli). Coupée : l'avatar répond en sous-titres
+// et fait ses gestes sans son. Passer à true pour la rallumer, rien d'autre à changer.
+export const VOICE_ENABLED = false;
+
 // Questions proposées en un clic sous l'avatar.
 export const chatSuggestions = [
   'Que peux-tu automatiser dans ma PME ?',

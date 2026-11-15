@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { VOICE_ENABLED } from '@/data/profile';
 
 // Petit WAV silencieux : le jouer pendant un clic « déverrouille » l'audio sur Safari et Chrome mobile,
 // sinon les phrases suivantes, lancées après un fetch, seraient bloquées par l'autoplay.
@@ -106,7 +107,7 @@ export const useVoice = () => {
 
   const say = (sentence: string) => {
     const text = sentence.trim();
-    if (!text || mutedRef.current) return;
+    if (!VOICE_ENABLED || !text || mutedRef.current) return;
     const gen = generation.current;
     // Le fetch part tout de suite : la phrase suivante est prête quand la précédente se termine.
     const clip = engine.current === 'browser' ? Promise.resolve(null) : fetchClip(text);

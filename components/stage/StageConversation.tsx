@@ -5,7 +5,7 @@ import { MdArrowUpward } from 'react-icons/md';
 import { VoiceBars } from './VoiceBars';
 import { Message } from '@/types/type';
 import { ChatStatus } from '@/hook/useChat';
-import { chatSuggestions } from '@/data/profile';
+import { chatSuggestions, VOICE_ENABLED } from '@/data/profile';
 import { MAX_MESSAGE_LENGTH } from '@/utils/constant';
 
 export const GREETING =
@@ -58,18 +58,20 @@ export const StageConversation = forwardRef<HTMLInputElement, StageConversationP
       <div className="flex h-full min-h-0 flex-col lg:mx-auto lg:w-full lg:max-w-xl">
         <div className="flex items-center justify-between border-b border-light/10 pb-4 font-mono text-[11px] uppercase tracking-[0.22em] text-light/55">
           <span className="flex items-center gap-3" aria-live="polite">
-            <VoiceBars active={speaking} analyserRef={analyserRef} />
+            {VOICE_ENABLED && <VoiceBars active={speaking} analyserRef={analyserRef} />}
             Achraf · {statusLabel}
           </span>
-          <button
-            type="button"
-            onClick={onToggleMute}
-            aria-label={muted ? 'Activer le son' : 'Couper le son'}
-            className="inline-flex items-center gap-2 transition hover:text-light"
-          >
-            {muted ? <BsVolumeMuteFill size={13} /> : <BsVolumeUpFill size={13} />}
-            {muted ? 'Muet' : 'Son'}
-          </button>
+          {VOICE_ENABLED && (
+            <button
+              type="button"
+              onClick={onToggleMute}
+              aria-label={muted ? 'Activer le son' : 'Couper le son'}
+              className="inline-flex items-center gap-2 transition hover:text-light"
+            >
+              {muted ? <BsVolumeMuteFill size={13} /> : <BsVolumeUpFill size={13} />}
+              {muted ? 'Muet' : 'Son'}
+            </button>
+          )}
         </div>
 
         <div className="flex min-h-0 flex-1 flex-col justify-center py-6">
@@ -86,7 +88,7 @@ export const StageConversation = forwardRef<HTMLInputElement, StageConversationP
             </motion.p>
           </div>
           <div className="mt-5 flex min-h-[24px] items-center gap-5 text-sm">
-            {!lastBot && (
+            {VOICE_ENABLED && !lastBot && (
               <button type="button" onClick={onListenGreeting} className="group inline-flex items-center gap-2 text-light/70 transition hover:text-light">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full border border-light/40 text-[9px] transition group-hover:border-light">▶</span>
                 Écouter Achraf
