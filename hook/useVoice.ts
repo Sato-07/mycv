@@ -122,7 +122,9 @@ export const useVoice = () => {
         if (url) {
           setSpeaking(true);
           await playClip(url);
-        } else if (engine.current === 'browser') {
+        } else {
+          // Voix du navigateur si ElevenLabs n'est pas configuré, ou refuse cette phrase (quota, abonnement) :
+          // sans ce repli, l'avatar restait muet.
           setSpeaking(true);
           await speakWithBrowser(text);
         }
