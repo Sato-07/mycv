@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AVATAR_CLIPS } from '@/data/profile';
+import { AvatarPuppet } from './AvatarPuppet';
 
 type TalkingAvatarProps = {
   speaking: boolean;
@@ -13,8 +14,7 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
   const intro = useRef<HTMLVideoElement>(null);
   const talkingVideo = useRef<HTMLVideoElement>(null);
   const [introPlaying, setIntroPlaying] = useState(Boolean(AVATAR_CLIPS.intro));
-  // Une fois jouée, la vidéo de parole reste affichée sur sa dernière image : revenir à la pose
-  // de départ faisait un petit saut visible. Elle reprend au début à la question suivante.
+  // Visible pendant la vidéo de parole ; ensuite on revient à la pose animée.
   const [clipOn, setClipOn] = useState(false);
   const playedThisTurn = useRef(false);
   const speakingRef = useRef(speaking);
@@ -91,8 +91,7 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
           {AVATAR_CLIPS.idle ? (
             <video src={AVATAR_CLIPS.idle} poster={AVATAR_CLIPS.pose} className={layer} autoPlay muted loop playsInline aria-hidden />
           ) : (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={AVATAR_CLIPS.pose} alt="Avatar d'Achraf Baitar" className={layer} />
+            <AvatarPuppet className="absolute inset-0" active={!introPlaying && !clipOn} talking={speaking} />
           )}
         </div>
         {AVATAR_CLIPS.talking && (
@@ -103,6 +102,8 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
             muted
             playsInline
             preload="auto"
+            // Retour à la pose une fois la vidéo finie : elle est vivante (regard, clignements, bouche).
+            onEnded={() => setClipOn(false)}
             aria-hidden
           />
         )}
