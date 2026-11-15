@@ -1,18 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { generateText } from 'ai';
-import { createOpenAI } from '@ai-sdk/openai';
+import Anthropic from '@anthropic-ai/sdk';
 import { z } from 'zod';
 import { OpenAIResponse } from '@/types/type';
 import { MAX_MESSAGE_LENGTH } from '@/utils/constant';
 import { caseStudies, CONTACT_EMAIL, offers } from '@/data/profile';
 
-const groq = createOpenAI({
-  baseURL: 'https://api.groq.com/openai/v1',
-  apiKey: process.env.GROQ_API_KEY,
-});
+// Lit ANTHROPIC_API_KEY dans l'environnement (.env, jamais commité).
+const client = new Anthropic();
 
-// llama3-70b-8192 a été retiré par Groq : les appels échouaient.
-const MODEL = 'llama-3.3-70b-versatile';
+const MODEL = 'claude-sonnet-5-5';
 
 // L'historique vient du navigateur : sans plafond, un visiteur peut faire payer un prompt énorme.
 const BodySchema = z.object({
@@ -32,6 +28,7 @@ const SYSTEM_PROMPT = `Rôle :
 Tu es l'assistant IA du site d'Achraf Baitar, développeur freelance en Belgique. Tu parles de lui à la troisième personne,
 avec un ton simple, chaleureux et professionnel, sans jargon. Tes visiteurs sont surtout des patrons de PME et d'indépendants.
 Réponds dans la langue du visiteur, en français par défaut. Trois à six phrases maximum.
+Écris en texte brut : la bulle de chat n'affiche pas le markdown, donc ni astérisques, ni titres, ni listes à puces.
 
 Positionnement :
 Achraf automatise la prospection et la gestion des PME avec l'IA. Il construit des outils sur mesure qui font gagner du temps
@@ -82,14 +79,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const { conversation, userMessage } = parsed.data;
 
   try {
-    const object = await generateText({
-      model: groq(MODEL),
-      system: SYSTEM_PROMPT,
-      prompt: `${conversation}\nVisiteur : "${userMessage}"\n`,
-      maxTokens: 400,
+    const response = await client.beta.messages.create({
+      model: MODEL,
+      // Plafond de coût par réponse ; il inclut la réflexion, d'où la marge au-delà des 3-6 phrases demandées.
+      max_tokens: 2000,
+      // Effort bas : une conversation de site n'a pas besoin de réflexion longue, et c'est plus rapide.
+      output_config: { effort: 'low' },
+      // Si Sonnet refuse une demande, l'API la rejoue sur un modèle de repli dans le même appel.
+      betas: ['server-side-fallback-2026-07-01'],
+      fallbacks: 'default',
+      // Le prompt système est identique à chaque requête : le mettre en cache réduit le coût d'entrée.
+      system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
+      messages: [
+        {
+          role: 'user',
+          content: conversation
+            ? `Conversation précédente :\n${conversation}\n\nNouveau message du visiteur : ${userMessage}`
+            : userMessage,
+        },
+      ],
     });
 
-    const { cleanedText, subjects, colors } = extractSubjectsAndCleanText(object.text || '');
+    if (response.stop_reason === 'refusal') {
+      return res.status(200).json({
+        subjects: [],
+        code: '',
+        textcode: '',
+        text: `Je ne peux pas répondre à ça. Pour toute question, écrivez à ${CONTACT_EMAIL}.`,
+      });
+    }
+
+    const text = response.content
+      .map((block) => (block.type === 'text' ? block.text : ''))
+      .join('');
+    const { cleanedText, subjects, colors } = extractSubjectsAndCleanText(text);
 
     return res.status(200).json({
       subjects,
@@ -98,7 +121,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       text: cleanedText,
     });
   } catch (error) {
-    console.error('Erreur Groq :', error);
+    if (error instanceof Anthropic.RateLimitError) {
+      return res.status(429).json({ error: "Trop de demandes en même temps, réessayez dans un instant." });
+    }
+    if (error instanceof Anthropic.APIError) {
+      console.error(`Erreur API Anthropic ${error.status} :`, error.message);
+    } else {
+      console.error('Erreur assistant :', error);
+    }
     return res.status(500).json({ error: "L'assistant est indisponible pour le moment." });
   }
 }
