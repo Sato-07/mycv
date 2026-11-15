@@ -3,11 +3,38 @@
 @tailwind utilities;
 
 :root {
-    --dark: #1b1b1b;
-    --light: #f5f5f5;
+  --dark: #1b1b1b;
+  --light: #f5f5f5;
 }
 
-body {
-    background: var(--custom-gradient-color);
+html {
+  scroll-behavior: smooth;
+}
+
+/* Trame de points discrète : le décor « IA » de toute la page, sans image à charger. */
+.bg-dots {
+  background-image: radial-gradient(rgba(27, 27, 27, 0.09) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.dark .bg-dots {
+  background-image: radial-gradient(rgba(245, 245, 245, 0.07) 1px, transparent 1px);
+}
+
+.text-ai {
+  background-image: linear-gradient(90deg, #7c3aed, #d946ef, #06b6d4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
-  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

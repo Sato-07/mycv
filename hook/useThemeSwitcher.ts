@@ -22,6 +22,8 @@ export const useThemeSwitcher = (): [string, (mode: string) => void] => {
     }, []);
 
     useEffect(() => {
+        // Premier rendu : le mode n'est pas encore lu, ne pas écraser la préférence enregistrée.
+        if (!mode) return;
         if (typeof window !== 'undefined') {
             if (mode === "dark") {
                 document.documentElement.classList.add("dark");

@@ -2,9 +2,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { caseStudies } from '@/data/profile';
 
-export const CaseStudies: React.FC = () => {
+export const CaseStudies: React.FC<{ onAsk: (question: string) => void }> = ({ onAsk }) => {
   return (
-    <section id="realisations" className="w-full pt-32 lg:pt-20 px-10 sm:px-5">
+    <section id="realisations" className="w-full pt-32 lg:pt-20 px-10 sm:px-5 scroll-mt-24">
       <h2 className="font-medium text-8xl lg:text-6xl sm:text-5xl mb-16 sm:mb-10 text-center w-full">Réalisations</h2>
       <ul className="w-full">
         {caseStudies.map((study) => (
@@ -27,6 +27,13 @@ export const CaseStudies: React.FC = () => {
                   study.title
                 )}
               </h3>
+              <button
+                type="button"
+                onClick={() => onAsk(`Parle-moi du projet ${study.title} : comment il fonctionne et ce qu'il apporte.`)}
+                className="mt-4 font-mono text-xs text-dark/60 transition hover:text-violet-500 dark:text-light/60"
+              >
+                ✦ Demander à l'IA →
+              </button>
             </div>
             <div className="col-span-2 lg:col-span-1 grid grid-cols-3 gap-6 md:grid-cols-1 md:gap-3">
               <div>

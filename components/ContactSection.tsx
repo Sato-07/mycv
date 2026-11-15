@@ -4,7 +4,7 @@ import { bookingHref, CONTACT_EMAIL } from '@/data/profile';
 
 export const ContactSection: React.FC = () => {
   return (
-    <section id="contact" className="w-full py-32 lg:py-20 px-10 sm:px-5 flex flex-col items-center text-center">
+    <section id="contact" className="w-full py-32 lg:py-20 px-10 sm:px-5 flex flex-col items-center text-center scroll-mt-24">
       <AnimatedTitle
         className="text-8xl lg:text-6xl sm:text-4xl font-medium leading-none"
         text="Un projet ? Parlons-en."
@@ -18,7 +18,7 @@ export const ContactSection: React.FC = () => {
           href={bookingHref()}
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-full bg-dark dark:bg-light text-light dark:text-dark border border-solid border-dark dark:border-light px-8 py-3 font-medium hover:bg-light hover:text-dark dark:hover:bg-dark dark:hover:text-light transition-colors"
+          className="rounded-full bg-ai-gradient text-white px-8 py-3 font-medium shadow-lg shadow-violet-500/30 transition hover:scale-[1.03]"
         >
           Réserver un appel
         </a>

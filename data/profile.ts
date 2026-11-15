@@ -94,6 +94,14 @@ export const offers: Offer[] = [
   },
 ];
 
+// Questions proposées en un clic dans le chat.
+export const chatSuggestions = [
+  'Que pourrais-tu automatiser dans ma PME ?',
+  'Montre-moi ce que tu as déjà livré',
+  'Combien coûte un site ou une automatisation ?',
+  'Passe le site en mode sombre',
+];
+
 // Positions des bulles autour du centre « IA » (section Compétences).
 export const skills = [
   { name: 'TypeScript', x: '-5vw', y: '-8vw' },

@@ -1,12 +1,13 @@
 export interface Message {
+  id: number;
   text: string;
   sender: 'user' | 'server';
-  id?: number; 
+  streaming?: boolean;
+  error?: boolean;
 }
 
-
-export interface OpenAIResponse {
-  text: string;
+// Ce que la réponse de l'IA demande à la page : sections à afficher, couleurs à appliquer.
+export interface ChatAction {
   subjects: string[];
   code: string;
   textcode: string;
@@ -55,5 +56,7 @@ export type AnimatedDescriptionProps = {
 export type AnimatedTextProps = {
   text: string,
   className?: string,
-  show?: Boolean, 
+  show?: Boolean,
+  // Index du premier mot écrit en dégradé « IA » (jusqu'à la fin du titre).
+  highlightFrom?: number,
 }

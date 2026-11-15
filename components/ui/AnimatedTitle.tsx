@@ -31,14 +31,14 @@ const singleWord = {
 
 
 
-export const AnimatedTitle:React.FC<AnimatedTextProps> = ({ show=true, text, className = '' }) => {
+export const AnimatedTitle:React.FC<AnimatedTextProps> = ({ show=true, text, className = '', highlightFrom }) => {
     return (
         show ? (
         <div className='w-full m-auto py-2 flex items-center justify-center text-center overflow-hidden sm:py-0'>
-            <motion.h1 className={`inline-block w-full font-bold   ${className}`} variants={quote} initial="initial" animate="animate">
+            <motion.h1 className={`inline-block w-full ${className}`} variants={quote} initial="initial" animate="animate">
                 {
                     text.split(" ").map((word: string, index: number) =>
-                        <motion.span variants={singleWord} initial="initial" animate="animate" key={word+'-'+index} className='inline-block'>
+                        <motion.span variants={singleWord} initial="initial" animate="animate" key={word+'-'+index} className={`inline-block ${highlightFrom !== undefined && index >= highlightFrom ? 'text-ai' : ''}`}>
                             {word}&nbsp;
                         </motion.span>
                     )}

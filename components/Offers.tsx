@@ -28,7 +28,7 @@ export const Offers: React.FC<OffersProps> = ({ compact = false }) => {
             whileInView={{ y: 0, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: index * 0.1, type: 'spring' }}
-            className="flex flex-col rounded-3xl bg-dark dark:bg-light text-light dark:text-dark p-8 shadow-dark"
+            className="flex flex-col rounded-3xl bg-dark dark:bg-light text-light dark:text-dark p-8 ring-1 ring-transparent transition hover:-translate-y-1 hover:ring-violet-500/60 hover:shadow-2xl hover:shadow-violet-500/20"
           >
             <h3 className="text-3xl font-normal">{offer.title}</h3>
             <p className="font-semibold mt-2">{offer.price}</p>

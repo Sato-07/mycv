@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-export const useScrollToBottom = (messages: any[]) => {
+export const useScrollToBottom = (messages: unknown[]) => {
   const messageContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {

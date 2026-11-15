@@ -2,61 +2,68 @@ import React from 'react';
 import Image from 'next/image';
 import FotoProfil from '@/public/hb7_sport.png';
 import { Message } from '@/types/type';
-import {TypingAnimation} from './TypingAnimation';
+import { TypingAnimation } from './TypingAnimation';
 import { useScrollToBottom } from '@/hook/useScrollToBotom';
+import { ChatStatus } from '@/hook/useChat';
+
+const GREETING =
+  "Bonjour ! Je suis l'assistant IA d'Achraf. Dites-moi ce qui vous fait perdre du temps dans votre entreprise, ou demandez-moi ce qu'il a déjà livré, ses offres ou ses compétences.";
+
+const BotAvatar = () => (
+  <div className="shrink-0 rounded-full p-[2px] bg-ai-gradient">
+    <Image src={FotoProfil} alt="" className="h-8 w-8 rounded-full bg-light object-cover object-top" />
+  </div>
+);
+
+const BotBubble: React.FC<{ children: React.ReactNode; error?: boolean }> = ({ children, error }) => (
+  <div className="flex items-start gap-3">
+    <BotAvatar />
+    <div
+      className={`max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-tl-sm px-4 py-3 text-sm leading-relaxed ${
+        error
+          ? 'border border-red-500/40 bg-red-500/10 text-red-700 dark:text-red-300'
+          : 'bg-dark text-light dark:bg-light dark:text-dark'
+      }`}
+    >
+      {children}
+    </div>
+  </div>
+);
 
 type MessageListProps = {
-  allMessages: Message[];
-  isLoading: boolean;
+  messages: Message[];
+  status: ChatStatus;
 };
 
-export const MessageList: React.FC<MessageListProps> = ({ allMessages, isLoading }) => {
-  const { messageContainerRef } = useScrollToBottom(allMessages);
+export const MessageList: React.FC<MessageListProps> = ({ messages, status }) => {
+  const { messageContainerRef } = useScrollToBottom(messages);
 
   return (
-    <div ref={messageContainerRef} className="flex-grow overflow-auto">
-      <div className="flex items-center mb-2 p-3">
-        <Image
-          src={FotoProfil}
-          alt="Achraf"
+    <div ref={messageContainerRef} className="flex-1 space-y-4 overflow-y-auto p-5" aria-live="polite">
+      <BotBubble>{GREETING}</BotBubble>
 
-          className="rounded-full w-14 -mt-8 mr-2"
-        />
-        <span className="inline-block p-2 rounded-lg bg-dark dark:bg-light text-light dark:text-dark">
-          Bonjour ! Je suis l'assistant IA d'Achraf. Dites-moi ce qui vous fait perdre du temps dans votre entreprise,
-          ou demandez-moi ce qu'il a déjà livré, ses offres ou ses compétences.
-          Je peux aussi changer les couleurs du site si vous voulez.
-        </span>
-      </div>
+      {messages.map((message) =>
+        message.sender === 'user' ? (
+          <div key={message.id} className="flex justify-end">
+            <div className="max-w-[85%] whitespace-pre-wrap rounded-2xl rounded-tr-sm bg-gradient-to-br from-violet-600 to-cyan-500 px-4 py-3 text-sm leading-relaxed text-white shadow-lg shadow-violet-500/20">
+              {message.text}
+            </div>
+          </div>
+        ) : (
+          <BotBubble key={message.id} error={message.error}>
+            {message.text}
+            {message.streaming && (
+              <span className="ml-0.5 inline-block h-4 w-[7px] translate-y-0.5 bg-current animate-blink" aria-hidden />
+            )}
+          </BotBubble>
+        )
+      )}
 
-      {allMessages.map((message, index) => (
-        <div key={index} className={`mb-2 p-3 ${message.sender === 'user' ? 'text-right' : 'text-left'}`}>
-          {message.sender === 'user' ? (
-            <div className="flex items-center mb-2 justify-end">
-              <span className="inline-block p-2 rounded-lg bg-gray-200 text-dark dark:bg-neutral-700 dark:text-light">
-                {message.text}
-              </span>
-            </div>
-          ) : (
-            <div className="flex items-center mb-2">
-              <Image
-                src={FotoProfil}
-                alt="Assistant IA"
-                className="rounded-full w-14 -mt-8 mr-2"
-              />
-              <span className="inline-block p-2 rounded-lg bg-dark dark:bg-light text-light dark:text-dark">
-                {message.text}
-              </span>
-            </div>
-          )}
-        </div>
-      ))}
-      {isLoading && (
-        <span className="inline-block p-2 rounded-lg bg-dark">
+      {status === 'thinking' && (
+        <BotBubble>
           <TypingAnimation />
-        </span>
+        </BotBubble>
       )}
     </div>
   );
 };
-

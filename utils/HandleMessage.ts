@@ -1,15 +1,15 @@
-import { OpenAIResponse } from '@/types/type';
+import { ChatAction } from '@/types/type';
 import { Dispatch, SetStateAction } from 'react';
 
 const handleMessage = (
 setActiveSection: Dispatch<SetStateAction<string>>,
-setThemeSettings?: Dispatch<SetStateAction<{ backgroundColor: string; }>>,
-setTextSettings?: Dispatch<SetStateAction<{ textColor: string; }>>,
+setThemeSettings?: Dispatch<SetStateAction<{ backgroundColor?: string; }>>,
+setTextSettings?: Dispatch<SetStateAction<{ textColor?: string; }>>,
 setShowServerImage?: Dispatch<SetStateAction<boolean>>,
 setShowExampleQuestions?: Dispatch<SetStateAction<boolean>>,
 setMode?: (mode: string) => void,
 ) => {
-  return (message: Partial<OpenAIResponse>) => {
+  return (message: Partial<ChatAction>) => {
     const subjectMessage = message.subjects ?? [];
     const color = message.code || '';
     const textcolor = message.textcode || '';

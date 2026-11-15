@@ -1,52 +1,16 @@
-import { motion, Variants } from "framer-motion";
+import React from 'react';
 
-
-const typingVariants: Variants = {
-    start: {
-      opacity: 0.5,
-      color: 'transparent', 
-    },
-    end: {
-      opacity: 1,
-      color: 'white', 
-      transition: {
-        duration: 0.5,
-      },
-    },
-  };  
-  
-
-  
-
+// Trois points qui rebondissent : l'IA « réfléchit » avant le premier mot.
 export const TypingAnimation: React.FC = () => {
   return (
-    <div className="flex  items-center">
-      <motion.span
-        className="mr-1"
-        variants={typingVariants}
-        initial="start"
-        animate="end"
-      >
-        .
-      </motion.span>
-      <motion.span
-        className="mr-1"
-        variants={typingVariants}
-        initial="start"
-        animate="end"
-        transition={{ delay: 0.2 }} 
-      >
-        .
-      </motion.span>
-      <motion.span
-        variants={typingVariants}
-        initial="start"
-        animate="end"
-        transition={{ delay: 0.4 }} 
-      >
-        .
-      </motion.span>
-    </div>
+    <span className="flex items-center gap-1 py-1" aria-label="L'assistant réfléchit">
+      {[0, 150, 300].map((delay) => (
+        <span
+          key={delay}
+          className="h-2 w-2 rounded-full bg-current opacity-70 animate-bounce"
+          style={{ animationDelay: `${delay}ms` }}
+        />
+      ))}
+    </span>
   );
 };
-
