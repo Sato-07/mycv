@@ -9,11 +9,6 @@ type TalkingAvatarProps = {
   waveSignal: number;
 };
 
-// Repères de public/avatar/talking.mp4 (24 images/s, 200 images) : début 0-48, milieu 49-130 dont les
-// 8 dernières se fondent vers l'image 48 pour boucler sans saut, fin 131-199 qui reprend à l'image 122.
-const FPS = 24;
-const TALK_TIMING = { loopStart: 49 / FPS, loopEnd: 131 / FPS, exitAt: 123 / FPS, frame: 1 / FPS };
-
 // Calques superposés : pose de repos (ou boucle de repos), boucle de parole, coucou d'intro.
 // Le conteneur est fusionné en « lighten » avec la page : le fond noir des clips disparaît.
 export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking, analyserRef, waveSignal }) => {
@@ -21,10 +16,9 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking
   const intro = useRef<HTMLVideoElement>(null);
   const talkingVideo = useRef<HTMLVideoElement>(null);
   const [introPlaying, setIntroPlaying] = useState(Boolean(AVATAR_CLIPS.intro));
-  // Visible du début de la parole jusqu'à la fin du geste de rangement, même si la voix s'arrête avant.
+  // Visible pendant l'unique lecture de la vidéo de parole, même si la voix s'arrête avant la fin.
   const [clipOn, setClipOn] = useState(false);
-  const speakingRef = useRef(speaking);
-  const exiting = useRef(false);
+  const playedThisTurn = useRef(false);
 
   // Coucou à l'arrivée, puis à chaque signal ; sans mouvement réduit seulement.
   useEffect(() => {
@@ -39,51 +33,20 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking
     el.play().catch(() => setIntroPlaying(false));
   }, [waveSignal]);
 
-  // La vidéo de parole est montée en trois temps (voir TALK_TIMING) : il sort les mains, fait ses gestes
-  // en boucle tant qu'il parle, puis remet les mains dans les poches. Sans ce découpage, une réponse
-  // longue le faisait ranger et ressortir les mains toutes les 8 secondes.
+  // La vidéo de parole se joue une seule fois par réponse, du début à la fin, puis il revient au repos
+  // même s'il parle encore : la répéter rendait les longues réponses pénibles à regarder.
   useEffect(() => {
-    speakingRef.current = speaking;
     const el = talkingVideo.current;
-    if (!el || !speaking || clipOn) return;
-    exiting.current = false;
+    if (!speaking) {
+      playedThisTurn.current = false;
+      return;
+    }
+    if (!el || playedThisTurn.current) return;
+    playedThisTurn.current = true;
     el.currentTime = 0;
     setClipOn(true);
     void el.play().catch(() => setClipOn(false));
-  }, [speaking, clipOn]);
-
-  useEffect(() => {
-    const el = talkingVideo.current;
-    if (!el || !clipOn) return;
-    const { loopStart, loopEnd, exitAt, frame } = TALK_TIMING;
-    let raf = 0;
-    const tick = () => {
-      const t = el.currentTime;
-      if (!exiting.current && t >= loopEnd - frame * 0.6 && t < loopEnd + 0.25) {
-        // Fin du milieu : on revient à son début (le raccord est fondu dans la vidéo).
-        el.currentTime = loopStart;
-      } else if (!speakingRef.current && !exiting.current && t >= exitAt && t < exitAt + frame * 3) {
-        // Il a fini de parler : on saute à la fin, qui reprend exactement à cette image.
-        exiting.current = true;
-        el.currentTime = loopEnd;
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [clipOn]);
-
-  const onTalkEnded = () => {
-    const el = talkingVideo.current;
-    // Il s'est remis à parler pendant qu'il rangeait les mains : il recommence depuis le début.
-    if (el && speakingRef.current) {
-      exiting.current = false;
-      el.currentTime = 0;
-      void el.play().catch(() => setClipOn(false));
-      return;
-    }
-    setClipOn(false);
-  };
+  }, [speaking]);
 
   // Le halo sous l'avatar grossit avec le volume réel de la voix.
   useEffect(() => {
@@ -137,7 +100,7 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking
             muted
             playsInline
             preload="auto"
-            onEnded={onTalkEnded}
+            onEnded={() => setClipOn(false)}
             aria-hidden
           />
         )}
