@@ -88,7 +88,7 @@ export const StageConversation = forwardRef<HTMLInputElement, StageConversationP
             </motion.p>
           </div>
           <div className="mt-5 flex min-h-[24px] items-center gap-5 text-sm">
-            {(VOICE_ENABLED || AVATAR_CLIPS.introVoice) && !lastBot && (
+            {(VOICE_ENABLED || AVATAR_CLIPS.introHasSound) && !lastBot && (
               <button type="button" onClick={onListenGreeting} className="group inline-flex items-center gap-2 text-light/70 transition hover:text-light">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full border border-light/40 text-[9px] transition group-hover:border-light">▶</span>
                 Écouter Achraf

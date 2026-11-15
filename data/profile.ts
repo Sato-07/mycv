@@ -110,17 +110,18 @@ export const chatSuggestions = [
 // - pose : image de repos (première image du coucou), affichée entre deux clips ;
 // - intro : joué une fois à l'arrivée, et quand le visiteur clique sur « Écouter Achraf » ;
 // - idle / talking : boucles de repos et de parole, null tant qu'elles ne sont pas générées ;
-// - introVoice : la voix du coucou, jouée seulement au clic (les navigateurs bloquent le son automatique).
+// - introHasSound : le coucou contient sa voix (lèvres synchronisées par Kling) ; muet à l'arrivée,
+//   car les navigateurs bloquent le son automatique, et sonore au clic sur « Écouter Achraf ».
 export const AVATAR_CLIPS: {
   pose: string;
   intro: string | null;
-  introVoice: string | null;
+  introHasSound: boolean;
   idle: string | null;
   talking: string | null;
 } = {
   pose: '/avatar/pose.jpg',
   intro: '/avatar/wave.mp4',
-  introVoice: '/avatar/hello.mp3',
+  introHasSound: true,
   idle: null,
   talking: '/avatar/talking.mp4',
 };

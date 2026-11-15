@@ -17,29 +17,25 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
   // de départ faisait un petit saut visible. Elle reprend au début à la question suivante.
   const [clipOn, setClipOn] = useState(false);
   const playedThisTurn = useRef(false);
-  const introVoice = useRef<HTMLAudioElement | null>(null);
 
   // Coucou à l'arrivée (muet), puis à chaque clic sur « Écouter Achraf », cette fois avec sa voix.
   useEffect(() => {
     const el = intro.current;
     if (!el) return;
-    // La voix démarre quand la vidéo joue vraiment : lancées ensemble, elle partait avant l'image.
-    const playVoice = () => {
-      if (waveSignal === 0 || !AVATAR_CLIPS.introVoice) return;
-      const audio = introVoice.current ?? new Audio(AVATAR_CLIPS.introVoice);
-      introVoice.current = audio;
-      audio.currentTime = 0;
-      void audio.play().catch(() => undefined);
-    };
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       setIntroPlaying(false);
-      playVoice();
       return;
     }
+    // Le son est dans la vidéo : les lèvres restent synchronisées sans rien caler à la main.
+    el.muted = waveSignal === 0 || !AVATAR_CLIPS.introHasSound;
     el.currentTime = 0;
     setIntroPlaying(true);
     el.play()
-      .then(playVoice)
+      .catch(() => {
+        // Son refusé par le navigateur : le coucou se joue quand même, sans voix.
+        el.muted = true;
+        return el.play();
+      })
       .catch(() => setIntroPlaying(false));
   }, [waveSignal]);
 
@@ -53,7 +49,7 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
       return;
     }
     // Une question coupe le message d'accueil s'il était encore en cours.
-    introVoice.current?.pause();
+    if (intro.current) intro.current.muted = true;
     if (!el || playedThisTurn.current) return;
     playedThisTurn.current = true;
     el.currentTime = 0;

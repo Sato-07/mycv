@@ -74,7 +74,7 @@ export const FullChat: React.FC<FullChatProps> = ({ messages, status, subject, o
           <p className="mt-5 text-[1.35rem] font-light leading-snug text-light/90 xl:text-xl">
             <AnimatedWords text={GREETING} />
           </p>
-          {AVATAR_CLIPS.introVoice && (
+          {AVATAR_CLIPS.introHasSound && (
             <button type="button" onClick={onListen} className="group mt-4 inline-flex items-center gap-2 self-start text-sm text-light/70 transition hover:text-light">
               <span className="flex h-6 w-6 items-center justify-center rounded-full border border-light/40 text-[9px] transition group-hover:border-light">▶</span>
               Écouter Achraf
