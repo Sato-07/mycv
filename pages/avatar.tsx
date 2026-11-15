@@ -84,10 +84,12 @@ export default function AvatarPage() {
       <section className="grain relative overflow-hidden">
         {/* Pas de z-index ni de transform sur la colonne de l'avatar : sa fusion « lighten » doit voir le fond de la page. */}
         <div
-          className={`relative mx-auto grid h-[100svh] min-h-[680px] max-w-[1600px] grid-cols-[minmax(0,1fr)_auto] grid-rows-[1fr_auto] gap-x-12 px-12 xl:px-8 lg:h-auto lg:min-h-[100svh] lg:grid-cols-1 lg:grid-rows-none lg:gap-y-6 lg:px-6 lg:pb-10 ${
+          className={`relative mx-auto grid max-w-[1600px] grid-cols-[minmax(0,1fr)_auto] grid-rows-[1fr_auto] gap-x-12 px-12 xl:px-8 lg:h-auto lg:min-h-[100svh] lg:grid-cols-1 lg:grid-rows-none lg:gap-y-6 lg:px-6 lg:pb-10 ${
             roomy
-              ? "[grid-template-areas:'chat_avatar'_'chat_avatar'] lg:[grid-template-areas:'avatar'_'chat']"
-              : "[grid-template-areas:'title_avatar'_'chat_avatar'] lg:[grid-template-areas:'title'_'avatar'_'chat']"
+              ? "h-[max(100svh,680px)] [grid-template-areas:'chat_avatar'_'chat_avatar'] lg:[grid-template-areas:'avatar'_'chat']"
+              : // Hauteur minimale et non fixe : sur un écran bas, la page s'allonge au lieu de faire
+                // remonter le chat sur le titre.
+                "min-h-[max(100svh,680px)] [grid-template-areas:'title_avatar'_'chat_avatar'] lg:[grid-template-areas:'title'_'avatar'_'chat']"
           }`}
         >
           <AnimatePresence onExitComplete={() => setTitleGone(true)}>
@@ -98,7 +100,7 @@ export default function AvatarPage() {
             )}
           </AnimatePresence>
 
-          <div className={`relative z-[1] min-h-0 pb-[5vh] [grid-area:chat] lg:pb-0 ${roomy ? 'pt-24 lg:h-[60svh] lg:pt-0' : 'pt-6'}`}>
+          <div className={`relative z-[1] pb-[5vh] [grid-area:chat] lg:pb-0 ${roomy ? 'min-h-0 pt-24 lg:h-[60svh] lg:pt-0' : 'pt-6'}`}>
             <FullChat messages={messages} status={status} subject={subject} onSend={ask} onReset={restart} onListen={() => setWaveSignal((n) => n + 1)} />
           </div>
 

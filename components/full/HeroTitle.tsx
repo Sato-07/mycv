@@ -42,7 +42,7 @@ export const HeroTitle: React.FC = () => (
     </h1>
     <motion.p
       variants={line}
-      className="mt-[3vh] max-w-md text-lg font-light leading-relaxed text-light/60 [@media(max-height:780px)]:hidden lg:mx-auto lg:text-base lg:[@media(max-height:780px)]:block"
+      className="mt-[3vh] max-w-md text-lg font-light leading-relaxed text-light/60 [@media(max-height:880px)]:hidden lg:mx-auto lg:text-base lg:[@media(max-height:880px)]:block"
     >
       Prospection, devis, relances, veille : des outils sur mesure, à prix fixé d'avance. Posez votre question à mon double.
     </motion.p>
