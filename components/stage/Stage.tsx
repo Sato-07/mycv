@@ -46,8 +46,6 @@ export const Stage = forwardRef<HTMLInputElement, StageProps>(({ waveSignal, ...
           <TalkingAvatar
             // Il parle dès que la réponse s'écrit, pas seulement quand la voix joue : avec le son coupé, il bouge quand même.
             speaking={conversation.speaking || conversation.status === 'streaming'}
-            thinking={conversation.status === 'thinking'}
-            analyserRef={conversation.analyserRef}
             waveSignal={waveSignal}
           />
         </div>

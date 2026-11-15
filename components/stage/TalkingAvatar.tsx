@@ -1,18 +1,15 @@
-import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AVATAR_CLIPS } from '@/data/profile';
 
 type TalkingAvatarProps = {
   speaking: boolean;
-  thinking: boolean;
-  analyserRef: MutableRefObject<AnalyserNode | null>;
   // Incrémenté pour rejouer le coucou (clic sur « Écouter Achraf »).
   waveSignal: number;
 };
 
-// Calques superposés : pose de repos (ou boucle de repos), boucle de parole, coucou d'intro.
+// Calques superposés : pose de repos, vidéo de parole, coucou d'intro.
 // Le conteneur est fusionné en « lighten » avec la page : le fond noir des clips disparaît.
-export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking, analyserRef, waveSignal }) => {
-  const halo = useRef<HTMLDivElement>(null);
+export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSignal }) => {
   const intro = useRef<HTMLVideoElement>(null);
   const talkingVideo = useRef<HTMLVideoElement>(null);
   const [introPlaying, setIntroPlaying] = useState(Boolean(AVATAR_CLIPS.intro));
@@ -33,7 +30,8 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking
     el.play().catch(() => setIntroPlaying(false));
   }, [waveSignal]);
 
-  // La vidéo de parole se joue une seule fois par réponse, du début à la fin, puis il revient au repos
+  // La vidéo de parole (coupée à 7,5 s : ensuite, l'original relance un geste interrompu net) se joue
+  // une seule fois par réponse, du début à la fin, puis il revient au repos
   // même s'il parle encore : la répéter rendait les longues réponses pénibles à regarder.
   useEffect(() => {
     const el = talkingVideo.current;
@@ -48,26 +46,6 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking
     void el.play().catch(() => setClipOn(false));
   }, [speaking]);
 
-  // Le halo sous l'avatar grossit avec le volume réel de la voix.
-  useEffect(() => {
-    if (!speaking) {
-      if (halo.current) halo.current.style.transform = 'translateX(-50%) scale(1)';
-      return;
-    }
-    const analyser = analyserRef.current;
-    if (!analyser) return;
-    const data = new Uint8Array(analyser.frequencyBinCount);
-    let frame = 0;
-    const tick = () => {
-      analyser.getByteFrequencyData(data);
-      const level = data.slice(2, 16).reduce((a, b) => a + b, 0) / (14 * 255);
-      if (halo.current) halo.current.style.transform = `translateX(-50%) scale(${(1 + level * 0.35).toFixed(3)})`;
-      frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [speaking, analyserRef]);
-
   // Au repos, l'avatar reste immobile (une « respiration » sur un avatar de cette taille distrait).
   // Sans boucle de parole générée, la pose fixe bouge seulement pendant qu'il parle.
   const poseMotion = speaking && !AVATAR_CLIPS.talking ? 'animate-talk' : '';
@@ -75,14 +53,6 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking
 
   return (
     <div className="relative mx-auto aspect-[3/4] h-full min-h-[280px]">
-      <div
-        ref={halo}
-        aria-hidden
-        className={`absolute bottom-[6%] left-1/2 h-[40%] w-[80%] rounded-full bg-light blur-[90px] ${
-          speaking ? 'opacity-[0.14]' : thinking ? 'animate-pulse opacity-[0.09]' : 'opacity-[0.06]'
-        }`}
-        style={{ transform: 'translateX(-50%)', transition: 'transform 80ms linear, opacity 700ms' }}
-      />
       <div className="relative isolate h-full w-full mix-blend-lighten [mask-image:linear-gradient(to_bottom,black_78%,transparent)]">
         <div className={`absolute inset-0 ${introPlaying ? '' : poseMotion}`}>
           {AVATAR_CLIPS.idle ? (
