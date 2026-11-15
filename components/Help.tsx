@@ -28,25 +28,25 @@ import { motion } from 'framer-motion';
                 >
                     <div className='relative flex flex-col font-mont h-full w-4/5 sm:w-5/6 -top-28 sm:-top-36 bottom-auto'>
                         <h1 className='text-4xl sm:text-lg font-bold dark:text-dark'>
-                            Are there any other mysteries you'd like to clarify?
+                            Que demander à l'assistant ?
                         </h1>
                         <p className='text-lg sm:text-base font-bold sm:pt-2 sm:pb-0 pt-16 pb-5'>
-                            Here are more sample questions:
+                            D'autres exemples de questions :
                         </p>
                         <ul className='font-light mb-4 sm:mb-0'>
-                            <li className='text-lg sm:text-sm mb-2'>I'd like to change the text color to blue and the background to green, please.</li>
-                            <li className='text-lg sm:hidden mb-2'>Let's update the description to highlight your strengths and skills.</li>
-                            <li className='text-lg sm:text-sm mb-2'>How do you see your academic background contributing to your success in the field of deep learning and AI?</li>
+                            <li className='text-lg sm:text-sm mb-2'>Je tiens un commerce : qu'est-ce que tu pourrais automatiser chez moi ?</li>
+                            <li className='text-lg sm:hidden mb-2'>Comment fonctionne ton radar de prospection ?</li>
+                            <li className='text-lg sm:text-sm mb-2'>Passe le texte en bleu et le fond en vert, s'il te plaît.</li>
                         </ul>
 
                         <p className='text-xl flex justify-center sm:text-base font-bold text-red-600 pb-7 pt-9 sm:pt-2 sm:pb-2'>
-                            ⚠️ If you encounter an issue, follow these steps:
+                            ⚠️ Si quelque chose ne va pas :
                         </p>
                         <ul className='font-light flex justify-center sm:text-sm mb-0'>
                             <li>
-                                If the AI's responses seem incorrect or if elements are not displaying properly, I encourage you to repeat your question. However, if the issue persists,
-                                I recommend refreshing the page. The conversation history can sometimes affect how information is displayed, and by refreshing the page,
-                                you may be able to resolve the issue.
+                                Si une réponse semble fausse ou si la page ne s'affiche pas bien, reformulez votre question. Si le souci persiste,
+                                rechargez la page : l'historique de la conversation influence parfois l'affichage. Et pour une vraie question,
+                                le plus simple reste de m'écrire directement.
                             </li>
                         </ul>
                     </div>

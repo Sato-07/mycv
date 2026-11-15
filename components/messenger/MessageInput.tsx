@@ -14,7 +14,8 @@ export const MessageInput: React.FC<MessageInputProps> = ({ newMessage, onChange
       <input
         type="text"
         className="flex-grow bg-dark dark-bg-light lg:w-full placeholder-light dark-placeholder-dark text-white dark-text-dark rounded-lg border px-4 py-2 focus:outline-none"
-        placeholder="Type your message..."
+        placeholder="Votre question..."
+        maxLength={500}
         value={newMessage}
         onChange={(e) => onChange(e.target.value)}
         onKeyPress={onKeyPress}
@@ -22,6 +23,7 @@ export const MessageInput: React.FC<MessageInputProps> = ({ newMessage, onChange
       <button
         className="ml-2 px-4 py-2 bg-dark hover:bg-light text-light hover:text-dark dark-bg-light dark-text-light rounded-lg border border-solid hover:border-dark"
         onClick={onSendMessage}
+        aria-label="Envoyer"
       >
         <MdSend size={24} />
       </button>

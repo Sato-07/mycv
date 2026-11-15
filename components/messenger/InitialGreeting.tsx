@@ -10,9 +10,8 @@ export const InitialGreeting: React.FC = () => {
         className="rounded-full w-14 -mt-8 mr-2"
       />
       <span className=" p-2 rounded-lg bg-dark dark-bg-light text-light dark-text-dark">
-        Hi! Welcome to my portfolio. I'm Achraf AI, your friendly AI here to help you explore my world.
-        Feel free to ask me questions about my skills, projects, or academic journey.
-        We can even customize the site to your liking. Interested?
+        Bonjour ! Je suis l'assistant IA d'Achraf. Dites-moi ce qui vous fait perdre du temps dans votre entreprise,
+        ou demandez-moi ce qu'il a déjà livré, ses offres ou ses compétences.
       </span>
     </div>
   );

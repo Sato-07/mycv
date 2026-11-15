@@ -16,9 +16,9 @@ export interface OpenAIResponse {
   export interface ProjectProps {
     index: number;
     title: string;
-    src: string;
+    subtitle: string;
     show:Boolean;
-    url: string;
+    url?: string;
     setModal: (modal: { active: boolean; index: number }) => void;
   }
 

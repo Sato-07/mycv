@@ -12,8 +12,8 @@ const Details: React.FC<DetailsProps> = ({ position, company, companyLink, time,
         whileInView={{ y: 0 }}
         transition={{ duration: 0.5, type: 'spring' }}
       >
-        <h3 className='capitalize font-medium text-2xl'>
-          {position}&nbsp;<a target="_blank" className='text-primary capitalize' href={companyLink}>@{company}</a>
+        <h3 className='font-medium text-2xl'>
+          {position}&nbsp;<a target="_blank" rel="noopener noreferrer" className='text-primary' href={companyLink}>@{company}</a>
         </h3>
         <span className='capitalize font-medium text-dark/75'>
           {time} | {address}
@@ -37,45 +37,35 @@ type ExperienceProps = {
 
     <div className=' flex flex-col justify-center items-center'>
       <h2 className='font-medium text-8xl justify-center flex items-center flex-col mb-20 text-center w-full'>
-        Education
+        Parcours
       </h2>
       <div>
         <div  className={`w-[100%] h-full relative `}>
           <ul className='w-full flex flex-col items-center justify-between'>
             <Details
-              position='Machine learning' company="Coursera"
+              position='Développeur freelance' company="Indépendant"
+              time="Aujourd'hui" address="Belgique"
+              work="J'accompagne les PME qui veulent gagner du temps ou des clients : automatisations IA, outils de prospection
+              et de veille, logiciels métier, sites web. Prix fixé avant de commencer, livraison par étapes."
+            />
+            <Details
+              position='Cofondateur et développeur' company="Aionik"
+              companyLink="https://aionik.app"
+              time="Aujourd'hui" address="Belgique"
+              work="Aionik est un logiciel de gestion pour les paysagistes : devis, facturation électronique Peppol, relevé d'heures,
+              stock, agenda, application iOS et Android et assistant IA. Je le conçois, le développe et le vends."
+            />
+            <Details
+              position='Bachelier en informatique et systèmes' company="ISIPS"
+              time="2020" address="Belgique"
+              work="Développement logiciel, réseaux, bases de données et systèmes."
+            />
+            <Details
+              position='Machine learning, Université Stanford' company="Coursera"
               companyLink="https://www.coursera.org/"
-              time="2020-Present" address="Belgium"
-              work="Je suis honoré de détenir la certification du cours 'Supervised Machine Learning: Regression and Classification'
-              de l'Université Stanford sur Coursera, dirigé par le renommé professeur Andrew Ng. Cette formation a renforcé ma
-              compréhension des concepts fondamentaux du machine learning, en me permettant d'acquérir des compétences avancées en matière
-              de régression et de classification."
-            />
-            <Details
-              position='Machine learning' company="Coursera"
-              companyLink="www.google.com"
-              time="2020-Present" address="Belgium"
-              work="Je suis honoré de détenir la certification du cours  'Advanced Learning Algorithms' de l'Université Stanford sur Coursera,
-              dirigé par le renommé professeur Andrew Ng. Cette formation m'a permis d'approfondir ma compréhension
-              des algorithmes d'apprentissage avancés, en me dotant de compétences essentielles pour la résolution de problèmes complexes
-              en intelligence artificielle et en data science."
-            />
-            <Details
-              position='Machine learning' company="Coursera"
-              companyLink="www.google.com"
-              time="2020-Present" address="Belgium"
-              work="Je suis honoré de détenir la certification du cours 'Unsupervised Learning, Recommenders, Reinforcement Learning'
-              de l'Université Stanford sur Coursera, dirigé par le renommé professeur Andrew Ng.
-              Cette formation m'a permis d'approfondir ma compréhension des domaines essentiels tels que l'apprentissage non supervisé,
-              les systèmes de recommandation et l'apprentissage par renforcement."
-            />
-            <Details
-              position='Etudiant' company="ISIPS"
-              time="2020-Present" address="Belgium"
-              work="Je suis actuellement en 3ème année de bachelier en informatique et systèmes,
-              avec pour seul obstacle restant la réalisation de mon travail de fin d'études (TFE).
-              Mon parcours académique m'a permis d'acquérir des compétences solides en informatique
-              et de me préparer pour une carrière prometteuse dans ce domaine."
+              time="2020" address="En ligne"
+              work="Trois certifications du cursus d'Andrew Ng : apprentissage supervisé (régression et classification),
+              algorithmes avancés et réseaux de neurones, apprentissage non supervisé et systèmes de recommandation."
             />
 
           </ul>

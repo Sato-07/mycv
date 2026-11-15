@@ -35,6 +35,10 @@ setMode?: (mode: string) => void,
           case 'LIGHTMODE':
             setMode?.("light");
             break;
+          case 'OFFERS':
+            setActiveSection('OFFERS');
+            setShowExampleQuestions?.(false);
+            break;
           case 'PROJECT':
             setActiveSection('PROJECT');
             setShowExampleQuestions?.(false);

@@ -18,14 +18,14 @@ export const MessageList: React.FC<MessageListProps> = ({ allMessages, isLoading
       <div className="flex items-center mb-2 p-3">
         <Image
           src={FotoProfil}
-          alt="Profile image"
+          alt="Achraf"
 
           className="rounded-full w-14 -mt-8 mr-2"
         />
         <span className="inline-block p-2 rounded-lg bg-dark dark:bg-light text-light dark:text-dark">
-          Hi! Welcome to my portfolio. I'm Achraf AI, your friendly AI here to help you explore my world.
-          Feel free to ask me questions about my skills, projects, or academic journey.
-          We can even customize the site to your liking. Interested?
+          Bonjour ! Je suis l'assistant IA d'Achraf. Dites-moi ce qui vous fait perdre du temps dans votre entreprise,
+          ou demandez-moi ce qu'il a déjà livré, ses offres ou ses compétences.
+          Je peux aussi changer les couleurs du site si vous voulez.
         </span>
       </div>
 
@@ -41,7 +41,7 @@ export const MessageList: React.FC<MessageListProps> = ({ allMessages, isLoading
             <div className="flex items-center mb-2">
               <Image
                 src={FotoProfil}
-                alt="server profile"
+                alt="Assistant IA"
                 className="rounded-full w-14 -mt-8 mr-2"
               />
               <span className="inline-block p-2 rounded-lg bg-dark dark:bg-light text-light dark:text-dark">

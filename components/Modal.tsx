@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 interface ModalProps {
   modal: { active: boolean; index: number };
-  projects: { src: string; color: string }[];
+  projects: { src?: string; color: string; title: string; tag: string }[];
 }
 
 const scaleAnimation = {
@@ -81,17 +81,25 @@ export const Modal: React.FC<ModalProps> = ({ modal, projects }) => {
       >
         <div style={{ top: index * -100 + '%' }} className="h-full w-full absolute transition-top duration-500 cubic-bezier(0.76, 0, 0.24, 1)">
           {projects.map((project, index) => {
-            const { src, color } = project;
+            const { src, color, title, tag } = project;
             return (
               <div style={{ backgroundColor: color }} key={`modal_${index}`} className="h-full w-full flex items-center justify-center">
-                <Image src={`/images/${src}`} width={300} height={300} className='h-auto' alt="image" />
+                {src ? (
+                  <Image src={`/images/${src}`} width={300} height={300} className='h-auto' alt={title} />
+                ) : (
+                  // Pas encore de capture : la carte affiche le nom du projet, dans le même cadre.
+                  <div className="flex flex-col items-center justify-center text-center text-light px-8">
+                    <span className="text-3xl font-medium">{title}</span>
+                    <span className="font-light mt-2">{tag}</span>
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
       </motion.div>
       <motion.div ref={cursor} className="w-20 h-20 rounded-full bg-blue-500 text-white absolute z-10 flex items-center justify-center text-sm font-light pointer-events-none" variants={scaleAnimation} initial="initial" animate={active ? 'enter' : 'closed'}></motion.div>
-      <motion.div ref={cursorLabel} className="w-20 h-20 rounded-full bg-transparent absolute z-10 flex items-center justify-center text-sm font-light pointer-events-none" variants={scaleAnimation} initial="initial" animate={active ? 'enter' : 'closed'}>View</motion.div>
+      <motion.div ref={cursorLabel} className="w-20 h-20 rounded-full bg-transparent absolute z-10 flex items-center justify-center text-sm font-light pointer-events-none" variants={scaleAnimation} initial="initial" animate={active ? 'enter' : 'closed'}>Voir</motion.div>
     </>
   );
 };

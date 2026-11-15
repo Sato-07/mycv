@@ -7,6 +7,7 @@ import { BsFillMoonStarsFill, BsSunFill } from 'react-icons/bs';
 import { Link as ScrollLink } from 'react-scroll';
 import { useThemeSwitcher } from '@/hook/useThemeSwitcher';
 import { CustomLinkProps, OpenAIResponse } from '@/types/type';
+import { GITHUB_URL, LINKEDIN_URL } from '@/data/profile';
 
 const CustomLink: React.FC<CustomLinkProps> = ({ href, title, className = '', onClick }) => {
     const router = useRouter();
@@ -66,14 +67,11 @@ export const NavBar: React.FC<NavBarProps> = ({ onSendMessage }) => {
     };
 
     const handleAboutClick = () => {
-        onSendMessage({ text: 'What are your top skills?', subjects: ['SKILLS'] });
+        onSendMessage({ text: 'Que pourrais-tu automatiser dans une PME ?', subjects: ['NULL'] });
         setIsMenuOpen(false);
     };
-  
-    const handleProjectsClick = () => {
-        onSendMessage({ text: 'Can you tell me about one of your projects?', subjects: ['PROJECT'] });
-        setIsMenuOpen(false);
-    };
+
+    const closeMenu = () => setIsMenuOpen(false);
 
     return (
         <header className='w-full z-50 relative px-32 md:p-12 lg:p-14 py-8 font-large flex items-center justify-between dark:text-light'>
@@ -81,6 +79,7 @@ export const NavBar: React.FC<NavBarProps> = ({ onSendMessage }) => {
                 className='lg:flex flex-col py-2 md:right-auto md:flex md:left-0 md:top-0 md:bottom-auto hidden' 
                 onClick={toggleMenu} 
                 aria-expanded={isMenuOpen}
+                aria-label="Menu"
             >
                 <span className={`bg-dark dark:bg-light block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm -translate-y-0.5 ${isMenuOpen ? 'rotate-45 translate-y-1' : '-translate-y-0.5'}`}></span>
                 <span className={`bg-dark dark:bg-light block transition-all duration-300 ease-out h-0.5 w-6 rounded-sm my-0.5 ${isMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
@@ -88,18 +87,19 @@ export const NavBar: React.FC<NavBarProps> = ({ onSendMessage }) => {
             </button>
             <div className='w-full flex justify-between items-center lg:hidden'>
                 <nav>
-                    <CustomLink href="/" title="Home" className='mr-3' />
-                    <CustomLink onClick={handleAboutClick} href="#about" title="About" className='mr-3' />
-                    <CustomLink onClick={handleProjectsClick} href="#projects" title="Projects" className='mr-3' /> 
+                    <CustomLink href="#realisations" title="Réalisations" className='mr-3' />
+                    <CustomLink href="#offres" title="Offres" className='mr-3' />
+                    <CustomLink onClick={handleAboutClick} href="#about" title="Assistant IA" className='mr-3' />
+                    <CustomLink href="#contact" title="Contact" className='mr-3' />
                 </nav>
                 <nav className='flex items-center justify-center flex-wrap'>
-                    <motion.a href="https://www.linkedin.com/" target="_blank" className='w-6 mr-4' whileTap={{ scale: 0.9 }} whileHover={{ y: -2 }}>
+                    <motion.a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className='w-6 mr-4' whileTap={{ scale: 0.9 }} whileHover={{ y: -2 }}>
                         <LinkedInIcon />
                     </motion.a>
-                    <motion.a href="https://github.com/Sato-07" target="_blank" className='w-6 mr-4' whileTap={{ scale: 0.9 }} whileHover={{ y: -2 }}>
+                    <motion.a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className='w-6 mr-4' whileTap={{ scale: 0.9 }} whileHover={{ y: -2 }}>
                         <GithubIcon />
                     </motion.a>
-                    <motion.a onClick={() => setMode(mode === "light" ? "dark" : "light")} className='w-6 mr-4 cursor-pointer' whileTap={{ scale: 0.9 }} whileHover={{ y: -2 }}>
+                    <motion.a aria-label="Changer de thème" onClick={() => setMode(mode === "light" ? "dark" : "light")} className='w-6 mr-4 cursor-pointer' whileTap={{ scale: 0.9 }} whileHover={{ y: -2 }}>
                         {mode === "dark" ? <BsSunFill className={"fill-light w-6 h-6"} /> : <BsFillMoonStarsFill className={"fill-dark"} />}
                     </motion.a>
                 </nav>
@@ -115,17 +115,18 @@ export const NavBar: React.FC<NavBarProps> = ({ onSendMessage }) => {
                         &#10005; 
                     </button>
                     <nav className='flex items-center flex-col mb-2 justify-center'>
-                        <CustomMobileLink onClick={handleAboutClick} href="#about" title="About" />
-                        <CustomMobileLink onClick={handleProjectsClick} href="#projects" title="Projects" />
+                        <CustomMobileLink onClick={closeMenu} href="#realisations" title="Réalisations" />
+                        <CustomMobileLink onClick={closeMenu} href="#offres" title="Offres" />
+                        <CustomMobileLink onClick={closeMenu} href="#contact" title="Contact" />
                     </nav>
                     <nav className='flex items-center justify-center flex-wrap'>
-                        <motion.a href="https://www.linkedin.com/" target="_blank" className='w-6 mr-4' whileTap={{ scale: 0.9 }} whileHover={{ y: -2 }}>
+                        <motion.a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className='w-6 mr-4' whileTap={{ scale: 0.9 }} whileHover={{ y: -2 }}>
                             <LinkedInIcon />
                         </motion.a>
-                        <motion.a href="https://github.com/Sato-07" target="_blank" className='w-6 mr-4' whileTap={{ scale: 0.9 }} whileHover={{ y: -2 }}>
+                        <motion.a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className='w-6 mr-4' whileTap={{ scale: 0.9 }} whileHover={{ y: -2 }}>
                             <GithubIcon />
                         </motion.a>
-                        <motion.a onClick={() => setMode(mode === "light" ? "dark" : "light")} className='w-6 mr-4 cursor-pointer' whileTap={{ scale: 0.9 }} whileHover={{ y: -2 }}>
+                        <motion.a aria-label="Changer de thème" onClick={() => setMode(mode === "light" ? "dark" : "light")} className='w-6 mr-4 cursor-pointer' whileTap={{ scale: 0.9 }} whileHover={{ y: -2 }}>
                             {mode === "dark" ? <BsSunFill className={"fill-light w-6 h-6"} /> : <BsFillMoonStarsFill className={"fill-light"} />}
                         </motion.a>
                     </nav>
