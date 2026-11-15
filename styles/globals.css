@@ -23,21 +23,21 @@ html {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Fondus de l'avatar : le bas s'efface vers la page, et les bords latéraux aussi, pour qu'un bras
+/* Fondus de l'avatar : le bas s'efface vers la page (seulement les derniers 8 %, pour garder le jean), et les bords latéraux aussi, pour qu'un bras
    qui sort du cadre de la vidéo s'estompe au lieu d'être coupé net. Un masque par calque : sur le
    conteneur, il couperait aussi le coucou, plus grand que lui. */
 .avatar-mask {
-  -webkit-mask-image: linear-gradient(to bottom, black 78%, transparent), linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-  mask-image: linear-gradient(to bottom, black 78%, transparent), linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black 92%, transparent), linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+  mask-image: linear-gradient(to bottom, black 92%, transparent), linear-gradient(to right, transparent, black 5%, black 95%, transparent);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
 
-/* Coucou Kling, gardé entier (844 × 1284) et débordant du cadre 720 × 960 de la pose :
+/* Coucou Kling, gardé entier (844 × 1284) et débordant du cadre 720 × 1200 de la pose :
    son fondu du bas tombe à la même hauteur à l'écran que celui des autres calques. */
 .avatar-mask-intro {
-  -webkit-mask-image: linear-gradient(to bottom, black 61.4%, transparent 77.9%), linear-gradient(to right, transparent, black 6%, black 94%, transparent);
-  mask-image: linear-gradient(to bottom, black 61.4%, transparent 77.9%), linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black 89.1%, transparent 96.6%), linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+  mask-image: linear-gradient(to bottom, black 89.1%, transparent 96.6%), linear-gradient(to right, transparent, black 6%, black 94%, transparent);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }

@@ -17,8 +17,10 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
   // de départ faisait un petit saut visible. Elle reprend au début à la question suivante.
   const [clipOn, setClipOn] = useState(false);
   const playedThisTurn = useRef(false);
+  const speakingRef = useRef(speaking);
+  speakingRef.current = speaking;
 
-  // Coucou à l'arrivée (muet), puis à chaque clic sur « Écouter Achraf », cette fois avec sa voix.
+  // Coucou avec sa voix à l'arrivée, puis à chaque clic sur « Écouter Achraf ».
   useEffect(() => {
     const el = intro.current;
     if (!el) return;
@@ -27,7 +29,7 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
       return;
     }
     // Le son est dans la vidéo : les lèvres restent synchronisées sans rien caler à la main.
-    el.muted = waveSignal === 0 || !AVATAR_CLIPS.introHasSound;
+    el.muted = !AVATAR_CLIPS.introHasSound;
     el.currentTime = 0;
     setIntroPlaying(true);
     el.play()
@@ -38,6 +40,20 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
       })
       .catch(() => setIntroPlaying(false));
   }, [waveSignal]);
+
+  // Sans clic préalable, les navigateurs refusent le son : le coucou part alors muet, et le premier
+  // geste du visiteur (clic, touche, toucher) lui rend sa voix là où il en est, lèvres toujours calées.
+  useEffect(() => {
+    if (!AVATAR_CLIPS.introHasSound) return;
+    const events = ['pointerdown', 'keydown', 'touchstart'] as const;
+    const unmute = () => {
+      events.forEach((name) => window.removeEventListener(name, unmute));
+      const el = intro.current;
+      if (el && !el.paused && !el.ended && !speakingRef.current) el.muted = false;
+    };
+    events.forEach((name) => window.addEventListener(name, unmute, { once: true }));
+    return () => events.forEach((name) => window.removeEventListener(name, unmute));
+  }, []);
 
   // La vidéo de parole (coupée à 7,5 s : ensuite, l'original relance un geste interrompu net) se joue
   // une seule fois par réponse, du début à la fin, puis il revient au repos
@@ -63,7 +79,7 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
   const layer = 'avatar-mask absolute inset-0 h-full w-full object-contain object-bottom';
 
   return (
-    <div className="relative mx-auto aspect-[3/4] h-full min-h-[280px]">
+    <div className="relative mx-auto aspect-[3/5] h-full min-h-[280px]">
       <div className="relative isolate h-full w-full mix-blend-lighten">
         {/* Image de repos cachée pendant les vidéos : leurs fondus (bas, côtés) ne tombent pas au même
             endroit, et la pose transparaissait en dessous, mains dans les poches. */}
@@ -96,7 +112,7 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
             src={AVATAR_CLIPS.intro}
             // Vidéo Kling non recadrée : agrandie de 10 % et décalée pour que le personnage tombe pile
             // sur la pose ; elle déborde du cadre pour ne pas couper ses bras.
-            style={{ width: '117.22%', height: '133.75%', left: '-9.44%', top: '-4.17%' }}
+            style={{ width: '117.22%', height: '107%', left: '-9.44%', top: '-3.33%' }}
             className={`avatar-mask-intro absolute max-w-none object-fill transition-opacity duration-500 ${introPlaying ? 'opacity-100' : 'opacity-0'}`}
             muted
             playsInline

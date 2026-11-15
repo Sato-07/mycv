@@ -107,7 +107,7 @@ export const chatSuggestions = [
 
 // Clips de l'avatar, dans public/avatar/. Fond noir écrasé sous le noir du site : la page les fusionne
 // en mode « lighten », donc seul le personnage apparaît.
-// - pose : image de repos (première image du coucou), affichée entre deux clips ;
+// - pose : image de repos (première image de la vidéo de parole, 720 × 1200 pour montrer le jean) ;
 // - intro : joué une fois à l'arrivée, et quand le visiteur clique sur « Écouter Achraf » ;
 // - idle / talking : boucles de repos et de parole, null tant qu'elles ne sont pas générées ;
 // - introHasSound : le coucou contient sa voix (lèvres synchronisées par Kling) ; muet à l'arrivée,
