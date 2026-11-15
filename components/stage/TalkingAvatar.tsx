@@ -60,11 +60,11 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
   // Au repos, l'avatar reste immobile (une « respiration » sur un avatar de cette taille distrait).
   // Sans boucle de parole générée, la pose fixe bouge seulement pendant qu'il parle.
   const poseMotion = speaking && !AVATAR_CLIPS.talking ? 'animate-talk' : '';
-  const layer = 'absolute inset-0 h-full w-full object-contain object-bottom';
+  const layer = 'avatar-mask absolute inset-0 h-full w-full object-contain object-bottom';
 
   return (
     <div className="relative mx-auto aspect-[3/4] h-full min-h-[280px]">
-      <div className="relative isolate h-full w-full mix-blend-lighten [mask-image:linear-gradient(to_bottom,black_78%,transparent)]">
+      <div className="relative isolate h-full w-full mix-blend-lighten">
         <div className={`absolute inset-0 ${introPlaying ? '' : poseMotion}`}>
           {AVATAR_CLIPS.idle ? (
             <video src={AVATAR_CLIPS.idle} poster={AVATAR_CLIPS.pose} className={layer} autoPlay muted loop playsInline aria-hidden />
@@ -88,8 +88,10 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
           <video
             ref={intro}
             src={AVATAR_CLIPS.intro}
-            poster={AVATAR_CLIPS.pose}
-            className={`${layer} transition-opacity duration-500 ${introPlaying ? 'opacity-100' : 'opacity-0'}`}
+            // Vidéo Kling non recadrée : agrandie de 10 % et décalée pour que le personnage tombe pile
+            // sur la pose ; elle déborde du cadre pour ne pas couper ses bras.
+            style={{ width: '117.22%', height: '133.75%', left: '-9.44%', top: '-4.17%' }}
+            className={`avatar-mask-intro absolute max-w-none object-fill transition-opacity duration-500 ${introPlaying ? 'opacity-100' : 'opacity-0'}`}
             muted
             playsInline
             preload="auto"
