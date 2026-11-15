@@ -5,7 +5,7 @@ import { MdArrowUpward } from 'react-icons/md';
 import { VoiceBars } from './VoiceBars';
 import { Message } from '@/types/type';
 import { ChatStatus } from '@/hook/useChat';
-import { chatSuggestions, VOICE_ENABLED } from '@/data/profile';
+import { AVATAR_CLIPS, chatSuggestions, VOICE_ENABLED } from '@/data/profile';
 import { MAX_MESSAGE_LENGTH } from '@/utils/constant';
 
 export const GREETING =
@@ -88,7 +88,7 @@ export const StageConversation = forwardRef<HTMLInputElement, StageConversationP
             </motion.p>
           </div>
           <div className="mt-5 flex min-h-[24px] items-center gap-5 text-sm">
-            {VOICE_ENABLED && !lastBot && (
+            {(VOICE_ENABLED || AVATAR_CLIPS.introVoice) && !lastBot && (
               <button type="button" onClick={onListenGreeting} className="group inline-flex items-center gap-2 text-light/70 transition hover:text-light">
                 <span className="flex h-6 w-6 items-center justify-center rounded-full border border-light/40 text-[9px] transition group-hover:border-light">▶</span>
                 Écouter Achraf

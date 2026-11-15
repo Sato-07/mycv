@@ -24,6 +24,7 @@ export default function AvatarPage() {
   const started = messages.length > 0;
   // La grille ne change qu'une fois le titre sorti : pendant son envol, il garde sa place.
   const [titleGone, setTitleGone] = useState(false);
+  const [waveSignal, setWaveSignal] = useState(0);
   const roomy = started && titleGone;
 
   const restart = () => {
@@ -98,7 +99,7 @@ export default function AvatarPage() {
           </AnimatePresence>
 
           <div className={`relative z-[1] min-h-0 pb-[5vh] [grid-area:chat] lg:pb-0 ${roomy ? 'pt-24 lg:h-[60svh] lg:pt-0' : 'pt-6'}`}>
-            <FullChat messages={messages} status={status} subject={subject} onSend={ask} onReset={restart} />
+            <FullChat messages={messages} status={status} subject={subject} onSend={ask} onReset={restart} onListen={() => setWaveSignal((n) => n + 1)} />
           </div>
 
           <div className={`relative h-[calc(100svh-5.5rem)] max-h-[1000px] self-end [grid-area:avatar] lg:h-[48svh] lg:min-h-[320px] ${roomy ? 'lg:mt-24' : ''}`}>
@@ -111,7 +112,7 @@ export default function AvatarPage() {
             >
               ACHRAF
             </div>
-            <TalkingAvatar speaking={status === 'streaming'} waveSignal={0} />
+            <TalkingAvatar speaking={status === 'streaming'} waveSignal={waveSignal} />
           </div>
         </div>
       </section>

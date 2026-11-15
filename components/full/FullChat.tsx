@@ -6,7 +6,7 @@ import { ChatThread } from './ChatThread';
 import { AnimatedWords } from './AnimatedWords';
 import { Message } from '@/types/type';
 import { ChatStatus } from '@/hook/useChat';
-import { chatSuggestions } from '@/data/profile';
+import { AVATAR_CLIPS, chatSuggestions } from '@/data/profile';
 import { MAX_MESSAGE_LENGTH } from '@/utils/constant';
 
 // Liens vers les sections de la page d'accueil, d'après le sujet de la dernière réponse.
@@ -22,11 +22,12 @@ type FullChatProps = {
   subject: string | null;
   onSend: (text: string) => void;
   onReset: () => void;
+  onListen: () => void;
 };
 
 // Avant la première question : le message d'accueil et des suggestions.
 // Ensuite : le fil complet de la conversation, qui prend la place libérée par le titre.
-export const FullChat: React.FC<FullChatProps> = ({ messages, status, subject, onSend, onReset }) => {
+export const FullChat: React.FC<FullChatProps> = ({ messages, status, subject, onSend, onReset, onListen }) => {
   const [draft, setDraft] = useState('');
   const started = messages.length > 0;
   const busy = status !== 'idle';
@@ -69,9 +70,17 @@ export const FullChat: React.FC<FullChatProps> = ({ messages, status, subject, o
       {started ? (
         <ChatThread messages={messages} status={status} />
       ) : (
-        <p className="mt-5 text-[1.35rem] font-light leading-snug text-light/90 xl:text-xl">
-          <AnimatedWords text={GREETING} />
-        </p>
+        <>
+          <p className="mt-5 text-[1.35rem] font-light leading-snug text-light/90 xl:text-xl">
+            <AnimatedWords text={GREETING} />
+          </p>
+          {AVATAR_CLIPS.introVoice && (
+            <button type="button" onClick={onListen} className="group mt-4 inline-flex items-center gap-2 self-start text-sm text-light/70 transition hover:text-light">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full border border-light/40 text-[9px] transition group-hover:border-light">▶</span>
+              Écouter Achraf
+            </button>
+          )}
+        </>
       )}
 
       <div className="mt-3 min-h-[24px] text-sm">

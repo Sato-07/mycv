@@ -109,10 +109,18 @@ export const chatSuggestions = [
 // en mode « lighten », donc seul le personnage apparaît.
 // - pose : image de repos (première image du coucou), affichée entre deux clips ;
 // - intro : joué une fois à l'arrivée, et quand le visiteur clique sur « Écouter Achraf » ;
-// - idle / talking : boucles de repos et de parole, null tant qu'elles ne sont pas générées.
-export const AVATAR_CLIPS: { pose: string; intro: string | null; idle: string | null; talking: string | null } = {
+// - idle / talking : boucles de repos et de parole, null tant qu'elles ne sont pas générées ;
+// - introVoice : la voix du coucou, jouée seulement au clic (les navigateurs bloquent le son automatique).
+export const AVATAR_CLIPS: {
+  pose: string;
+  intro: string | null;
+  introVoice: string | null;
+  idle: string | null;
+  talking: string | null;
+} = {
   pose: '/avatar/pose.jpg',
   intro: '/avatar/wave.mp4',
+  introVoice: '/avatar/hello.mp3',
   idle: null,
   talking: '/avatar/talking.mp4',
 };
