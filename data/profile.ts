@@ -110,7 +110,7 @@ export const AVATAR_CLIPS: { pose: string; intro: string | null; idle: string | 
   pose: '/avatar/pose.jpg',
   intro: '/avatar/wave.mp4',
   idle: null,
-  talking: null,
+  talking: '/avatar/talking.mp4',
 };
 
 export const skills = [

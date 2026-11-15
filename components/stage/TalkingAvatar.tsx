@@ -32,10 +32,16 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking
 
   // La boucle de parole repart du début à chaque prise de parole, pour ne pas commencer bouche fermée.
   useEffect(() => {
-    if (speaking && talkingVideo.current) {
-      talkingVideo.current.currentTime = 0;
-      void talkingVideo.current.play().catch(() => undefined);
+    const el = talkingVideo.current;
+    if (!el) return;
+    if (speaking) {
+      el.currentTime = 0;
+      void el.play().catch(() => undefined);
+      return;
     }
+    // Pause après le fondu de sortie : une vidéo cachée qui tourne consomme pour rien.
+    const timer = window.setTimeout(() => el.pause(), 400);
+    return () => window.clearTimeout(timer);
   }, [speaking]);
 
   // Le halo sous l'avatar grossit avec le volume réel de la voix.

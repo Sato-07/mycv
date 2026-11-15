@@ -92,8 +92,15 @@ export const useVoice = () => {
       utterance.lang = 'fr-FR';
       const french = window.speechSynthesis.getVoices().find((v) => v.lang.startsWith('fr'));
       if (french) utterance.voice = french;
-      utterance.onend = () => resolve();
-      utterance.onerror = () => resolve();
+      // Certains navigateurs (sans voix installée, onglet en arrière-plan) ne déclenchent jamais onend :
+      // sans ce délai de secours, l'avatar continuerait de « parler » indéfiniment.
+      const fallback = window.setTimeout(() => resolve(), 1500 + text.length * 75);
+      const done = () => {
+        window.clearTimeout(fallback);
+        resolve();
+      };
+      utterance.onend = done;
+      utterance.onerror = done;
       window.speechSynthesis.speak(utterance);
     });
 
