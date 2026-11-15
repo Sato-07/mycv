@@ -9,6 +9,11 @@ type TalkingAvatarProps = {
   waveSignal: number;
 };
 
+// Repères de public/avatar/talking.mp4 (24 images/s, 200 images) : début 0-48, milieu 49-130 dont les
+// 8 dernières se fondent vers l'image 48 pour boucler sans saut, fin 131-199 qui reprend à l'image 122.
+const FPS = 24;
+const TALK_TIMING = { loopStart: 49 / FPS, loopEnd: 131 / FPS, exitAt: 123 / FPS, frame: 1 / FPS };
+
 // Calques superposés : pose de repos (ou boucle de repos), boucle de parole, coucou d'intro.
 // Le conteneur est fusionné en « lighten » avec la page : le fond noir des clips disparaît.
 export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking, analyserRef, waveSignal }) => {
@@ -16,6 +21,10 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking
   const intro = useRef<HTMLVideoElement>(null);
   const talkingVideo = useRef<HTMLVideoElement>(null);
   const [introPlaying, setIntroPlaying] = useState(Boolean(AVATAR_CLIPS.intro));
+  // Visible du début de la parole jusqu'à la fin du geste de rangement, même si la voix s'arrête avant.
+  const [clipOn, setClipOn] = useState(false);
+  const speakingRef = useRef(speaking);
+  const exiting = useRef(false);
 
   // Coucou à l'arrivée, puis à chaque signal ; sans mouvement réduit seulement.
   useEffect(() => {
@@ -30,19 +39,51 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking
     el.play().catch(() => setIntroPlaying(false));
   }, [waveSignal]);
 
-  // La boucle de parole repart du début à chaque prise de parole, pour ne pas commencer bouche fermée.
+  // La vidéo de parole est montée en trois temps (voir TALK_TIMING) : il sort les mains, fait ses gestes
+  // en boucle tant qu'il parle, puis remet les mains dans les poches. Sans ce découpage, une réponse
+  // longue le faisait ranger et ressortir les mains toutes les 8 secondes.
+  useEffect(() => {
+    speakingRef.current = speaking;
+    const el = talkingVideo.current;
+    if (!el || !speaking || clipOn) return;
+    exiting.current = false;
+    el.currentTime = 0;
+    setClipOn(true);
+    void el.play().catch(() => setClipOn(false));
+  }, [speaking, clipOn]);
+
   useEffect(() => {
     const el = talkingVideo.current;
-    if (!el) return;
-    if (speaking) {
+    if (!el || !clipOn) return;
+    const { loopStart, loopEnd, exitAt, frame } = TALK_TIMING;
+    let raf = 0;
+    const tick = () => {
+      const t = el.currentTime;
+      if (!exiting.current && t >= loopEnd - frame * 0.6 && t < loopEnd + 0.25) {
+        // Fin du milieu : on revient à son début (le raccord est fondu dans la vidéo).
+        el.currentTime = loopStart;
+      } else if (!speakingRef.current && !exiting.current && t >= exitAt && t < exitAt + frame * 3) {
+        // Il a fini de parler : on saute à la fin, qui reprend exactement à cette image.
+        exiting.current = true;
+        el.currentTime = loopEnd;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [clipOn]);
+
+  const onTalkEnded = () => {
+    const el = talkingVideo.current;
+    // Il s'est remis à parler pendant qu'il rangeait les mains : il recommence depuis le début.
+    if (el && speakingRef.current) {
+      exiting.current = false;
       el.currentTime = 0;
-      void el.play().catch(() => undefined);
+      void el.play().catch(() => setClipOn(false));
       return;
     }
-    // Pause après le fondu de sortie : une vidéo cachée qui tourne consomme pour rien.
-    const timer = window.setTimeout(() => el.pause(), 400);
-    return () => window.clearTimeout(timer);
-  }, [speaking]);
+    setClipOn(false);
+  };
 
   // Le halo sous l'avatar grossit avec le volume réel de la voix.
   useEffect(() => {
@@ -92,10 +133,11 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, thinking
           <video
             ref={talkingVideo}
             src={AVATAR_CLIPS.talking}
-            className={`${layer} transition-opacity duration-300 ${speaking && !introPlaying ? 'opacity-100' : 'opacity-0'}`}
+            className={`${layer} transition-opacity duration-300 ${clipOn && !introPlaying ? 'opacity-100' : 'opacity-0'}`}
             muted
-            loop
             playsInline
+            preload="auto"
+            onEnded={onTalkEnded}
             aria-hidden
           />
         )}
