@@ -82,5 +82,10 @@ export const useChat = (onAction: (action: ChatAction) => void, onText?: (text: 
     }
   };
 
-  return { messages, status, send };
+  // Repart d'une conversation vide (la page pleine réaffiche alors son titre).
+  const reset = () => {
+    if (status === 'idle') setMessages([]);
+  };
+
+  return { messages, status, send, reset };
 };

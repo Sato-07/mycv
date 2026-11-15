@@ -27,12 +27,14 @@ module.exports = {
           '50%': { transform: 'translateY(-1.5px) rotate(0.25deg)' },
         },
         wave: { '0%, 100%': { transform: 'scaleY(0.25)' }, '50%': { transform: 'scaleY(1)' } },
+        shimmer: { '0%': { backgroundPosition: '200% 0' }, '100%': { backgroundPosition: '-200% 0' } },
       },
       animation: {
         'spin-slow': 'spin 8s linear infinite',
         blink: 'blink 1s step-end infinite',
         talk: 'talk 1.6s ease-in-out infinite',
         wave: 'wave 0.9s ease-in-out infinite',
+        shimmer: 'shimmer 2.2s linear infinite',
       },
       backgroundImage:{
       }

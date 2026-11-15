@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { MdArrowUpward } from 'react-icons/md';
 import { GREETING } from '@/components/stage/StageConversation';
+import { ChatThread } from './ChatThread';
+import { AnimatedWords } from './AnimatedWords';
 import { Message } from '@/types/type';
 import { ChatStatus } from '@/hook/useChat';
 import { chatSuggestions } from '@/data/profile';
@@ -19,24 +21,17 @@ type FullChatProps = {
   status: ChatStatus;
   subject: string | null;
   onSend: (text: string) => void;
+  onReset: () => void;
 };
 
-// Le chat de la page pleine : la réponse s'affiche en grand, comme des sous-titres, au-dessus de la saisie.
-export const FullChat: React.FC<FullChatProps> = ({ messages, status, subject, onSend }) => {
+// Avant la première question : le message d'accueil et des suggestions.
+// Ensuite : le fil complet de la conversation, qui prend la place libérée par le titre.
+export const FullChat: React.FC<FullChatProps> = ({ messages, status, subject, onSend, onReset }) => {
   const [draft, setDraft] = useState('');
-  const subtitles = useRef<HTMLDivElement>(null);
-
-  const lastUser = [...messages].reverse().find((m) => m.sender === 'user');
-  const lastBot = [...messages].reverse().find((m) => m.sender === 'server');
+  const started = messages.length > 0;
   const busy = status !== 'idle';
   const statusLabel = status === 'thinking' ? 'réfléchit' : status === 'streaming' ? 'répond' : "à l'écoute";
   const link = !busy && subject ? SUBJECT_LINKS[subject] : undefined;
-  const text = status === 'thinking' && !lastBot?.streaming ? null : lastBot?.text ?? GREETING;
-
-  // Les sous-titres suivent la fin du texte pendant qu'il s'écrit.
-  useEffect(() => {
-    if (subtitles.current) subtitles.current.scrollTop = subtitles.current.scrollHeight;
-  }, [lastBot?.text]);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,40 +41,65 @@ export const FullChat: React.FC<FullChatProps> = ({ messages, status, subject, o
   };
 
   return (
-    <div className="w-full max-w-[560px] lg:mx-auto">
-      <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-light/55" aria-live="polite">
-        <span className={`h-1.5 w-1.5 rounded-full bg-light ${busy ? 'animate-pulse' : 'opacity-60'}`} aria-hidden />
-        Achraf · {statusLabel}
-      </p>
-      {lastUser && <p className="mt-4 line-clamp-1 font-mono text-xs text-light/40">Vous — {lastUser.text}</p>}
-      <div ref={subtitles} className="mt-4 max-h-[20vh] overflow-y-auto pr-2 lg:max-h-[20vh]">
-        <motion.p
-          key={lastBot?.id ?? 'greeting'}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className={`text-[1.35rem] font-light leading-snug xl:text-xl ${lastBot?.error ? 'text-red-300' : 'text-light/90'}`}
-        >
-          {text ?? <span className="text-light/40">…</span>}
-          {lastBot?.streaming && <span className="ml-1 inline-block h-5 w-[2px] translate-y-1 bg-light animate-blink" aria-hidden />}
-        </motion.p>
+    <div className="flex h-full w-full max-w-[600px] flex-col justify-end lg:mx-auto">
+      <div className="flex items-center justify-between font-mono text-[11px] uppercase tracking-[0.22em] text-light/55">
+        <p className="flex items-center gap-3" aria-live="polite">
+          <span className="relative flex h-1.5 w-1.5" aria-hidden>
+            {busy && <span className="absolute inset-0 animate-ping rounded-full bg-light opacity-60" />}
+            <span className={`relative h-1.5 w-1.5 rounded-full bg-light ${busy ? '' : 'opacity-60'}`} />
+          </span>
+          Achraf · {statusLabel}
+        </p>
+        <AnimatePresence>
+          {started && !busy && (
+            <motion.button
+              type="button"
+              onClick={onReset}
+              initial={{ opacity: 0, x: 8 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0 }}
+              className="transition hover:text-light"
+            >
+              ↺ Recommencer
+            </motion.button>
+          )}
+        </AnimatePresence>
       </div>
+
+      {started ? (
+        <ChatThread messages={messages} status={status} />
+      ) : (
+        <p className="mt-5 text-[1.35rem] font-light leading-snug text-light/90 xl:text-xl">
+          <AnimatedWords text={GREETING} />
+        </p>
+      )}
+
       <div className="mt-3 min-h-[24px] text-sm">
-        {link && (
-          <a href={link.href} className="group inline-flex items-center gap-2 border-b border-light/30 pb-0.5 text-light/80 transition hover:border-light hover:text-light">
-            {link.label} <span className="transition group-hover:translate-x-1">→</span>
-          </a>
-        )}
+        <AnimatePresence>
+          {link && (
+            <motion.a
+              key={link.href}
+              href={link.href}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="group inline-flex items-center gap-2 border-b border-light/30 pb-0.5 text-light/80 transition hover:border-light hover:text-light"
+            >
+              {link.label} <span className="transition group-hover:translate-x-1">→</span>
+            </motion.a>
+          )}
+        </AnimatePresence>
       </div>
 
       <form onSubmit={submit} className="mt-4">
-        <div className="flex items-center gap-2 rounded-full border border-light/15 bg-light/[0.04] p-1.5 pl-6 backdrop-blur transition focus-within:border-light/50">
+        <div className="flex items-center gap-2 rounded-full border border-light/15 bg-light/[0.04] p-1.5 pl-6 backdrop-blur transition focus-within:border-light/50 focus-within:shadow-[0_0_0_6px_rgba(245,245,245,0.04)]">
           <input
             id="avatar-input"
             type="text"
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             maxLength={MAX_MESSAGE_LENGTH}
-            placeholder="Parlez-moi de votre activité…"
+            placeholder={started ? 'Une autre question ?' : 'Parlez-moi de votre activité…'}
             aria-label="Votre question pour Achraf"
             className="min-w-0 flex-1 bg-transparent py-2.5 text-base placeholder:text-light/35 focus:outline-none"
           />
@@ -93,22 +113,36 @@ export const FullChat: React.FC<FullChatProps> = ({ messages, status, subject, o
           </button>
         </div>
       </form>
-      {/* Les suggestions servent à lancer la conversation : ensuite, elles prendraient la place de la réponse. */}
-      {!lastUser && (
-      <div className="mt-4 flex flex-wrap gap-2">
-        {chatSuggestions.map((suggestion) => (
-          <button
-            key={suggestion}
-            type="button"
-            disabled={busy}
-            onClick={() => onSend(suggestion)}
-            className="rounded-full border border-light/15 px-4 py-2 text-[13px] text-light/60 transition hover:border-light/50 hover:text-light disabled:opacity-40"
+
+      {/* Les suggestions lancent la conversation ; ensuite elles prendraient la place de la réponse. */}
+      <AnimatePresence initial={false}>
+        {!started && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.4 }}
+            className="overflow-hidden"
           >
-            {suggestion}
-          </button>
-        ))}
-      </div>
-      )}
+            <div className="flex flex-wrap gap-2 pt-4">
+              {chatSuggestions.map((suggestion, index) => (
+                <motion.button
+                  key={suggestion}
+                  type="button"
+                  disabled={busy}
+                  onClick={() => onSend(suggestion)}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6 + index * 0.08 }}
+                  className="rounded-full border border-light/15 px-4 py-2 text-[13px] text-light/60 transition-colors hover:border-light/50 hover:text-light disabled:opacity-40"
+                >
+                  {suggestion}
+                </motion.button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
