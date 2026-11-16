@@ -182,3 +182,19 @@ export const experience: ExperienceItem[] = [
     text: "Trois certifications du cursus d'Andrew Ng : apprentissage supervisé, algorithmes avancés et réseaux de neurones, apprentissage non supervisé.",
   },
 ];
+
+// Mode cinéma (page /avatar) : un seul plan 16:9 en plein écran, la scène est sur la droite et
+// la moitié gauche, vide et noire, accueille le titre et le chat.
+// - intro : il se retourne puis fait coucou et dit l'accueil (voix incluse, lèvres calées) ;
+// - talkAt : seconde où il commence à parler dans l'intro (« Écouter Achraf » reprend ici) ;
+// - talking : la partie parlée seule, muette, rejouée pendant les réponses du chat ;
+// - rest : dernière image, affichée au repos ; poster : première image (de dos).
+// - focus : position horizontale du personnage dans le cadre, pour le recadrage mobile.
+export const CINEMA = {
+  intro: '/avatar/cinema/intro.mp4',
+  talkAt: 7.533,
+  talking: '/avatar/cinema/talking.mp4',
+  rest: '/avatar/cinema/rest.jpg',
+  poster: '/avatar/cinema/poster.jpg',
+  focus: '74%',
+};

@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import { Logo } from '@/components/ui/Logo';
-import { TalkingAvatar } from '@/components/stage/TalkingAvatar';
+import { CinemaScene } from '@/components/cinema/CinemaScene';
+import { CinemaOpening } from '@/components/cinema/CinemaOpening';
 import { FullChat } from '@/components/full/FullChat';
 import { HeroTitle } from '@/components/full/HeroTitle';
 import { useChat } from '@/hook/useChat';
@@ -13,10 +14,10 @@ import { ChatAction } from '@/types/type';
 const TITLE = 'Parler à Achraf · Développeur freelance, automatisation IA pour PME';
 const DESCRIPTION = "Posez votre question à mon avatar IA : il vous dit ce que je peux automatiser dans votre PME.";
 
-// Page pleine : le titre, l'avatar et le chat, rien d'autre, sur un seul écran.
-// Grand écran : titre en haut à gauche, chat en bas à gauche, avatar sur toute la hauteur à droite.
-// Mobile : titre, avatar, puis chat, les uns sous les autres.
-// Dès la première question, le titre s'envole et la conversation prend toute la colonne.
+// Mode cinéma : un plan 16:9 en plein écran (il se retourne, fait coucou, parle), la scène à droite ;
+// le titre et le chat occupent la moitié gauche, vide et noire.
+// Mobile : le plan recadré sur lui en haut, puis le titre et le chat.
+// Dès la première question, le titre s'envole, la conversation prend la colonne et la caméra s'avance vers lui.
 export default function AvatarPage() {
   const [subject, setSubject] = useState<string | null>(null);
   const onAction = ({ subjects }: ChatAction) => setSubject(subjects.find((s) => s !== 'NULL') ?? null);
@@ -24,7 +25,7 @@ export default function AvatarPage() {
   const started = messages.length > 0;
   // La grille ne change qu'une fois le titre sorti : pendant son envol, il garde sa place.
   const [titleGone, setTitleGone] = useState(false);
-  const [waveSignal, setWaveSignal] = useState(0);
+  const [listenSignal, setListenSignal] = useState(0);
   const roomy = started && titleGone;
 
   const restart = () => {
@@ -81,40 +82,28 @@ export default function AvatarPage() {
         </div>
       </header>
 
-      <section className="grain relative overflow-hidden">
-        {/* Pas de z-index ni de transform sur la colonne de l'avatar : sa fusion « lighten » doit voir le fond de la page. */}
-        <div
-          className={`relative mx-auto grid max-w-[1600px] grid-cols-[minmax(0,1fr)_auto] grid-rows-[1fr_auto] gap-x-12 px-12 xl:px-8 lg:h-auto lg:min-h-[100svh] lg:grid-cols-1 lg:grid-rows-none lg:gap-y-6 lg:px-6 lg:pb-10 ${
-            roomy
-              ? "h-[max(100svh,680px)] [grid-template-areas:'chat_avatar'_'chat_avatar'] lg:[grid-template-areas:'avatar'_'chat']"
-              : // Hauteur minimale et non fixe : sur un écran bas, la page s'allonge au lieu de faire
-                // remonter le chat sur le titre.
-                "min-h-[max(100svh,680px)] [grid-template-areas:'title_avatar'_'chat_avatar'] lg:[grid-template-areas:'title'_'avatar'_'chat']"
-          }`}
-        >
-          <AnimatePresence onExitComplete={() => setTitleGone(true)}>
-            {!started && (
-              <div key="title" className="relative z-[1] self-start pt-[max(6.5rem,15vh)] [grid-area:title] lg:pt-28 lg:text-center">
-                <HeroTitle />
-              </div>
-            )}
-          </AnimatePresence>
+      <CinemaOpening />
+      <section className="grain relative min-h-[max(100svh,640px)] overflow-hidden bg-dark lg:min-h-[100svh]">
+        <CinemaScene
+          speaking={status === 'streaming'}
+          listenSignal={listenSignal}
+          closeUp={roomy}
+          className="absolute inset-0 lg:relative lg:inset-auto lg:h-[56svh] lg:min-h-[300px]"
+        />
 
-          <div className={`relative z-[1] pb-[5vh] [grid-area:chat] lg:pb-0 ${roomy ? 'min-h-0 pt-24 lg:h-[60svh] lg:pt-0' : 'pt-6'}`}>
-            <FullChat messages={messages} status={status} subject={subject} onSend={ask} onReset={restart} onListen={() => setWaveSignal((n) => n + 1)} />
-          </div>
+        <div className="relative z-[2] mx-auto flex h-[max(100svh,640px)] max-w-[1600px] px-12 xl:px-8 lg:-mt-24 lg:h-auto lg:px-6 lg:pb-8">
+          <div className="flex w-[min(44vw,640px)] flex-col lg:w-full">
+            <AnimatePresence onExitComplete={() => setTitleGone(true)}>
+              {!started && (
+                <div key="title" className="pt-[max(7rem,17vh)] lg:pt-0 lg:text-center">
+                  <HeroTitle />
+                </div>
+              )}
+            </AnimatePresence>
 
-          <div className={`relative h-[calc(100svh-5.5rem)] max-h-[1000px] self-end [grid-area:avatar] lg:h-[48svh] lg:min-h-[320px] ${roomy ? 'lg:mt-24' : ''}`}>
-            {/* Nom géant en filigrane derrière l'avatar. */}
-            <div
-              aria-hidden
-              className={`text-outline pointer-events-none absolute left-1/2 top-[8%] w-screen -translate-x-1/2 select-none text-center text-[19vw] font-semibold leading-none transition-[letter-spacing,opacity] duration-[1600ms] ease-out ${
-                roomy ? 'tracking-[0.04em] opacity-50' : 'tracking-tight'
-              }`}
-            >
-              ACHRAF
+            <div className={`mt-auto pb-[6vh] lg:pb-0 ${roomy ? 'flex min-h-0 flex-1 flex-col pt-28 lg:h-[62svh] lg:flex-none lg:pt-10' : 'pt-8'}`}>
+              <FullChat messages={messages} status={status} subject={subject} onSend={ask} onReset={restart} onListen={() => setListenSignal((n) => n + 1)} />
             </div>
-            <TalkingAvatar speaking={status === 'streaming'} waveSignal={waveSignal} />
           </div>
         </div>
       </section>

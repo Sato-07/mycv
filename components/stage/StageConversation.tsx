@@ -9,7 +9,7 @@ import { AVATAR_CLIPS, chatSuggestions, VOICE_ENABLED } from '@/data/profile';
 import { MAX_MESSAGE_LENGTH } from '@/utils/constant';
 
 export const GREETING =
-  "Salut, moi c'est Achraf. Enfin, mon double IA. Dites-moi ce qui vous fait perdre du temps dans votre entreprise, et je vous dis ce que je peux automatiser.";
+  "Salut, c'est le double IA d'Achraf. Qu'est-ce qui vous fait perdre du temps chaque semaine ? Je vous dis ce qu'on peut automatiser.";
 
 const SUBJECT_LINKS: Record<string, { href: string; label: string }> = {
   PROJECT: { href: '#realisations', label: 'Voir mes réalisations' },
