@@ -108,7 +108,8 @@ export const chatSuggestions = [
 // Clips de l'avatar, dans public/avatar/. Fond noir écrasé sous le noir du site : la page les fusionne
 // en mode « lighten », donc seul le personnage (et son bureau) apparaît.
 // Scène actuelle : assis à son bureau (public/avatar/desk/).
-// - pose : image de repos, dernière image de l'intro, assis face caméra mains sur les cuisses ;
+// - pose : image de repos, assis face caméra mains sur les cuisses (l'image où il cesse de pivoter) ;
+//   les vidéos s'y fondent en fin de lecture ;
 // - intro : joué à l'arrivée et au clic sur « Écouter Achraf » : il se retourne, fait coucou et parle ;
 // - introPoster : première image de l'intro (de dos), affichée pendant son chargement ;
 // - introHasSound : l'intro contient sa voix (lèvres synchronisées par Kling) ; muette si le navigateur

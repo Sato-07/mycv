@@ -104,7 +104,7 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
             muted
             playsInline
             preload="auto"
-            // Retour à la pose une fois la vidéo finie : sa dernière image est la pose de repos.
+            // Retour à la pose une fois la vidéo finie, en fondu.
             onEnded={() => setClipOn(false)}
             aria-hidden
           />
