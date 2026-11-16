@@ -55,8 +55,7 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
     return () => events.forEach((name) => window.removeEventListener(name, unmute));
   }, []);
 
-  // La vidéo de parole (coupée à 7,5 s : ensuite, l'original relance un geste interrompu net) se joue
-  // une seule fois par réponse, du début à la fin, puis il revient au repos
+  // La vidéo de parole se joue une seule fois par réponse, du début à la fin, puis il revient au repos
   // même s'il parle encore : la répéter rendait les longues réponses pénibles à regarder.
   useEffect(() => {
     const el = talkingVideo.current;
@@ -79,10 +78,10 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
   const layer = 'avatar-mask absolute inset-0 h-full w-full object-contain object-bottom';
 
   return (
-    <div className="relative mx-auto aspect-[3/5] h-full min-h-[280px]">
+    <div className="relative mx-auto h-full min-h-[280px]" style={{ aspectRatio: AVATAR_CLIPS.aspect }}>
       <div className="relative isolate h-full w-full mix-blend-lighten">
         {/* Image de repos cachée pendant les vidéos : leurs fondus (bas, côtés) ne tombent pas au même
-            endroit, et la pose transparaissait en dessous, mains dans les poches. */}
+            endroit, et la pose transparaissait en dessous. */}
         <div
           className={`absolute inset-0 transition-opacity duration-500 ${introPlaying ? 'opacity-0' : poseMotion} ${
             clipOn && !introPlaying ? 'opacity-0' : ''
@@ -90,8 +89,11 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
         >
           {AVATAR_CLIPS.idle ? (
             <video src={AVATAR_CLIPS.idle} poster={AVATAR_CLIPS.pose} className={layer} autoPlay muted loop playsInline aria-hidden />
-          ) : (
+          ) : AVATAR_CLIPS.puppet ? (
             <AvatarPuppet className="absolute inset-0" active={!introPlaying && !clipOn} talking={speaking} />
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={AVATAR_CLIPS.pose} alt="Avatar d'Achraf Baitar à son bureau" className={layer} />
           )}
         </div>
         {AVATAR_CLIPS.talking && (
@@ -102,7 +104,7 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
             muted
             playsInline
             preload="auto"
-            // Retour à la pose une fois la vidéo finie : elle est vivante (regard, clignements, bouche).
+            // Retour à la pose une fois la vidéo finie : sa dernière image est la pose de repos.
             onEnded={() => setClipOn(false)}
             aria-hidden
           />
@@ -111,10 +113,8 @@ export const TalkingAvatar: React.FC<TalkingAvatarProps> = ({ speaking, waveSign
           <video
             ref={intro}
             src={AVATAR_CLIPS.intro}
-            // Vidéo Kling non recadrée : agrandie de 10 % et décalée pour que le personnage tombe pile
-            // sur la pose ; elle déborde du cadre pour ne pas couper ses bras.
-            style={{ width: '117.22%', height: '107%', left: '-9.44%', top: '-3.33%' }}
-            className={`avatar-mask-intro absolute max-w-none object-fill transition-opacity duration-500 ${introPlaying ? 'opacity-100' : 'opacity-0'}`}
+            poster={AVATAR_CLIPS.introPoster ?? undefined}
+            className={`${layer} transition-opacity duration-500 ${introPlaying ? 'opacity-100' : 'opacity-0'}`}
             muted
             playsInline
             preload="auto"

@@ -106,24 +106,35 @@ export const chatSuggestions = [
 ];
 
 // Clips de l'avatar, dans public/avatar/. Fond noir écrasé sous le noir du site : la page les fusionne
-// en mode « lighten », donc seul le personnage apparaît.
-// - pose : image de repos (première image de la vidéo de parole, 720 × 1200 pour montrer le jean) ;
-// - intro : joué une fois à l'arrivée, et quand le visiteur clique sur « Écouter Achraf » ;
-// - idle / talking : boucles de repos et de parole, null tant qu'elles ne sont pas générées ;
-// - introHasSound : le coucou contient sa voix (lèvres synchronisées par Kling) ; muet à l'arrivée,
-//   car les navigateurs bloquent le son automatique, et sonore au clic sur « Écouter Achraf ».
+// en mode « lighten », donc seul le personnage (et son bureau) apparaît.
+// Scène actuelle : assis à son bureau (public/avatar/desk/).
+// - pose : image de repos, dernière image de l'intro, assis face caméra mains sur les cuisses ;
+// - intro : joué à l'arrivée et au clic sur « Écouter Achraf » : il se retourne, fait coucou et parle ;
+// - introPoster : première image de l'intro (de dos), affichée pendant son chargement ;
+// - introHasSound : l'intro contient sa voix (lèvres synchronisées par Kling) ; muette si le navigateur
+//   bloque le son, puis sonore au premier clic ;
+// - talking : gestes d'explication joués une fois par réponse, qui finissent sur la pose de repos ;
+// - puppet : yeux qui suivent la souris et clignements, découpés pour l'ancienne pose debout
+//   (public/avatar/parts/) : à laisser éteint tant que la pose assise n'a pas ses propres pièces ;
+// - aspect : proportions des clips (largeur / hauteur).
 export const AVATAR_CLIPS: {
   pose: string;
   intro: string | null;
+  introPoster: string | null;
   introHasSound: boolean;
   idle: string | null;
   talking: string | null;
+  puppet: boolean;
+  aspect: string;
 } = {
-  pose: '/avatar/pose.jpg',
-  intro: '/avatar/wave.mp4',
+  pose: '/avatar/desk/rest.jpg',
+  intro: '/avatar/desk/intro.mp4',
+  introPoster: '/avatar/desk/back.jpg',
   introHasSound: true,
   idle: null,
-  talking: '/avatar/talking.mp4',
+  talking: '/avatar/desk/talking.mp4',
+  puppet: false,
+  aspect: '9 / 16',
 };
 
 export const skills = [
