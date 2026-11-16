@@ -23,11 +23,11 @@ html {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-/* Fondus de l'avatar : le bureau de la scène va jusqu'aux bords de la vidéo ; sans un fondu large,
-   on voyait le plateau et la chaise coupés net à gauche, à droite et en bas. Un masque par calque. */
+/* Fondus de l'avatar : juste quelques pour cent sur les bords, pour adoucir la coupe de la vidéo
+   sans rendre transparents le bureau et l'écran. Un masque par calque. */
 .avatar-mask {
-  -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 99%), linear-gradient(to right, transparent, black 16%, black 84%, transparent);
-  mask-image: linear-gradient(to bottom, black 80%, transparent 99%), linear-gradient(to right, transparent, black 16%, black 84%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, black 93%, transparent), linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+  mask-image: linear-gradient(to bottom, black 93%, transparent), linear-gradient(to right, transparent, black 3%, black 97%, transparent);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
