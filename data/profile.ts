@@ -73,6 +73,7 @@ export const caseStudies: CaseStudy[] = [
     result: 'En ligne. Premier client de mon offre site vitrine.',
     url: 'https://raphael-bielen.be',
     media: 'bielen',
+    demo: 'Teaser · raphael-bielen.be',
     color: '#16240f',
   },
   {
