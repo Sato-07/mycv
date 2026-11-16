@@ -21,7 +21,7 @@ export const CaseFeature: React.FC<CaseFeatureProps> = ({ study, index, onAsk })
       className="grid grid-cols-[1.25fr_1fr] items-center gap-16 border-t border-light/10 py-20 xl:gap-10 lg:grid-cols-1 lg:py-14"
     >
       <div className={flip ? 'order-2 lg:order-none' : ''}>
-        {study.media && <SiteVideo media={study.media} url={study.url} title={study.title} />}
+        {study.media && <SiteVideo media={study.media} url={study.url} title={study.title} demo={study.demo} />}
       </div>
 
       <div>

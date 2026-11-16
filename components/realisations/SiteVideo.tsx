@@ -1,12 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-type SiteVideoProps = { media: string; url?: string; title: string };
+type SiteVideoProps = { media: string; url?: string; title: string; demo?: string };
 
 // Le vrai site filmé pendant qu'on le parcourt, dans un cadre de navigateur.
 // Noir et blanc tant qu'il est loin, en couleurs quand il arrive au centre : le site reste sobre
 // et chaque client prend vie au moment où on le lit. La vidéo ne se charge et ne tourne qu'à l'écran.
-export const SiteVideo: React.FC<SiteVideoProps> = ({ media, url, title }) => {
+export const SiteVideo: React.FC<SiteVideoProps> = ({ media, url, title, demo }) => {
   const video = useRef<HTMLVideoElement>(null);
   const [near, nearInView] = useInView({ rootMargin: '300px 0px' });
   const [center, centered] = useInView({ threshold: 0.6 });
@@ -18,7 +18,7 @@ export const SiteVideo: React.FC<SiteVideoProps> = ({ media, url, title }) => {
     else el.pause();
   }, [nearInView]);
 
-  const host = url?.replace(/^https?:\/\//, '') ?? '';
+  const host = demo ?? url?.replace(/^https?:\/\//, '') ?? '';
 
   return (
     <div ref={near} className="group/video relative">
@@ -40,8 +40,8 @@ export const SiteVideo: React.FC<SiteVideoProps> = ({ media, url, title }) => {
           loop
           playsInline
           preload="none"
-          aria-label={`Le site ${title}, parcouru de haut en bas`}
-          className={`aspect-[16/10] w-full object-cover object-top transition-[filter,transform] duration-[1200ms] group-hover/video:scale-[1.015] ${
+          aria-label={demo ? `${title} : ${demo}` : `Le site ${title}, parcouru de haut en bas`}
+          className={`${demo ? 'aspect-video' : 'aspect-[16/10]'} w-full object-cover object-top transition-[filter,transform] duration-[1200ms] group-hover/video:scale-[1.015] ${
             centered ? 'grayscale-0' : 'grayscale'
           }`}
         />

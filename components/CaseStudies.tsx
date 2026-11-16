@@ -14,7 +14,7 @@ export const CaseStudies: React.FC<{ onAsk: (question: string) => void }> = ({ o
       <div className="flex items-end justify-between gap-10 lg:flex-col lg:items-start lg:gap-5">
         <h2 className="mt-4 text-8xl font-medium leading-none lg:text-6xl sm:text-5xl">Ce que j'ai livré</h2>
         <p className="max-w-sm font-light text-light/55">
-          De vrais clients, de vrais sites en ligne. Chaque vidéo est le site lui-même, parcouru de haut en bas.
+          De vrais clients, des projets en ligne. Les vidéos sont filmées sur les vrais sites et dans le logiciel.
         </p>
       </div>
 

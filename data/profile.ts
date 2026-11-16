@@ -24,6 +24,8 @@ export type CaseStudy = {
   color: string;
   // Cas client mis en avant : vidéo en boucle du vrai site (public/realisations/<media>.mp4 + .jpg).
   media?: string;
+  // Vidéo de démo du produit (16:9, montée) plutôt que le site parcouru : cadre plus large, légende propre.
+  demo?: string;
   // Métier et lieu du client, sous le titre.
   client?: string;
   // Phrase du client, seulement si elle est déjà publique (citée sur son site ou sur aionik.app).
@@ -44,6 +46,7 @@ export const caseStudies: CaseStudy[] = [
     quote: { text: "Fini de passer mes soirées sur l'administratif.", author: 'Nicolas Rubini, Rubini Gardens' },
     url: 'https://aionik.app',
     media: 'aionik',
+    demo: "Démo · l'assistant Aion, du coup de fil au planning",
     color: '#062F2B',
   },
   {
