@@ -22,19 +22,73 @@ export type CaseStudy = {
   url?: string;
   src?: string;
   color: string;
+  // Cas client mis en avant : vidéo en boucle du vrai site (public/realisations/<media>.mp4 + .jpg).
+  media?: string;
+  // Vidéo de démo du produit (16:9, montée) plutôt que le site parcouru : cadre plus large, légende propre.
+  demo?: string;
+  // Métier et lieu du client, sous le titre.
+  client?: string;
+  // Phrase du client, seulement si elle est déjà publique (citée sur son site ou sur aionik.app).
+  quote?: { text: string; author: string };
 };
 
+// Les quatre premiers sont des cas clients filmés sur les vrais sites ; les autres passent en liste courte.
 export const caseStudies: CaseStudy[] = [
   {
     title: 'Aionik',
     tag: 'Logiciel métier · web + mobile',
+    client: 'Paysagistes et entrepreneurs de jardin, Belgique',
     problem:
       "Les paysagistes perdent leurs soirées sur l'administratif : devis, factures, heures des ouvriers, planning.",
     built:
       "Un logiciel de gestion complet : devis, facturation électronique Peppol, relevé d'heures, stock, agenda, application iOS et Android, et un assistant IA qui prépare les devis.",
-    result: 'En production chez des entreprises de jardinage belges.',
+    result: 'En production chez des entreprises de jardinage belges, dont Rubini Gardens.',
+    quote: { text: "Fini de passer mes soirées sur l'administratif.", author: 'Nicolas Rubini, Rubini Gardens' },
     url: 'https://aionik.app',
+    media: 'aionik',
+    demo: "Démo · l'assistant Aion, du coup de fil au planning",
     color: '#062F2B',
+  },
+  {
+    title: 'Rubini Gardens',
+    tag: 'Site web relié à Aionik',
+    client: 'Jardinier paysagiste à Wezembeek-Oppem',
+    problem:
+      "Un paysagiste est sur chantier toute la journée : il ne peut pas décrocher à chaque demande de devis ni recopier chaque nouveau client le soir.",
+    built:
+      "Un site éditorial où le jardin pousse au fil du défilement, avec la réservation en ligne : le visiteur choisit un créneau libre, sa fiche client est créée dans Aionik et la visite arrive dans l'agenda.",
+    result: 'En ligne. Les rendez-vous du site sont gérés avec Aionik, sans ressaisie.',
+    url: 'https://rubinigardens.com',
+    media: 'rubini',
+    color: '#1f3a2b',
+  },
+  {
+    title: 'Raphaël Bielen',
+    tag: 'Site vitrine',
+    client: 'Entrepreneur de jardin à Mont-Saint-Guibert',
+    problem:
+      "Vingt-cinq ans de métier, dont vingt comme indépendant : le site doit le montrer et vendre à sa place pendant qu'il est au jardin.",
+    built:
+      "Services, réalisations en photos, zone d'intervention sur 26 communes du Brabant wallon et demande de devis en un clic, sur ordinateur comme sur téléphone.",
+    result: 'En ligne. Premier client de mon offre site vitrine.',
+    url: 'https://raphael-bielen.be',
+    media: 'bielen',
+    demo: 'Teaser · raphael-bielen.be',
+    color: '#16240f',
+  },
+  {
+    title: 'Mister RenoConstruct',
+    tag: 'Site vitrine',
+    client: 'Entreprise générale du BTP à Genappe',
+    problem:
+      "Une entreprise qui fait tout elle-même, du gros œuvre aux finitions, doit le faire comprendre en quelques secondes.",
+    built:
+      "Un site sombre et haut de gamme : le message « le patron sur chantier », les quatre métiers, les chiffres clés et le devis gratuit toujours à portée de clic.",
+    result: 'En ligne. Depuis un téléphone, appel ou demande de devis en un geste.',
+    url: 'https://misterrenoconstruct.com',
+    media: 'reno',
+    demo: 'Teaser · misterrenoconstruct.com',
+    color: '#1a1408',
   },
   {
     title: 'Radar de prospection IA',
@@ -197,4 +251,9 @@ export const CINEMA = {
   rest: '/avatar/cinema/rest.jpg',
   poster: '/avatar/cinema/poster.jpg',
   focus: '74%',
+  // Présentation d'un projet : il pousse sa chaise et montre l'écran, le projet dedans dès le départ
+  // (une vidéo par cas client filmé, voix comprise quand elle existe). Elle s'arrête sur sa pose
+  // finale ; rollEnd = il est déjà à côté de l'écran (point de départ si le mouvement est réduit).
+  roll: (media: string) => `/avatar/cinema/roll-${media}.mp4`,
+  rollEnd: 9.6,
 };

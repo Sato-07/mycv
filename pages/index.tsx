@@ -1,8 +1,9 @@
 import Head from "next/head";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useInView } from "react-intersection-observer";
+import { MotionConfig } from "framer-motion";
 import { NavBar } from "@/components/NavBar";
-import { GREETING, Stage } from "@/components/stage/Stage";
+import { CinemaHero } from "@/components/cinema/CinemaHero";
 import { CaseStudies } from "@/components/CaseStudies";
 import { Offers } from "@/components/Offers";
 import { Parcours } from "@/components/Parcours";
@@ -10,59 +11,39 @@ import { ContactSection } from "@/components/ContactSection";
 import { FloatingAsk } from "@/components/FloatingAsk";
 import { Footer } from "@/components/Footer";
 import { useChat } from "@/hook/useChat";
-import { useVoice } from "@/hook/useVoice";
 import { ChatAction } from "@/types/type";
 
 const TITLE = "Achraf Baitar · Développeur freelance, automatisation IA pour PME";
 const DESCRIPTION = "Parlez à mon avatar IA : j'automatise la prospection et la gestion des PME avec l'IA. Outils sur mesure, automatisations, sites web. Belgique.";
 
-// Une phrase est complète quand sa ponctuation finale est suivie d'un espace : elle peut partir à la voix.
-const SENTENCE = /[\s\S]*?[.!?…](?=\s)/g;
-
 export default function Home() {
   const [subject, setSubject] = useState<string | null>(null);
-  const [waveSignal, setWaveSignal] = useState(0);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const spokenUpTo = useRef(0);
-  const voice = useVoice();
-
-  // Découpe le texte qui arrive en phrases et les envoie une à une à la voix.
-  const feedVoice = (text: string, done: boolean) => {
-    const rest = text.slice(spokenUpTo.current);
-    let consumed = 0;
-    for (const match of Array.from(rest.matchAll(SENTENCE))) {
-      voice.say(match[0]);
-      consumed = (match.index ?? 0) + match[0].length;
-    }
-    spokenUpTo.current += consumed;
-    if (done) {
-      voice.say(text.slice(spokenUpTo.current));
-      spokenUpTo.current = 0;
-    }
-  };
-
+  // Le projet qu'il présente sur son écran, depuis « Achraf vous l'explique ».
+  const [showcase, setShowcase] = useState<string | null>(null);
   const onAction = ({ subjects }: ChatAction) => setSubject(subjects.find((s) => s !== 'NULL') ?? null);
-  const { messages, status, send } = useChat(onAction, feedVoice);
+  // Pas de synthèse vocale ici : la voix est dans la vidéo, les réponses s'écrivent pendant qu'il parle.
+  const { messages, status, send, reset } = useChat(onAction);
 
   const ask = (text: string) => {
-    // Le clic d'envoi est le geste qui autorise le navigateur à jouer le son.
-    voice.unlock();
-    voice.stop();
-    spokenUpTo.current = 0;
     setSubject(null);
     void send(text);
   };
 
   const [stageViewRef, stageInView] = useInView({ threshold: 0.25 });
 
-  const backToAvatar = (question?: string) => {
+  const backToAvatar = (question?: string, media?: string) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (question) ask(question);
-    else window.setTimeout(() => inputRef.current?.focus({ preventScroll: true }), 600);
+    // Un projet filmé : il se pousse et le montre ; une autre question le ramène au bureau.
+    if (question) {
+      setShowcase(media ?? null);
+      ask(question);
+    } else {
+      window.setTimeout(() => document.getElementById('avatar-input')?.focus({ preventScroll: true }), 600);
+    }
   };
 
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <Head>
         <title>{TITLE}</title>
         <meta name="description" content={DESCRIPTION} />
@@ -75,23 +56,17 @@ export default function Home() {
       </Head>
       <NavBar />
       <div ref={stageViewRef}>
-        <Stage
-          ref={inputRef}
+        <CinemaHero
           messages={messages}
           status={status}
-          speaking={voice.speaking}
-          muted={voice.muted}
           subject={subject}
-          analyserRef={voice.analyserRef}
           onSend={ask}
-          waveSignal={waveSignal}
-          onListenGreeting={() => {
-            setWaveSignal((n) => n + 1);
-            voice.unlock();
-            voice.stop();
-            voice.say(GREETING);
+          onReset={() => {
+            reset();
+            setSubject(null);
+            setShowcase(null);
           }}
-          onToggleMute={() => voice.setMuted(!voice.muted)}
+          showcase={showcase}
         />
       </div>
       <div className="mx-auto max-w-7xl">
@@ -102,6 +77,6 @@ export default function Home() {
       </div>
       <Footer />
       <FloatingAsk visible={!stageInView} onClick={() => backToAvatar()} />
-    </>
+    </MotionConfig>
   );
 }
