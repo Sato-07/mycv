@@ -1,10 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
+// Le plan affiché : accueil, réponse parlée, repos, ou présentation d'un projet sur son écran.
+export type CinemaClip = 'intro' | 'talking' | 'rest' | 'roll';
+
 type CinemaHudProps = {
   video: React.RefObject<HTMLVideoElement>;
   talking: React.RefObject<HTMLVideoElement>;
-  clip: 'intro' | 'talking' | 'rest';
+  clip: CinemaClip;
   speaking: boolean;
   muted: boolean;
   onToggleSound: () => void;

@@ -15,6 +15,8 @@ type CinemaHeroProps = {
   onReset: () => void;
   // Prévenu quand le titre est parti et que la conversation prend la colonne.
   onRoomyChange?: (roomy: boolean) => void;
+  // Projet montré sur l'écran du bureau (réalisations), ou null.
+  showcase?: string | null;
 };
 
 // Mode cinéma : un plan 16:9 en plein écran (il se retourne, fait coucou, parle), la scène à droite ;
@@ -22,7 +24,7 @@ type CinemaHeroProps = {
 // Mobile : le plan recadré sur lui en haut, puis le titre et le chat.
 // Dès la première question, le titre s'envole, la conversation prend la colonne et la caméra s'avance vers lui.
 // Partagé par l'accueil et /avatar : une seule mise en scène à entretenir.
-export const CinemaHero: React.FC<CinemaHeroProps> = ({ messages, status, subject, onSend, onReset, onRoomyChange }) => {
+export const CinemaHero: React.FC<CinemaHeroProps> = ({ messages, status, subject, onSend, onReset, onRoomyChange, showcase = null }) => {
   const started = messages.length > 0;
   // La grille ne change qu'une fois le titre sorti : pendant son envol, il garde sa place.
   const [titleGone, setTitleGone] = useState(false);
@@ -44,6 +46,7 @@ export const CinemaHero: React.FC<CinemaHeroProps> = ({ messages, status, subjec
           speaking={status === 'streaming'}
           listenSignal={listenSignal}
           closeUp={roomy}
+          showcase={showcase}
           className="absolute inset-0 lg:relative lg:inset-auto lg:h-[56svh] lg:min-h-[300px]"
         />
 

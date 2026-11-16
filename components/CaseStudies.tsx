@@ -4,7 +4,7 @@ import { caseStudies } from '@/data/profile';
 import { CaseFeature } from './realisations/CaseFeature';
 
 // Les cas clients filmés d'abord, puis les autres projets en liste courte.
-export const CaseStudies: React.FC<{ onAsk: (question: string) => void }> = ({ onAsk }) => {
+export const CaseStudies: React.FC<{ onAsk: (question: string, media?: string) => void }> = ({ onAsk }) => {
   const featured = caseStudies.filter((s) => s.media);
   const others = caseStudies.filter((s) => !s.media);
 

@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { CaseStudy } from '@/data/profile';
 import { SiteVideo } from './SiteVideo';
 
-type CaseFeatureProps = { study: CaseStudy; index: number; onAsk: (question: string) => void };
+type CaseFeatureProps = { study: CaseStudy; index: number; onAsk: (question: string, media?: string) => void };
 
 const Label: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <dt className="font-mono text-[11px] uppercase tracking-[0.2em] text-light/40">{children}</dt>
@@ -67,7 +67,7 @@ export const CaseFeature: React.FC<CaseFeatureProps> = ({ study, index, onAsk })
           )}
           <button
             type="button"
-            onClick={() => onAsk(`Parle-moi du projet ${study.title} : comment il fonctionne et ce qu'il apporte.`)}
+            onClick={() => onAsk(`Parle-moi du projet ${study.title} : comment il fonctionne et ce qu'il apporte.`, study.media)}
             className="rounded-full border border-light/20 px-5 py-2.5 text-sm text-light/75 transition hover:border-light hover:text-light"
           >
             ▶ Achraf vous l'explique

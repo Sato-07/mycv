@@ -18,6 +18,8 @@ const DESCRIPTION = "Parlez à mon avatar IA : j'automatise la prospection et la
 
 export default function Home() {
   const [subject, setSubject] = useState<string | null>(null);
+  // Le projet qu'il présente sur son écran, depuis « Achraf vous l'explique ».
+  const [showcase, setShowcase] = useState<string | null>(null);
   const onAction = ({ subjects }: ChatAction) => setSubject(subjects.find((s) => s !== 'NULL') ?? null);
   // Pas de synthèse vocale ici : la voix est dans la vidéo, les réponses s'écrivent pendant qu'il parle.
   const { messages, status, send, reset } = useChat(onAction);
@@ -29,10 +31,15 @@ export default function Home() {
 
   const [stageViewRef, stageInView] = useInView({ threshold: 0.25 });
 
-  const backToAvatar = (question?: string) => {
+  const backToAvatar = (question?: string, media?: string) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (question) ask(question);
-    else window.setTimeout(() => document.getElementById('avatar-input')?.focus({ preventScroll: true }), 600);
+    // Un projet filmé : il se pousse et le montre ; une autre question le ramène au bureau.
+    if (question) {
+      setShowcase(media ?? null);
+      ask(question);
+    } else {
+      window.setTimeout(() => document.getElementById('avatar-input')?.focus({ preventScroll: true }), 600);
+    }
   };
 
   return (
@@ -57,7 +64,9 @@ export default function Home() {
           onReset={() => {
             reset();
             setSubject(null);
+            setShowcase(null);
           }}
+          showcase={showcase}
         />
       </div>
       <div className="mx-auto max-w-7xl">

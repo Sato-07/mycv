@@ -249,4 +249,8 @@ export const CINEMA = {
   rest: '/avatar/cinema/rest.jpg',
   poster: '/avatar/cinema/poster.jpg',
   focus: '74%',
+  // Présentation d'un projet : il pousse sa chaise et montre l'écran, le projet dedans dès le départ
+  // (une vidéo par cas client filmé). Après rollEnd, il tient la pose et seul le projet bouge.
+  roll: (media: string) => `/avatar/cinema/roll-${media}.mp4`,
+  rollEnd: 10.1,
 };
