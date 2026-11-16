@@ -3,10 +3,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import { Logo } from '@/components/ui/Logo';
-import { CinemaScene } from '@/components/cinema/CinemaScene';
-import { CinemaOpening } from '@/components/cinema/CinemaOpening';
-import { FullChat } from '@/components/full/FullChat';
-import { HeroTitle } from '@/components/full/HeroTitle';
+import { CinemaHero } from '@/components/cinema/CinemaHero';
 import { useChat } from '@/hook/useChat';
 import { bookingHref } from '@/data/profile';
 import { ChatAction } from '@/types/type';
@@ -14,24 +11,17 @@ import { ChatAction } from '@/types/type';
 const TITLE = 'Parler à Achraf · Développeur freelance, automatisation IA pour PME';
 const DESCRIPTION = "Posez votre question à mon avatar IA : il vous dit ce que je peux automatiser dans votre PME.";
 
-// Mode cinéma : un plan 16:9 en plein écran (il se retourne, fait coucou, parle), la scène à droite ;
-// le titre et le chat occupent la moitié gauche, vide et noire.
-// Mobile : le plan recadré sur lui en haut, puis le titre et le chat.
-// Dès la première question, le titre s'envole, la conversation prend la colonne et la caméra s'avance vers lui.
+// Le mode cinéma seul, sans le reste du site : lien direct à envoyer à un prospect.
 export default function AvatarPage() {
   const [subject, setSubject] = useState<string | null>(null);
   const onAction = ({ subjects }: ChatAction) => setSubject(subjects.find((s) => s !== 'NULL') ?? null);
   const { messages, status, send, reset } = useChat(onAction);
-  const started = messages.length > 0;
-  // La grille ne change qu'une fois le titre sorti : pendant son envol, il garde sa place.
-  const [titleGone, setTitleGone] = useState(false);
-  const [listenSignal, setListenSignal] = useState(0);
-  const roomy = started && titleGone;
+  // Le titre parti, le nom passe à côté du logo.
+  const [roomy, setRoomy] = useState(false);
 
   const restart = () => {
     reset();
     setSubject(null);
-    setTitleGone(false);
   };
 
   const ask = (text: string) => {
@@ -82,31 +72,7 @@ export default function AvatarPage() {
         </div>
       </header>
 
-      <CinemaOpening />
-      <section className="grain relative min-h-[max(100svh,640px)] overflow-hidden bg-dark lg:min-h-[100svh]">
-        <CinemaScene
-          speaking={status === 'streaming'}
-          listenSignal={listenSignal}
-          closeUp={roomy}
-          className="absolute inset-0 lg:relative lg:inset-auto lg:h-[56svh] lg:min-h-[300px]"
-        />
-
-        <div className="relative z-[2] mx-auto flex h-[max(100svh,640px)] max-w-[1600px] px-12 xl:px-8 lg:-mt-24 lg:h-auto lg:px-6 lg:pb-8">
-          <div className="flex w-[min(44vw,640px)] flex-col lg:w-full">
-            <AnimatePresence onExitComplete={() => setTitleGone(true)}>
-              {!started && (
-                <div key="title" className="pt-[max(7rem,17vh)] lg:pt-0 lg:text-center">
-                  <HeroTitle />
-                </div>
-              )}
-            </AnimatePresence>
-
-            <div className={`mt-auto pb-[6vh] lg:pb-0 ${roomy ? 'flex min-h-0 flex-1 flex-col pt-28 lg:h-[62svh] lg:flex-none lg:pt-10' : 'pt-8'}`}>
-              <FullChat messages={messages} status={status} subject={subject} onSend={ask} onReset={restart} onListen={() => setListenSignal((n) => n + 1)} />
-            </div>
-          </div>
-        </div>
-      </section>
+      <CinemaHero messages={messages} status={status} subject={subject} onSend={ask} onReset={restart} onRoomyChange={setRoomy} />
     </MotionConfig>
   );
 }
