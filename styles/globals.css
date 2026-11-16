@@ -3,11 +3,64 @@
 @tailwind utilities;
 
 :root {
-    --dark: #1b1b1b;
-    --light: #f5f5f5;
+  --dark: #0a0a0a;
+  --light: #f5f5f5;
+  color-scheme: dark;
 }
 
-body {
-    background: var(--custom-gradient-color);
+html {
+  scroll-behavior: smooth;
+  background: #0a0a0a;
+}
+
+/* Grain de film très léger : donne de la matière au noir sans ajouter de couleur. */
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Fondus de l'avatar : juste quelques pour cent sur les bords, pour adoucir la coupe de la vidéo
+   sans rendre transparents le bureau et l'écran. Un masque par calque. */
+.avatar-mask {
+  -webkit-mask-image: linear-gradient(to bottom, black 93%, transparent), linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+  mask-image: linear-gradient(to bottom, black 93%, transparent), linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(245, 245, 245, 0.09);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
-  
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* Bords du plan cinéma fondus dans la page (haut, bas, gauche) : sans couture quand il ne remplit pas l'écran. */
+.cinema-mask {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 9%, black 90%, transparent),
+    linear-gradient(to right, transparent, black 12%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to bottom, transparent, black 9%, black 90%, transparent),
+    linear-gradient(to right, transparent, black 12%);
+  mask-composite: intersect;
+}
+@media (max-width: 1023px) {
+  .cinema-mask {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
