@@ -250,8 +250,8 @@ export const CINEMA = {
   poster: '/avatar/cinema/poster.jpg',
   focus: '74%',
   // Présentation d'un projet : il pousse sa chaise et montre l'écran, le projet dedans dès le départ
-  // (une vidéo par cas client filmé). La vidéo s'arrête sur sa pose finale ; rollEnd = il est déjà
-  // à côté de l'écran (on y saute quand on passe d'un projet à l'autre).
+  // (une vidéo par cas client filmé, voix comprise quand elle existe). Elle s'arrête sur sa pose
+  // finale ; rollEnd = il est déjà à côté de l'écran (point de départ si le mouvement est réduit).
   roll: (media: string) => `/avatar/cinema/roll-${media}.mp4`,
   rollEnd: 9.6,
 };

@@ -109,7 +109,6 @@ export const CinemaScene: React.FC<CinemaSceneProps> = ({ speaking, listenSignal
   }, [speaking]);
 
   // Un projet demandé : il pousse sa chaise et le montre, le projet déjà dans l'écran (une vidéo par projet).
-  // Déjà en train de présenter : on reprend le nouveau projet là où il est assis à côté, sans le ramener au bureau.
   // Plus de projet : retour en fondu à l'image du bureau.
   useEffect(() => {
     if (!showcase) {
@@ -124,8 +123,17 @@ export const CinemaScene: React.FC<CinemaSceneProps> = ({ speaking, listenSignal
     intro.current?.pause();
     talking.current?.pause();
     Object.values(rolls.current).forEach((v) => v && v !== el && v.pause());
-    el.currentTime = clipRef.current === 'roll' || reduced ? CINEMA.rollEnd : 0;
-    void el.play().catch(() => setClip('rest'));
+    // Toujours depuis le début : sa voix présente le projet dès qu'il se pousse (sauf mouvement réduit).
+    el.currentTime = reduced ? CINEMA.rollEnd : 0;
+    // Sa voix présente le projet (quand la vidéo en a une) : le clic sur « Achraf vous l'explique »
+    // autorise le son ; si le navigateur le refuse quand même, la vidéo part muette.
+    el.muted = false;
+    el.play()
+      .catch(() => {
+        el.muted = true;
+        return el.play();
+      })
+      .catch(() => setClip('rest'));
   }, [showcase]);
 
   const toggleSound = () => {
