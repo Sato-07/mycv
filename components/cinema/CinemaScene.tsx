@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { CINEMA, caseStudies } from '@/data/profile';
 import { CinemaHud, CinemaClip } from './CinemaHud';
 
@@ -35,24 +35,6 @@ export const CinemaScene: React.FC<CinemaSceneProps> = ({ speaking, listenSignal
   const [muted, setMuted] = useState(true);
   const speakingRef = useRef(speaking);
   speakingRef.current = speaking;
-
-  // Parallaxe : la scène glisse un peu à l'opposé de la souris, comme vue à travers une vitre.
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const sx = useSpring(mx, { stiffness: 40, damping: 18 });
-  const sy = useSpring(my, { stiffness: 40, damping: 18 });
-  const x = useTransform(sx, (v) => v * -14);
-  const y = useTransform(sy, (v) => v * -9);
-
-  useEffect(() => {
-    if (!window.matchMedia('(pointer: fine)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const onMove = (e: PointerEvent) => {
-      mx.set(e.clientX / window.innerWidth - 0.5);
-      my.set(e.clientY / window.innerHeight - 0.5);
-    };
-    window.addEventListener('pointermove', onMove);
-    return () => window.removeEventListener('pointermove', onMove);
-  }, [mx, my]);
 
   // À l'arrivée : tout le plan depuis le début. Ensuite, « Écouter Achraf » reprend là où il se met à parler.
   useEffect(() => {
@@ -159,7 +141,8 @@ export const CinemaScene: React.FC<CinemaSceneProps> = ({ speaking, listenSignal
       {/* Le plan apparaît en sortant du flou et du noir, pendant que les volets s'ouvrent. */}
       <motion.div
         className="absolute inset-0"
-        style={{ x, y, transformOrigin: `${CINEMA.focus} 55%` }}
+        // Pas de parallaxe à la souris : le bureau bougeait et l'écran incrusté semblait trembler.
+        style={{ transformOrigin: `${CINEMA.focus} 55%` }}
         initial={{ filter: 'blur(24px) brightness(0.2)', scale: 1.08 }}
         animate={{ filter: 'blur(0px) brightness(1)', scale: closeUp ? 1.06 : 1 }}
         transition={{
