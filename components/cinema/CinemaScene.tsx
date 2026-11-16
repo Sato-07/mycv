@@ -182,11 +182,6 @@ export const CinemaScene: React.FC<CinemaSceneProps> = ({ speaking, listenSignal
                 setShown(media);
                 setClip('roll');
               }}
-              // La fin tient sa dernière pose pendant que le projet tourne : on reboucle sur ce passage.
-              onEnded={(e) => {
-                e.currentTarget.currentTime = CINEMA.rollEnd;
-                void e.currentTarget.play();
-              }}
               aria-hidden
             />
           ))}
