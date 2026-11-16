@@ -48,3 +48,19 @@ html {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* Bords du plan cinéma fondus dans la page (haut, bas, gauche) : sans couture quand il ne remplit pas l'écran. */
+.cinema-mask {
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 9%, black 90%, transparent),
+    linear-gradient(to right, transparent, black 12%);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to bottom, transparent, black 9%, black 90%, transparent),
+    linear-gradient(to right, transparent, black 12%);
+  mask-composite: intersect;
+}
+@media (max-width: 1023px) {
+  .cinema-mask {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}

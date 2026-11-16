@@ -120,14 +120,17 @@ export const CinemaScene: React.FC<CinemaSceneProps> = ({ speaking, listenSignal
       <motion.div
         className="absolute inset-0"
         style={{ x, y, transformOrigin: `${CINEMA.focus} 55%` }}
-        initial={{ filter: 'blur(24px) brightness(0.2)', scale: 1.14 }}
-        animate={{ filter: 'blur(0px) brightness(1)', scale: closeUp ? 1.13 : 1.05 }}
+        initial={{ filter: 'blur(24px) brightness(0.2)', scale: 1.08 }}
+        animate={{ filter: 'blur(0px) brightness(1)', scale: closeUp ? 1.06 : 1 }}
         transition={{
           filter: { duration: 2.2, ease: [0.22, 1, 0.36, 1], delay: 0.5 },
           scale: { duration: closeUp ? 6 : 3.2, ease: [0.22, 1, 0.36, 1] },
         }}
       >
-        <div className="absolute inset-0">
+        {/* Grand écran : le plan garde ses proportions et ne dépasse pas ~1,2 fois sa taille réelle
+            (vidéo en 720p, agrandie davantage elle devenait floue) ; ses bords fondent dans le noir.
+            Mobile : il remplit le cadre, recadré sur lui. */}
+        <div className="cinema-mask absolute right-0 top-1/2 aspect-video w-[min(100%,1560px,calc(100svh*16/9))] -translate-y-1/2 lg:inset-0 lg:aspect-auto lg:w-full lg:translate-y-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={CINEMA.rest} alt="Achraf, son double IA, assis à son bureau" className={`${layer} ${show('rest')}`} style={{ objectPosition: `${CINEMA.focus} 50%` }} />
           <video
