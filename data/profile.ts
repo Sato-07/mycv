@@ -87,6 +87,7 @@ export const caseStudies: CaseStudy[] = [
     result: 'En ligne. Depuis un téléphone, appel ou demande de devis en un geste.',
     url: 'https://misterrenoconstruct.com',
     media: 'reno',
+    demo: 'Teaser · misterrenoconstruct.com',
     color: '#1a1408',
   },
   {
