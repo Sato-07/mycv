@@ -128,9 +128,9 @@ export const CinemaScene: React.FC<CinemaSceneProps> = ({ speaking, listenSignal
         }}
       >
         {/* Grand écran : le plan garde ses proportions et ne dépasse pas ~1,2 fois sa taille réelle
-            (vidéo en 720p, agrandie davantage elle devenait floue) ; ses bords fondent dans le noir.
+            (vidéo en 1080p agrandie par IA ; au-delà elle redeviendrait floue) ; ses bords fondent dans le noir.
             Mobile : il remplit le cadre, recadré sur lui. */}
-        <div className="cinema-mask absolute right-0 top-1/2 aspect-video w-[min(100%,1560px,calc(100svh*16/9))] -translate-y-1/2 lg:inset-0 lg:aspect-auto lg:w-full lg:translate-y-0">
+        <div className="cinema-mask absolute right-0 top-1/2 aspect-video w-[min(100%,2200px,calc(100svh*16/9))] -translate-y-1/2 lg:inset-0 lg:aspect-auto lg:w-full lg:translate-y-0">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={CINEMA.rest} alt="Achraf, son double IA, assis à son bureau" className={`${layer} ${show('rest')}`} style={{ objectPosition: `${CINEMA.focus} 50%` }} />
           <video
